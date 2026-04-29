@@ -1,0 +1,80 @@
+name: Sync whitelist
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Debug filesystem
+        run: |
+          echo "=== CURRENT DIR ==="
+          pwd
+          echo "=== ROOT FILES ==="
+          ls -la
+          echo "=== TREE ==="
+          find . -maxdepth 2 -type f
+
+      - name: Validate header.txt
+        run: |
+          if [ ! -f "./header.txt" ]; then
+            echo "FATAL: header.txt NOT FOUND"
+            echo "Expected path: ./header.txt"
+            exit 1
+          fi
+
+          echo "header.txt OK"
+
+      - name: Download external file
+        run: |
+          echo "Downloading..."
+          curl -fsSL https://raw.githubusercontent.com/zieng2/wl/main/vless_lite.txt -o external.txt || {
+            echo "Download failed"
+            exit 1
+          }
+
+          if [ ! -s external.txt ]; then
+            echo "Downloaded file is empty"
+            exit 1
+          fi
+
+      - name: Merge
+        run: |
+          cat header.txt external.txt > combined.txt
+
+      - name: Compare & update
+        run: |
+          if [ ! -f vless_lite.txt ]; then
+            echo "First run"
+            mv combined.txt vless_lite.txt
+            echo "changed=true" >> $GITHUB_ENV
+            exit 0
+          fi
+
+          if cmp -s combined.txt vless_lite.txt; then
+            echo "No changes"
+            rm combined.txt
+          else
+            echo "Updating file"
+            mv combined.txt vless_lite.txt
+            echo "changed=true" >> $GITHUB_ENV
+          fi
+
+      - name: Commit
+        if: env.changed == 'true'
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add vless_lite.txt
+          git commit -m "auto: update merged list"
+          git push
