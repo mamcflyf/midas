@@ -2,7 +2,7 @@ name: Sync whitelist
 
 on:
   schedule:
-    - cron: "0 * * * *"
+    - cron: "* * * * *"
   workflow_dispatch:
 
 permissions:
