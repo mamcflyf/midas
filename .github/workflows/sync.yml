@@ -25,15 +25,15 @@ jobs:
           echo "=== TREE ==="
           find . -maxdepth 2 -type f
 
-      - name: Validate header.txt
+      - name: Validate header
         run: |
-          if [ ! -f "./header.txt" ]; then
+          if [ ! -f "./header" ]; then
             echo "FATAL: header.txt NOT FOUND"
             echo "Expected path: ./header.txt"
             exit 1
           fi
 
-          echo "header.txt OK"
+          echo "header OK"
 
       - name: Download external file
         run: |
@@ -50,7 +50,7 @@ jobs:
 
       - name: Merge
         run: |
-          cat header.txt external.txt > combined.txt
+          cat header external.txt > combined.txt
 
       - name: Compare & update
         run: |
