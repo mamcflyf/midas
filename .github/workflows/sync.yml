@@ -21,22 +21,17 @@ jobs:
 
       - name: Debug filesystem
         run: |
-          echo "=== CURRENT DIR ==="
-          pwd
-          echo "=== ROOT FILES ==="
+          echo "=== ROOT ==="
           ls -la
           echo "=== TREE ==="
           find . -maxdepth 2 -type f
 
       - name: Validate header
         run: |
-          if [ ! -f "./header" ]; then
-            echo "FATAL: header.txt NOT FOUND"
-            echo "Expected path: ./header.txt"
+          if [ ! -f white/header.txt ]; then
+            echo "ERROR: white/header.txt not found"
             exit 1
           fi
-
-          echo "header OK"
 
       - name: Download external file
         run: |
@@ -51,29 +46,41 @@ jobs:
             exit 1
           fi
 
-      - name: Merge
+      - name: Merge with metadata
         run: |
-          cat header external.txt > combined.txt
+          COUNT=$(grep -cve '^\s*$' external.txt)
+          DATE=$(date -u "+%Y-%m-%d %H:%M:%S")
 
-      - name: Compare & update
+          {
+            cat white/header.txt
+            echo "#auto-selected-at: $DATE"
+            echo "#servers-count: $COUNT"
+            echo ""
+            cat external.txt
+          } > combined.txt
+
+          echo "=== PREVIEW ==="
+          head -n 15 combined.txt
+
+      - name: Update file if changed
         run: |
-          if [ ! -f wl.txt.txt ]; then
-            echo "First run"
+          if [ ! -f wl.txt ]; then
+            echo "First run: creating file"
             mv combined.txt wl.txt
             echo "changed=true" >> $GITHUB_ENV
             exit 0
           fi
 
-          if cmp -s combined.txt wl.txt.txt; then
+          if cmp -s combined.txt wl.txt; then
             echo "No changes"
             rm combined.txt
           else
-            echo "Updating file"
+            echo "File updated"
             mv combined.txt wl.txt
             echo "changed=true" >> $GITHUB_ENV
           fi
 
-      - name: Commit
+      - name: Commit changes
         if: env.changed == 'true'
         run: |
           git config user.name "github-actions"
