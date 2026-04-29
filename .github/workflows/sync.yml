@@ -19,30 +19,16 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Debug filesystem
-        run: |
-          echo "=== ROOT ==="
-          ls -la
-          echo "=== TREE ==="
-          find . -maxdepth 2 -type f
-
-      - name: Validate header
-        run: |
-          if [ ! -f header ]; then
-            echo "ERROR: header not found"
-            exit 1
-          fi
-
       - name: Download external file
         run: |
-          echo "Downloading..."
+          echo "Загружаем файл..."
           curl -fsSL https://raw.githubusercontent.com/zieng2/wl/main/vless_lite.txt -o external.txt || {
-            echo "Download failed"
+            echo "Ошибка загрузки"
             exit 1
           }
 
           if [ ! -s external.txt ]; then
-            echo "Downloaded file is empty"
+            echo "Загруженный файл пуст"
             exit 1
           fi
 
@@ -59,29 +45,17 @@ jobs:
             cat external.txt
           } > combined.txt
 
-          echo "=== PREVIEW ==="
-          head -n 15 combined.txt
-
       - name: Update file if changed
         run: |
-          if [ ! -f wl ]; then
-            echo "First run: creating file"
+          if ! cmp -s combined.txt wl; then
             mv combined.txt wl
-            echo "changed=true" >> $GITHUB_ENV
-            exit 0
-          fi
-
-          if cmp -s combined.txt wl; then
-            echo "No changes"
-            rm combined.txt
+            echo "CHANGED=true" >> $GITHUB_ENV
           else
-            echo "File updated"
-            mv combined.txt wl
-            echo "changed=true" >> $GITHUB_ENV
+            rm combined.txt
           fi
 
       - name: Commit changes
-        if: env.changed == 'true'
+        if: env.CHANGED == 'true'
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
