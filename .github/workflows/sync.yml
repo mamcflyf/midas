@@ -64,19 +64,19 @@ jobs:
 
       - name: Update file if changed
         run: |
-          if [ ! -f wl.txt ]; then
+          if [ ! -f wl ]; then
             echo "First run: creating file"
-            mv combined.txt wl.txt
+            mv combined.txt wl
             echo "changed=true" >> $GITHUB_ENV
             exit 0
           fi
 
-          if cmp -s combined.txt wl.txt; then
+          if cmp -s combined.txt wl; then
             echo "No changes"
             rm combined.txt
           else
             echo "File updated"
-            mv combined.txt wl.txt
+            mv combined.txt wl
             echo "changed=true" >> $GITHUB_ENV
           fi
 
@@ -85,6 +85,6 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
-          git add wl.txt
+          git add wl
           git commit -m "auto: update merged list"
           git push
