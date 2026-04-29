@@ -2,7 +2,7 @@ name: Sync whitelist
 
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "0 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -59,7 +59,7 @@ jobs:
         run: |
           if [ ! -f vless_lite.txt ]; then
             echo "First run"
-            mv combined.txt vless_lite.txt
+            mv combined.txt wl.txt
             echo "changed=true" >> $GITHUB_ENV
             exit 0
           fi
@@ -69,7 +69,7 @@ jobs:
             rm combined.txt
           else
             echo "Updating file"
-            mv combined.txt vless_lite.txt
+            mv combined.txt wl.txt
             echo "changed=true" >> $GITHUB_ENV
           fi
 
@@ -78,6 +78,6 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
-          git add vless_lite.txt
+          git add wl.txt
           git commit -m "auto: update merged list"
           git push
