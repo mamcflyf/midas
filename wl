@@ -2,7 +2,7 @@
 #profile-title: Midas (WL)
 #support-url: https://t.me/srydave
 #announce: base64:0KLQvtC70YzQutC+INC00LvRjyDQvtCx0YXQvtC00LAg0LHQtdC70YvRhSDRgdC/0LjRgdC60L7QsiDQvdCwINC80L7QsdC40LvRjNC90L7QuSDRgdC10YLQuCEKMe+4j+KDoyDQndCw0LbQsNGC0Ywg0YHQv9C40LTQvtC80LXRgtGAICjQv9GA0L7QstC10YDQuNGC0Ywg0L/QuNC90LMpCjLvuI/ig6Mg0JLRi9Cx0YDQsNGC0Ywg0YHQtdGA0LLQtdGAINGBINC70YPRh9GI0LjQvCDQv9C40L3Qs9C+0LwKM++4j+KDoyDQl9Cw0L/Rg9GB0YLQuNGC0YwgVlBO
-#auto-selected-at: 2026-04-29 05:17:31
+#auto-selected-at: 2026-04-29 05:56:34
 #servers-count: 1057
 
 vless://cbf10015-d51a-4a7c-b13a-3c6091135d93@89.208.230.241:5443?flow=xtls-rprx-vision&encryption=none&type=tcp&security=reality&fp=chrome&sni=max.ru&pbk=LGcG8Sqv5vPDypbaEgHV0ZGqQOBkgDepPWXyDohbVXQ#%F0%9F%87%B7%F0%9F%87%BA%20VK%20%E2%80%94%20%231
