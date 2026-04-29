@@ -52,7 +52,7 @@ jobs:
           DATE=$(date -u "+%Y-%m-%d %H:%M:%S")
 
           {
-            cat white/header.txt
+            cat header.txt
             echo "#auto-selected-at: $DATE"
             echo "#servers-count: $COUNT"
             echo ""
