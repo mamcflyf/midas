@@ -57,14 +57,14 @@ jobs:
 
       - name: Compare & update
         run: |
-          if [ ! -f vless_lite.txt ]; then
+          if [ ! -f wl.txt.txt ]; then
             echo "First run"
             mv combined.txt wl.txt
             echo "changed=true" >> $GITHUB_ENV
             exit 0
           fi
 
-          if cmp -s combined.txt vless_lite.txt; then
+          if cmp -s combined.txt wl.txt.txt; then
             echo "No changes"
             rm combined.txt
           else
