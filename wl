@@ -2,7 +2,7 @@
 #profile-title: Midas (WL)
 #support-url: https://t.me/srydave
 #announce: base64:0KLQvtC70YzQutC+INC00LvRjyDQvtCx0YXQvtC00LAg0LHQtdC70YvRhSDRgdC/0LjRgdC60L7QsiDQvdCwINC80L7QsdC40LvRjNC90L7QuSDRgdC10YLQuCEKMe+4j+KDoyDQndCw0LbQsNGC0Ywg0YHQv9C40LTQvtC80LXRgtGAICjQv9GA0L7QstC10YDQuNGC0Ywg0L/QuNC90LMpCjLvuI/ig6Mg0JLRi9Cx0YDQsNGC0Ywg0YHQtdGA0LLQtdGAINGBINC70YPRh9GI0LjQvCDQv9C40L3Qs9C+0LwKM++4j+KDoyDQl9Cw0L/Rg9GB0YLQuNGC0YwgVlBO
-#auto-selected-at: 2026-05-07 23:00:52
+#auto-selected-at: 2026-05-07 23:54:57
 #servers-count: 976
 
 vless://22f65fc9-4dee-456c-a213-2a025389af31@109.120.189.213:58652?encryption=none&type=tcp&security=reality&fp=chrome&sni=www.apple.com&pbk=VZq5atMvE_1AW0nXcn4opuxZdrSu3zy3kP7YTdGj6EQ&sid=28000000#%F0%9F%87%B7%F0%9F%87%BA%20VK%20%E2%80%94%20%231
