@@ -15,7 +15,6 @@
           "domain:braze.com",
           "domain:sparxcdn.net",
           "domain:sparx.io",
-          "domain:mrm.works"
         ]
       },
       {
@@ -80,7 +79,6 @@
           "domain:braze.com",
           "domain:sparxcdn.net",
           "domain:sparx.io",
-          "domain:mrm.works"
         ],
         "outboundTag": "proxy"
       },
