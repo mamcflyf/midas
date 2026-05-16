@@ -1,8 +1,12 @@
 {
+  "remarks": "MIDAS (БС)",
+
   "log": {
     "loglevel": "warning"
   },
+
   "stats": {},
+
   "policy": {
     "levels": {
       "8": {
@@ -17,13 +21,16 @@
       "statsOutboundDownlink": true
     }
   },
+
   "dns": {
     "hosts": {
       "lkfl2.nalog.ru": "213.24.64.175",
       "lknpd.nalog.ru": "213.24.64.181"
     },
+
     "servers": [
       "https://8.8.8.8/dns-query",
+
       {
         "address": "https://8.8.8.8/dns-query",
         "domains": [
@@ -35,6 +42,7 @@
           "domain:sparx.io"
         ]
       },
+
       {
         "address": "https://77.88.8.8/dns-query",
         "domains": [
@@ -43,16 +51,20 @@
         ]
       }
     ],
+
     "queryStrategy": "UseIPv4"
   },
+
   "routing": {
     "domainStrategy": "IPIfNonMatch",
+
     "rules": [
       {
         "type": "field",
         "port": 53,
         "outboundTag": "dns-out"
       },
+
       {
         "type": "field",
         "domain": [
@@ -62,6 +74,7 @@
         ],
         "outboundTag": "block"
       },
+
       {
         "type": "field",
         "ip": [
@@ -69,13 +82,15 @@
         ],
         "outboundTag": "direct"
       },
+
       {
         "type": "field",
         "ip": [
           "8.8.8.8"
         ],
-        "outboundTag": "proxy"
+        "outboundTag": "🇩🇪 Germany #1-1 | LTE"
       },
+
       {
         "type": "field",
         "domain": [
@@ -86,8 +101,9 @@
           "domain:sparxcdn.net",
           "domain:sparx.io"
         ],
-        "outboundTag": "proxy"
+        "outboundTag": "🇩🇪 Germany #1-1 | LTE"
       },
+
       {
         "type": "field",
         "domain": [
@@ -96,6 +112,7 @@
         ],
         "outboundTag": "direct"
       },
+
       {
         "type": "field",
         "ip": [
@@ -106,19 +123,23 @@
       }
     ]
   },
+
   "inbounds": [
     {
       "tag": "socks",
       "port": 10808,
       "listen": "127.0.0.1",
       "protocol": "socks",
+
       "settings": {
         "udp": true,
         "auth": "noauth",
         "userLevel": 8
       },
+
       "sniffing": {
         "enabled": true,
+
         "destOverride": [
           "http",
           "tls",
@@ -126,16 +147,20 @@
         ]
       }
     },
+
     {
       "tag": "http",
       "port": 10809,
       "listen": "127.0.0.1",
       "protocol": "http",
+
       "settings": {
         "userLevel": 8
       },
+
       "sniffing": {
         "enabled": true,
+
         "destOverride": [
           "http",
           "tls",
@@ -144,15 +169,19 @@
       }
     }
   ],
+
   "outbounds": [
     {
-      "tag": "proxy",
+      "tag": "🇩🇪 Germany #1-1 | LTE",
+
       "protocol": "vless",
+
       "settings": {
         "vnext": [
           {
             "address": "84.201.188.77",
             "port": 443,
+
             "users": [
               {
                 "id": "018b39eb-e686-4bf3-9ca7-23d7cdce941b",
@@ -163,9 +192,11 @@
           }
         ]
       },
+
       "streamSettings": {
         "network": "tcp",
         "security": "reality",
+
         "realitySettings": {
           "fingerprint": "chrome",
           "serverName": "login.vk.com",
@@ -175,19 +206,23 @@
         }
       }
     },
+
     {
       "tag": "direct",
       "protocol": "freedom"
     },
+
     {
       "tag": "block",
       "protocol": "blackhole"
     },
+
     {
       "tag": "dns-out",
       "protocol": "dns",
+
       "proxySettings": {
-        "tag": "proxy"
+        "tag": "🇩🇪 Germany #1-1 | LTE"
       }
     }
   ]
