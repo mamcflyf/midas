@@ -1,5 +1,9 @@
 {
-  "remarks": "MIDAS (БС2)",
+  "_meta": {
+    "name": "MIDAS (БС)",
+    "updateInterval": 12,
+    "supportUrl": "https://t.me/srydave"
+  },
 
   "log": {
     "loglevel": "warning"
@@ -16,6 +20,7 @@
         "downlinkOnly": 1
       }
     },
+
     "system": {
       "statsOutboundUplink": true,
       "statsOutboundDownlink": true
@@ -33,6 +38,7 @@
 
       {
         "address": "https://8.8.8.8/dns-query",
+
         "domains": [
           "domain:easebar.com",
           "domain:battle.net",
@@ -45,6 +51,7 @@
 
       {
         "address": "https://77.88.8.8/dns-query",
+
         "domains": [
           "geosite:private",
           "geosite:whitelist"
@@ -67,32 +74,39 @@
 
       {
         "type": "field",
+
         "domain": [
           "geosite:win-spy",
           "geosite:torrent",
           "geosite:category-ads"
         ],
+
         "outboundTag": "block"
       },
 
       {
         "type": "field",
+
         "ip": [
           "77.88.8.8"
         ],
+
         "outboundTag": "direct"
       },
 
       {
         "type": "field",
+
         "ip": [
           "8.8.8.8"
         ],
+
         "outboundTag": "🇩🇪 Germany #1-1 | LTE"
       },
 
       {
         "type": "field",
+
         "domain": [
           "domain:easebar.com",
           "domain:battle.net",
@@ -101,24 +115,29 @@
           "domain:sparxcdn.net",
           "domain:sparx.io"
         ],
+
         "outboundTag": "🇩🇪 Germany #1-1 | LTE"
       },
 
       {
         "type": "field",
+
         "domain": [
           "geosite:private",
           "geosite:whitelist"
         ],
+
         "outboundTag": "direct"
       },
 
       {
         "type": "field",
+
         "ip": [
           "geoip:private",
           "geoip:whitelist"
         ],
+
         "outboundTag": "direct"
       }
     ]
@@ -127,8 +146,10 @@
   "inbounds": [
     {
       "tag": "socks",
+
       "port": 10808,
       "listen": "127.0.0.1",
+
       "protocol": "socks",
 
       "settings": {
@@ -150,8 +171,10 @@
 
     {
       "tag": "http",
+
       "port": 10809,
       "listen": "127.0.0.1",
+
       "protocol": "http",
 
       "settings": {
