@@ -11,20 +11,37 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru",
+            "ip-api.com"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit"
+          ]
         }
       ]
     },
@@ -164,27 +181,44 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit",
+            "ip-api.com"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:direct"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -203,20 +237,37 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru",
+            "ip-api.com"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit"
+          ]
         }
       ]
     },
@@ -356,27 +407,44 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit",
+            "ip-api.com"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:direct"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -395,20 +463,37 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru",
+            "ip-api.com"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit"
+          ]
         }
       ]
     },
@@ -550,27 +635,44 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit",
+            "ip-api.com"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:direct"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -589,20 +691,37 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru",
+            "ip-api.com"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit"
+          ]
         }
       ]
     },
@@ -744,27 +863,44 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit",
+            "ip-api.com"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:direct"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -783,20 +919,37 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru",
+            "ip-api.com"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit"
+          ]
         }
       ]
     },
@@ -938,27 +1091,44 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit",
+            "ip-api.com"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:direct"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -977,20 +1147,37 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru",
+            "ip-api.com"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit"
+          ]
         }
       ]
     },
@@ -1130,27 +1317,44 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit",
+            "ip-api.com"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:direct"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -1169,20 +1373,37 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru",
+            "ip-api.com"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit"
+          ]
         }
       ]
     },
@@ -1322,27 +1543,44 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit",
+            "ip-api.com"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:direct"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -1361,20 +1599,37 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru",
+            "ip-api.com"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit"
+          ]
         }
       ]
     },
@@ -1516,27 +1771,44 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit",
+            "ip-api.com"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:direct"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -1555,20 +1827,37 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru",
+            "ip-api.com"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit"
+          ]
         }
       ]
     },
@@ -1710,27 +1999,44 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit",
+            "ip-api.com"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:direct"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -1749,20 +2055,37 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru",
+            "ip-api.com"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit"
+          ]
         }
       ]
     },
@@ -1904,27 +2227,44 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit",
+            "ip-api.com"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:direct"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -1943,20 +2283,37 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru",
+            "ip-api.com"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit"
+          ]
         }
       ]
     },
@@ -2096,27 +2453,44 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit",
+            "ip-api.com"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:direct"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -2135,20 +2509,37 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru",
+            "ip-api.com"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit"
+          ]
         }
       ]
     },
@@ -2288,27 +2679,44 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit",
+            "ip-api.com"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:direct"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -2327,20 +2735,37 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru",
+            "ip-api.com"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit"
+          ]
         }
       ]
     },
@@ -2480,27 +2905,44 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit",
+            "ip-api.com"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:direct"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -2519,20 +2961,37 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru",
+            "ip-api.com"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit"
+          ]
         }
       ]
     },
@@ -2672,27 +3131,44 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit",
+            "ip-api.com"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:direct"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -2711,20 +3187,37 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru",
+            "ip-api.com"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit"
+          ]
         }
       ]
     },
@@ -2864,27 +3357,44 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit",
+            "ip-api.com"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:direct"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -2903,20 +3413,37 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru",
+            "ip-api.com"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit"
+          ]
         }
       ]
     },
@@ -3056,27 +3583,44 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "geosite:google-play",
+            "geosite:github",
+            "geosite:twitch-ads",
+            "geosite:youtube",
+            "geosite:telegram",
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io",
+            "domain:seasonvar.ru"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:category-ru",
+            "geosite:whitelist",
+            "geosite:microsoft",
+            "geosite:apple",
+            "geosite:epicgames",
+            "geosite:riot",
+            "geosite:escapefromtarkov",
+            "geosite:steam",
+            "geosite:twitch",
+            "geosite:pinterest",
+            "geosite:faceit",
+            "ip-api.com"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:direct"
+          ],
           "outboundTag": "direct"
         }
       ]
