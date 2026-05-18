@@ -3037,7 +3037,7 @@
       "loglevel": "warning"
     },
     "meta": {
-      "serverDescription": "🇳🇱 Netherlands #3-3 | LTE"
+      "serverDescription": "🇳🇱 Netherlands #3-1 | LTE"
     },
     "outbounds": [
       {
@@ -3101,7 +3101,7 @@
         "statsOutboundUplink": true
       }
     },
-    "remarks": "🇳🇱 Netherlands #3-3 | LTE",
+    "remarks": "🇳🇱 Netherlands #3-1 | LTE",
     "routing": {
       "domainStrategy": "IPIfNonMatch",
       "rules": [
@@ -3263,7 +3263,7 @@
       "loglevel": "warning"
     },
     "meta": {
-      "serverDescription": "🇳🇱 Netherlands #3-3 | LTE"
+      "serverDescription": "🇳🇱 Netherlands #3-2 | LTE"
     },
     "outbounds": [
       {
@@ -3327,7 +3327,7 @@
         "statsOutboundUplink": true
       }
     },
-    "remarks": "🇳🇱 Netherlands #3-3 | LTE",
+    "remarks": "🇳🇱 Netherlands #3-2 | LTE",
     "routing": {
       "domainStrategy": "IPIfNonMatch",
       "rules": [
