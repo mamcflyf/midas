@@ -11,20 +11,20 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:whitelist"
+          ]
         }
       ]
     },
@@ -164,27 +164,27 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:whitelist"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:whitelist"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -203,20 +203,20 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:whitelist"
+          ]
         }
       ]
     },
@@ -356,27 +356,27 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:whitelist"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:whitelist"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -1063,20 +1063,20 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:whitelist"
+          ]
         }
       ]
     },
@@ -1216,27 +1216,27 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:whitelist"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:whitelist"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -1255,20 +1255,20 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:whitelist"
+          ]
         }
       ]
     },
@@ -1408,27 +1408,27 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:whitelist"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:whitelist"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -1447,20 +1447,20 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:whitelist"
+          ]
         }
       ]
     },
@@ -1602,27 +1602,27 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:whitelist"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:whitelist"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -1641,20 +1641,20 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:whitelist"
+          ]
         }
       ]
     },
@@ -1796,27 +1796,27 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:whitelist"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:whitelist"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -1835,20 +1835,20 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:whitelist"
+          ]
         }
       ]
     },
@@ -1990,27 +1990,27 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:whitelist"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:whitelist"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -2029,20 +2029,20 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:whitelist"
+          ]
         }
       ]
     },
@@ -2182,27 +2182,27 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:whitelist"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:whitelist"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -2221,20 +2221,20 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:whitelist"
+          ]
         }
       ]
     },
@@ -2374,27 +2374,27 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:whitelist"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:whitelist"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -2413,20 +2413,20 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:whitelist"
+          ]
         }
       ]
     },
@@ -2566,27 +2566,27 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:whitelist"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:whitelist"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -2605,20 +2605,20 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:whitelist"
+          ]
         }
       ]
     },
@@ -2758,27 +2758,27 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:whitelist"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:whitelist"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -2797,20 +2797,20 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:whitelist"
+          ]
         }
       ]
     },
@@ -2950,27 +2950,27 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:whitelist"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:whitelist"
+          ],
           "outboundTag": "direct"
         }
       ]
@@ -2989,20 +2989,20 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ]
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
-          "geosite:private",
-          "geosite:whitelist"
-        ]
+            "geosite:private",
+            "geosite:whitelist"
+          ]
         }
       ]
     },
@@ -3142,27 +3142,27 @@
         },
         {
           "domain": [
-          "domain:easebar.com",
-          "domain:battle.net",
-          "domain:blizzard.com",
-          "domain:braze.com",
-          "domain:sparxcdn.net",
-          "domain:sparx.io"
-        ],
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
-          "geosite:private",
-          "geosite:whitelist"
-        ],
+            "geosite:private",
+            "geosite:whitelist"
+          ],
           "outboundTag": "direct"
         },
         {
           "ip": [
-          "geoip:private",
-          "geoip:whitelist"
-        ],
+            "geoip:private",
+            "geoip:whitelist"
+          ],
           "outboundTag": "direct"
         }
       ]
