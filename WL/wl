@@ -182,7 +182,7 @@
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -373,7 +373,7 @@
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -564,7 +564,7 @@
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -755,7 +755,7 @@
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -946,7 +946,7 @@
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -1137,7 +1137,7 @@
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -1328,7 +1328,7 @@
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -1519,7 +1519,7 @@
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -1712,7 +1712,7 @@
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -1905,7 +1905,7 @@
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -2098,7 +2098,7 @@
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -2289,7 +2289,7 @@
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -2480,7 +2480,7 @@
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -2671,7 +2671,7 @@
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -2862,7 +2862,7 @@
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -3053,7 +3053,7 @@
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -3244,7 +3244,7 @@
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
