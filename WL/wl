@@ -1040,7 +1040,7 @@
           "vnext": [
             {
               "address": "95.163.212.38",
-              "port": 443,
+              "port": 8443,
               "users": [
                 {
                   "encryption": "none",
@@ -1231,7 +1231,7 @@
           "vnext": [
             {
               "address": "95.163.212.38",
-              "port": 443,
+              "port": 8443,
               "users": [
                 {
                   "encryption": "none",
