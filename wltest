@@ -1,8 +1,3 @@
-#profile-update-interval: 12
-#profile-title: MIDAS (БС)
-#support-url: https://t.me/srydave
-#subscription-userinfo: expire=1798761600
-
 [
   {
     "dns": {
@@ -16,36 +11,19 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru",
-            "ip-api.com"
+            "domain:sparx.io"
           ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit"
+            "geosite:whitelist"
           ]
         }
       ]
@@ -92,7 +70,7 @@
       "loglevel": "warning"
     },
     "meta": {
-      "serverDescription": "🇩🇪 Germany #1-1 | LTE"
+      "serverDescription": "VLESS | Premium"
     },
     "outbounds": [
       {
@@ -118,8 +96,7 @@
             "fingerprint": "chrome",
             "publicKey": "PkonquQjHffrUL1SAl1B7MyhnQI6rfHOxorpEe3b6nw",
             "serverName": "login.vk.com",
-            "shortId": "4b0a81253be6",
-            "spiderX": "/"
+            "shortId": "5f8c1a72d4be9031"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -186,43 +163,26 @@
         },
         {
           "domain": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru"
+            "domain:sparx.io"
           ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit",
-            "ip-api.com"
+            "geosite:whitelist"
           ],
           "outboundTag": "direct"
         },
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -242,36 +202,19 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru",
-            "ip-api.com"
+            "domain:sparx.io"
           ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit"
+            "geosite:whitelist"
           ]
         }
       ]
@@ -318,7 +261,7 @@
       "loglevel": "warning"
     },
     "meta": {
-      "serverDescription": "🇩🇪 Germany #1-1 | LTE"
+      "serverDescription": "VLESS | Premium"
     },
     "outbounds": [
       {
@@ -344,8 +287,7 @@
             "fingerprint": "chrome",
             "publicKey": "PkonquQjHffrUL1SAl1B7MyhnQI6rfHOxorpEe3b6nw",
             "serverName": "ads.x5.ru",
-            "shortId": "0fdf",
-            "spiderX": "/"
+            "shortId": "a9e47cbb128fd650"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -412,43 +354,26 @@
         },
         {
           "domain": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru"
+            "domain:sparx.io"
           ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit",
-            "ip-api.com"
+            "geosite:whitelist"
           ],
           "outboundTag": "direct"
         },
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -468,36 +393,19 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru",
-            "ip-api.com"
+            "domain:sparx.io"
           ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit"
+            "geosite:whitelist"
           ]
         }
       ]
@@ -544,7 +452,7 @@
       "loglevel": "warning"
     },
     "meta": {
-      "serverDescription": "🇩🇪 Germany #2-1 | LTE"
+      "serverDescription": "VLESS | Premium"
     },
     "outbounds": [
       {
@@ -552,31 +460,28 @@
         "settings": {
           "vnext": [
             {
-              "address": "46.182.24.52",
+              "address": "212.233.122.99",
               "port": 443,
               "users": [
                 {
                   "encryption": "none",
-                  "id": "9652a540-23e2-4c0b-a24a-26c08ac4779e"
+                  "flow": "xtls-rprx-vision",
+                  "id": "5a3c5917-cbce-4b49-b2a4-bfee6356b085"
                 }
               ]
             }
           ]
         },
         "streamSettings": {
-          "network": "grpc",
+          "network": "tcp",
           "realitySettings": {
             "fingerprint": "chrome",
-            "publicKey": "NEb4teZd-O_o38QHuCp7M8mSda48yU6BbYev-HJHpXQ",
-            "serverName": "st.vk.com",
-            "shortId": "fcaee38c10e6",
-            "spiderX": "/"
+            "publicKey": "Uv8syYANfix6DewS7rVWGs_GqmTO587zQRAnov-mfQA",
+            "serverName": "eh.vk.ru",
+            "shortId": "3c71f8de94ab2f6c"
           },
           "security": "reality",
-          "grpcSettings": {
-            "multiMode": false,
-            "serviceName": ""
-          }
+          "tcpSettings": {}
         },
         "tag": "proxy"
       },
@@ -610,7 +515,7 @@
         "statsOutboundUplink": true
       }
     },
-    "remarks": "🇩🇪 Germany #2-1 | LTE",
+    "remarks": "🇱🇻 Latvia #1-1 | LTE",
     "routing": {
       "domainStrategy": "IPIfNonMatch",
       "rules": [
@@ -640,43 +545,26 @@
         },
         {
           "domain": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru"
+            "domain:sparx.io"
           ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit",
-            "ip-api.com"
+            "geosite:whitelist"
           ],
           "outboundTag": "direct"
         },
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -696,36 +584,19 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru",
-            "ip-api.com"
+            "domain:sparx.io"
           ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit"
+            "geosite:whitelist"
           ]
         }
       ]
@@ -772,7 +643,7 @@
       "loglevel": "warning"
     },
     "meta": {
-      "serverDescription": "🇩🇪 Germany #2-2 | LTE"
+      "serverDescription": "VLESS | Premium"
     },
     "outbounds": [
       {
@@ -780,31 +651,28 @@
         "settings": {
           "vnext": [
             {
-              "address": "46.182.24.52",
+              "address": "212.233.122.99",
               "port": 443,
               "users": [
                 {
                   "encryption": "none",
-                  "id": "9652a540-23e2-4c0b-a24a-26c08ac4779e"
+                  "flow": "xtls-rprx-vision",
+                  "id": "5a3c5917-cbce-4b49-b2a4-bfee6356b085"
                 }
               ]
             }
           ]
         },
         "streamSettings": {
-          "network": "grpc",
+          "network": "tcp",
           "realitySettings": {
             "fingerprint": "chrome",
-            "publicKey": "NEb4teZd-O_o38QHuCp7M8mSda48yU6BbYev-HJHpXQ",
+            "publicKey": "Uv8syYANfix6DewS7rVWGs_GqmTO587zQRAnov-mfQA",
             "serverName": "music.yandex.ru",
-            "shortId": "abf5ca17f045fa",
-            "spiderX": "/"
+            "shortId": "e2b6490fd17ca835"
           },
           "security": "reality",
-          "grpcSettings": {
-            "multiMode": false,
-            "serviceName": ""
-          }
+          "tcpSettings": {}
         },
         "tag": "proxy"
       },
@@ -838,7 +706,7 @@
         "statsOutboundUplink": true
       }
     },
-    "remarks": "🇩🇪 Germany #2-2 | LTE",
+    "remarks": "🇱🇻 Latvia #1-2 | LTE",
     "routing": {
       "domainStrategy": "IPIfNonMatch",
       "rules": [
@@ -868,43 +736,26 @@
         },
         {
           "domain": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru"
+            "domain:sparx.io"
           ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit",
-            "ip-api.com"
+            "geosite:whitelist"
           ],
           "outboundTag": "direct"
         },
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -924,36 +775,19 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru",
-            "ip-api.com"
+            "domain:sparx.io"
           ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit"
+            "geosite:whitelist"
           ]
         }
       ]
@@ -1000,7 +834,7 @@
       "loglevel": "warning"
     },
     "meta": {
-      "serverDescription": "🇩🇪 Germany #2-3 | LTE"
+      "serverDescription": "VLESS | Premium"
     },
     "outbounds": [
       {
@@ -1008,31 +842,28 @@
         "settings": {
           "vnext": [
             {
-              "address": "46.182.24.52",
+              "address": "212.233.122.99",
               "port": 443,
               "users": [
                 {
                   "encryption": "none",
-                  "id": "9652a540-23e2-4c0b-a24a-26c08ac4779e"
+                  "flow": "xtls-rprx-vision",
+                  "id": "5a3c5917-cbce-4b49-b2a4-bfee6356b085"
                 }
               ]
             }
           ]
         },
         "streamSettings": {
-          "network": "grpc",
+          "network": "tcp",
           "realitySettings": {
             "fingerprint": "chrome",
-            "publicKey": "NEb4teZd-O_o38QHuCp7M8mSda48yU6BbYev-HJHpXQ",
-            "serverName": "max.ru",
-            "shortId": "e728431eb0",
-            "spiderX": "/"
+            "publicKey": "Uv8syYANfix6DewS7rVWGs_GqmTO587zQRAnov-mfQA",
+            "serverName": "ads.x5.ru",
+            "shortId": "8d3fa72bc41e9650"
           },
           "security": "reality",
-          "grpcSettings": {
-            "multiMode": false,
-            "serviceName": ""
-          }
+          "tcpSettings": {}
         },
         "tag": "proxy"
       },
@@ -1066,7 +897,7 @@
         "statsOutboundUplink": true
       }
     },
-    "remarks": "🇩🇪 Germany #2-3 | LTE",
+    "remarks": "🇱🇻 Latvia #1-3 | LTE",
     "routing": {
       "domainStrategy": "IPIfNonMatch",
       "rules": [
@@ -1096,43 +927,26 @@
         },
         {
           "domain": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru"
+            "domain:sparx.io"
           ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit",
-            "ip-api.com"
+            "geosite:whitelist"
           ],
           "outboundTag": "direct"
         },
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -1152,36 +966,19 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru",
-            "ip-api.com"
+            "domain:sparx.io"
           ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit"
+            "geosite:whitelist"
           ]
         }
       ]
@@ -1228,7 +1025,198 @@
       "loglevel": "warning"
     },
     "meta": {
-      "serverDescription": "🇱🇹 Lithuania #1-1 | LTE"
+      "serverDescription": "VLESS | Premium"
+    },
+    "outbounds": [
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "212.233.122.99",
+              "port": 443,
+              "users": [
+                {
+                  "encryption": "none",
+                  "flow": "xtls-rprx-vision",
+                  "id": "5a3c5917-cbce-4b49-b2a4-bfee6356b085"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "realitySettings": {
+            "fingerprint": "chrome",
+            "publicKey": "Uv8syYANfix6DewS7rVWGs_GqmTO587zQRAnov-mfQA",
+            "serverName": "max.ru",
+            "shortId": "14c8e9ab76fd203d"
+          },
+          "security": "reality",
+          "tcpSettings": {}
+        },
+        "tag": "proxy"
+      },
+      {
+        "protocol": "freedom",
+        "tag": "direct"
+      },
+      {
+        "protocol": "blackhole",
+        "tag": "block"
+      },
+      {
+        "protocol": "dns",
+        "proxySettings": {
+          "tag": "proxy"
+        },
+        "tag": "dns-out"
+      }
+    ],
+    "policy": {
+      "levels": {
+        "8": {
+          "connIdle": 300,
+          "downlinkOnly": 1,
+          "handshake": 4,
+          "uplinkOnly": 1
+        }
+      },
+      "system": {
+        "statsOutboundDownlink": true,
+        "statsOutboundUplink": true
+      }
+    },
+    "remarks": "🇱🇻 Latvia #1-4 | LTE",
+    "routing": {
+      "domainStrategy": "IPIfNonMatch",
+      "rules": [
+        {
+          "outboundTag": "dns-out",
+          "port": 53
+        },
+        {
+          "domain": [
+            "geosite:win-spy",
+            "geosite:torrent",
+            "geosite:category-ads"
+          ],
+          "outboundTag": "block"
+        },
+        {
+          "ip": [
+            "77.88.8.8"
+          ],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": [
+            "8.8.8.8"
+          ],
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ],
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "geosite:private",
+            "geosite:whitelist"
+          ],
+          "outboundTag": "direct"
+        },
+        {
+          "ip": [
+            "geoip:private",
+            "geoip:whitelist"
+          ],
+          "outboundTag": "direct"
+        }
+      ]
+    },
+    "stats": {}
+  },
+  {
+    "dns": {
+      "hosts": {
+        "lkfl2.nalog.ru": "213.24.64.175",
+        "lknpd.nalog.ru": "213.24.64.181"
+      },
+      "queryStrategy": "UseIPv4",
+      "servers": [
+        "https://8.8.8.8/dns-query",
+        {
+          "address": "https://8.8.8.8/dns-query",
+          "domains": [
+            "domain:easebar.com",
+            "domain:battle.net",
+            "domain:blizzard.com",
+            "domain:braze.com",
+            "domain:sparxcdn.net",
+            "domain:sparx.io"
+          ]
+        },
+        {
+          "address": "https://77.88.8.8/dns-query",
+          "domains": [
+            "geosite:private",
+            "geosite:whitelist"
+          ]
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "listen": "127.0.0.1",
+        "port": 10808,
+        "protocol": "socks",
+        "settings": {
+          "auth": "noauth",
+          "udp": true,
+          "userLevel": 8
+        },
+        "sniffing": {
+          "destOverride": [
+            "http",
+            "quic",
+            "tls"
+          ],
+          "enabled": true
+        },
+        "tag": "socks"
+      },
+      {
+        "listen": "127.0.0.1",
+        "port": 10809,
+        "protocol": "http",
+        "settings": {
+          "userLevel": 8
+        },
+        "sniffing": {
+          "destOverride": [
+            "http",
+            "quic",
+            "tls"
+          ],
+          "enabled": true
+        },
+        "tag": "http"
+      }
+    ],
+    "log": {
+      "loglevel": "warning"
+    },
+    "meta": {
+      "serverDescription": "VLESS | Premium"
     },
     "outbounds": [
       {
@@ -1254,8 +1242,7 @@
             "fingerprint": "chrome",
             "publicKey": "kNO52JpKeKuantsDTqNo63NjtfCYKZISTKtdey9Ruk0",
             "serverName": "eh.vk.ru",
-            "shortId": "9392",
-            "spiderX": "/"
+            "shortId": "b57d21ce8a490f34"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -1322,43 +1309,26 @@
         },
         {
           "domain": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru"
+            "domain:sparx.io"
           ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit",
-            "ip-api.com"
+            "geosite:whitelist"
           ],
           "outboundTag": "direct"
         },
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -1378,36 +1348,19 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru",
-            "ip-api.com"
+            "domain:sparx.io"
           ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit"
+            "geosite:whitelist"
           ]
         }
       ]
@@ -1454,7 +1407,7 @@
       "loglevel": "warning"
     },
     "meta": {
-      "serverDescription": "🇱🇹 Lithuania #1-2 | LTE"
+      "serverDescription": "VLESS | Premium"
     },
     "outbounds": [
       {
@@ -1480,8 +1433,7 @@
             "fingerprint": "chrome",
             "publicKey": "kNO52JpKeKuantsDTqNo63NjtfCYKZISTKtdey9Ruk0",
             "serverName": "max.ru",
-            "shortId": "5d3cec8d0c89",
-            "spiderX": "/"
+            "shortId": "6ae193fcb7428d15"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -1548,43 +1500,26 @@
         },
         {
           "domain": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru"
+            "domain:sparx.io"
           ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit",
-            "ip-api.com"
+            "geosite:whitelist"
           ],
           "outboundTag": "direct"
         },
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -1604,36 +1539,19 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru",
-            "ip-api.com"
+            "domain:sparx.io"
           ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit"
+            "geosite:whitelist"
           ]
         }
       ]
@@ -1680,7 +1598,7 @@
       "loglevel": "warning"
     },
     "meta": {
-      "serverDescription": "🇳🇱 Netherlands #1-1 | LTE"
+      "serverDescription": "VLESS | Premium"
     },
     "outbounds": [
       {
@@ -1705,8 +1623,7 @@
             "fingerprint": "chrome",
             "publicKey": "UOpEuuUA4c6X7JrprUUbV4T0OjJYBa2DCN5sFIt7PE8",
             "serverName": "st.vk.com",
-            "shortId": "cd11",
-            "spiderX": "/"
+            "shortId": "f0b74d91ce2683aa"
           },
           "security": "reality",
           "grpcSettings": {
@@ -1776,43 +1693,26 @@
         },
         {
           "domain": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru"
+            "domain:sparx.io"
           ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit",
-            "ip-api.com"
+            "geosite:whitelist"
           ],
           "outboundTag": "direct"
         },
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -1832,36 +1732,19 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru",
-            "ip-api.com"
+            "domain:sparx.io"
           ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit"
+            "geosite:whitelist"
           ]
         }
       ]
@@ -1908,7 +1791,7 @@
       "loglevel": "warning"
     },
     "meta": {
-      "serverDescription": "🇳🇱 Netherlands #1-2 | LTE"
+      "serverDescription": "VLESS | Premium"
     },
     "outbounds": [
       {
@@ -1933,8 +1816,7 @@
             "fingerprint": "chrome",
             "publicKey": "UOpEuuUA4c6X7JrprUUbV4T0OjJYBa2DCN5sFIt7PE8",
             "serverName": "music.yandex.ru",
-            "shortId": "bfde8d1b",
-            "spiderX": "/"
+            "shortId": "29dc6f8ab1547e03"
           },
           "security": "reality",
           "grpcSettings": {
@@ -2004,43 +1886,26 @@
         },
         {
           "domain": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru"
+            "domain:sparx.io"
           ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit",
-            "ip-api.com"
+            "geosite:whitelist"
           ],
           "outboundTag": "direct"
         },
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -2060,36 +1925,19 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru",
-            "ip-api.com"
+            "domain:sparx.io"
           ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit"
+            "geosite:whitelist"
           ]
         }
       ]
@@ -2136,7 +1984,7 @@
       "loglevel": "warning"
     },
     "meta": {
-      "serverDescription": "🇳🇱 Netherlands #1-3 | LTE"
+      "serverDescription": "VLESS | Premium"
     },
     "outbounds": [
       {
@@ -2161,8 +2009,7 @@
             "fingerprint": "chrome",
             "publicKey": "UOpEuuUA4c6X7JrprUUbV4T0OjJYBa2DCN5sFIt7PE8",
             "serverName": "max.ru",
-            "shortId": "98eb469615",
-            "spiderX": "/"
+            "shortId": "c41e95db70af3268"
           },
           "security": "reality",
           "grpcSettings": {
@@ -2232,43 +2079,26 @@
         },
         {
           "domain": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru"
+            "domain:sparx.io"
           ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit",
-            "ip-api.com"
+            "geosite:whitelist"
           ],
           "outboundTag": "direct"
         },
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -2288,36 +2118,19 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru",
-            "ip-api.com"
+            "domain:sparx.io"
           ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit"
+            "geosite:whitelist"
           ]
         }
       ]
@@ -2364,685 +2177,7 @@
       "loglevel": "warning"
     },
     "meta": {
-      "serverDescription": "🇳🇱 Netherlands #2-1 | LTE"
-    },
-    "outbounds": [
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "81.200.149.170",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision",
-                  "id": "965f0180-43a0-4447-b011-9b78a0b5a49e"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "realitySettings": {
-            "fingerprint": "chrome",
-            "publicKey": "DmzcxY5l0chUswHEpfmE488t8kw_c77fRo-R_wCuxBw",
-            "serverName": "st.vk.com",
-            "shortId": "57b6306e338b",
-            "spiderX": "/"
-          },
-          "security": "reality",
-          "tcpSettings": {}
-        },
-        "tag": "proxy"
-      },
-      {
-        "protocol": "freedom",
-        "tag": "direct"
-      },
-      {
-        "protocol": "blackhole",
-        "tag": "block"
-      },
-      {
-        "protocol": "dns",
-        "proxySettings": {
-          "tag": "proxy"
-        },
-        "tag": "dns-out"
-      }
-    ],
-    "policy": {
-      "levels": {
-        "8": {
-          "connIdle": 300,
-          "downlinkOnly": 1,
-          "handshake": 4,
-          "uplinkOnly": 1
-        }
-      },
-      "system": {
-        "statsOutboundDownlink": true,
-        "statsOutboundUplink": true
-      }
-    },
-    "remarks": "🇳🇱 Netherlands #2-1 | LTE",
-    "routing": {
-      "domainStrategy": "IPIfNonMatch",
-      "rules": [
-        {
-          "outboundTag": "dns-out",
-          "port": 53
-        },
-        {
-          "domain": [
-            "geosite:win-spy",
-            "geosite:torrent",
-            "geosite:category-ads"
-          ],
-          "outboundTag": "block"
-        },
-        {
-          "ip": [
-            "77.88.8.8"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "ip": [
-            "8.8.8.8"
-          ],
-          "outboundTag": "proxy"
-        },
-        {
-          "domain": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
-            "domain:easebar.com",
-            "domain:battle.net",
-            "domain:blizzard.com",
-            "domain:braze.com",
-            "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru"
-          ],
-          "outboundTag": "proxy"
-        },
-        {
-          "domain": [
-            "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit",
-            "ip-api.com"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "ip": [
-            "geoip:private",
-            "geoip:direct"
-          ],
-          "outboundTag": "direct"
-        }
-      ]
-    },
-    "stats": {}
-  },
-  {
-    "dns": {
-      "hosts": {
-        "lkfl2.nalog.ru": "213.24.64.175",
-        "lknpd.nalog.ru": "213.24.64.181"
-      },
-      "queryStrategy": "UseIPv4",
-      "servers": [
-        "https://8.8.8.8/dns-query",
-        {
-          "address": "https://8.8.8.8/dns-query",
-          "domains": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
-            "domain:easebar.com",
-            "domain:battle.net",
-            "domain:blizzard.com",
-            "domain:braze.com",
-            "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru",
-            "ip-api.com"
-          ]
-        },
-        {
-          "address": "https://77.88.8.8/dns-query",
-          "domains": [
-            "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit"
-          ]
-        }
-      ]
-    },
-    "inbounds": [
-      {
-        "listen": "127.0.0.1",
-        "port": 10808,
-        "protocol": "socks",
-        "settings": {
-          "auth": "noauth",
-          "udp": true,
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": [
-            "http",
-            "quic",
-            "tls"
-          ],
-          "enabled": true
-        },
-        "tag": "socks"
-      },
-      {
-        "listen": "127.0.0.1",
-        "port": 10809,
-        "protocol": "http",
-        "settings": {
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": [
-            "http",
-            "quic",
-            "tls"
-          ],
-          "enabled": true
-        },
-        "tag": "http"
-      }
-    ],
-    "log": {
-      "loglevel": "warning"
-    },
-    "meta": {
-      "serverDescription": "🇳🇱 Netherlands #2-2 | LTE"
-    },
-    "outbounds": [
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "81.200.149.170",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision",
-                  "id": "965f0180-43a0-4447-b011-9b78a0b5a49e"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "realitySettings": {
-            "fingerprint": "chrome",
-            "publicKey": "DmzcxY5l0chUswHEpfmE488t8kw_c77fRo-R_wCuxBw",
-            "serverName": "music.yandex.ru",
-            "shortId": "a2f02a6fe898",
-            "spiderX": "/"
-          },
-          "security": "reality",
-          "tcpSettings": {}
-        },
-        "tag": "proxy"
-      },
-      {
-        "protocol": "freedom",
-        "tag": "direct"
-      },
-      {
-        "protocol": "blackhole",
-        "tag": "block"
-      },
-      {
-        "protocol": "dns",
-        "proxySettings": {
-          "tag": "proxy"
-        },
-        "tag": "dns-out"
-      }
-    ],
-    "policy": {
-      "levels": {
-        "8": {
-          "connIdle": 300,
-          "downlinkOnly": 1,
-          "handshake": 4,
-          "uplinkOnly": 1
-        }
-      },
-      "system": {
-        "statsOutboundDownlink": true,
-        "statsOutboundUplink": true
-      }
-    },
-    "remarks": "🇳🇱 Netherlands #2-2 | LTE",
-    "routing": {
-      "domainStrategy": "IPIfNonMatch",
-      "rules": [
-        {
-          "outboundTag": "dns-out",
-          "port": 53
-        },
-        {
-          "domain": [
-            "geosite:win-spy",
-            "geosite:torrent",
-            "geosite:category-ads"
-          ],
-          "outboundTag": "block"
-        },
-        {
-          "ip": [
-            "77.88.8.8"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "ip": [
-            "8.8.8.8"
-          ],
-          "outboundTag": "proxy"
-        },
-        {
-          "domain": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
-            "domain:easebar.com",
-            "domain:battle.net",
-            "domain:blizzard.com",
-            "domain:braze.com",
-            "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru"
-          ],
-          "outboundTag": "proxy"
-        },
-        {
-          "domain": [
-            "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit",
-            "ip-api.com"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "ip": [
-            "geoip:private",
-            "geoip:direct"
-          ],
-          "outboundTag": "direct"
-        }
-      ]
-    },
-    "stats": {}
-  },
-  {
-    "dns": {
-      "hosts": {
-        "lkfl2.nalog.ru": "213.24.64.175",
-        "lknpd.nalog.ru": "213.24.64.181"
-      },
-      "queryStrategy": "UseIPv4",
-      "servers": [
-        "https://8.8.8.8/dns-query",
-        {
-          "address": "https://8.8.8.8/dns-query",
-          "domains": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
-            "domain:easebar.com",
-            "domain:battle.net",
-            "domain:blizzard.com",
-            "domain:braze.com",
-            "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru",
-            "ip-api.com"
-          ]
-        },
-        {
-          "address": "https://77.88.8.8/dns-query",
-          "domains": [
-            "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit"
-          ]
-        }
-      ]
-    },
-    "inbounds": [
-      {
-        "listen": "127.0.0.1",
-        "port": 10808,
-        "protocol": "socks",
-        "settings": {
-          "auth": "noauth",
-          "udp": true,
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": [
-            "http",
-            "quic",
-            "tls"
-          ],
-          "enabled": true
-        },
-        "tag": "socks"
-      },
-      {
-        "listen": "127.0.0.1",
-        "port": 10809,
-        "protocol": "http",
-        "settings": {
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": [
-            "http",
-            "quic",
-            "tls"
-          ],
-          "enabled": true
-        },
-        "tag": "http"
-      }
-    ],
-    "log": {
-      "loglevel": "warning"
-    },
-    "meta": {
-      "serverDescription": "🇳🇱 Netherlands #2-3 | LTE"
-    },
-    "outbounds": [
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "81.200.149.170",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision",
-                  "id": "965f0180-43a0-4447-b011-9b78a0b5a49e"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "realitySettings": {
-            "fingerprint": "chrome",
-            "publicKey": "DmzcxY5l0chUswHEpfmE488t8kw_c77fRo-R_wCuxBw",
-            "serverName": "max.ru",
-            "shortId": "f0fa43fbd850",
-            "spiderX": "/"
-          },
-          "security": "reality",
-          "tcpSettings": {}
-        },
-        "tag": "proxy"
-      },
-      {
-        "protocol": "freedom",
-        "tag": "direct"
-      },
-      {
-        "protocol": "blackhole",
-        "tag": "block"
-      },
-      {
-        "protocol": "dns",
-        "proxySettings": {
-          "tag": "proxy"
-        },
-        "tag": "dns-out"
-      }
-    ],
-    "policy": {
-      "levels": {
-        "8": {
-          "connIdle": 300,
-          "downlinkOnly": 1,
-          "handshake": 4,
-          "uplinkOnly": 1
-        }
-      },
-      "system": {
-        "statsOutboundDownlink": true,
-        "statsOutboundUplink": true
-      }
-    },
-    "remarks": "🇳🇱 Netherlands #2-3 | LTE",
-    "routing": {
-      "domainStrategy": "IPIfNonMatch",
-      "rules": [
-        {
-          "outboundTag": "dns-out",
-          "port": 53
-        },
-        {
-          "domain": [
-            "geosite:win-spy",
-            "geosite:torrent",
-            "geosite:category-ads"
-          ],
-          "outboundTag": "block"
-        },
-        {
-          "ip": [
-            "77.88.8.8"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "ip": [
-            "8.8.8.8"
-          ],
-          "outboundTag": "proxy"
-        },
-        {
-          "domain": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
-            "domain:easebar.com",
-            "domain:battle.net",
-            "domain:blizzard.com",
-            "domain:braze.com",
-            "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru"
-          ],
-          "outboundTag": "proxy"
-        },
-        {
-          "domain": [
-            "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit",
-            "ip-api.com"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "ip": [
-            "geoip:private",
-            "geoip:direct"
-          ],
-          "outboundTag": "direct"
-        }
-      ]
-    },
-    "stats": {}
-  },
-  {
-    "dns": {
-      "hosts": {
-        "lkfl2.nalog.ru": "213.24.64.175",
-        "lknpd.nalog.ru": "213.24.64.181"
-      },
-      "queryStrategy": "UseIPv4",
-      "servers": [
-        "https://8.8.8.8/dns-query",
-        {
-          "address": "https://8.8.8.8/dns-query",
-          "domains": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
-            "domain:easebar.com",
-            "domain:battle.net",
-            "domain:blizzard.com",
-            "domain:braze.com",
-            "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru",
-            "ip-api.com"
-          ]
-        },
-        {
-          "address": "https://77.88.8.8/dns-query",
-          "domains": [
-            "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit"
-          ]
-        }
-      ]
-    },
-    "inbounds": [
-      {
-        "listen": "127.0.0.1",
-        "port": 10808,
-        "protocol": "socks",
-        "settings": {
-          "auth": "noauth",
-          "udp": true,
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": [
-            "http",
-            "quic",
-            "tls"
-          ],
-          "enabled": true
-        },
-        "tag": "socks"
-      },
-      {
-        "listen": "127.0.0.1",
-        "port": 10809,
-        "protocol": "http",
-        "settings": {
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": [
-            "http",
-            "quic",
-            "tls"
-          ],
-          "enabled": true
-        },
-        "tag": "http"
-      }
-    ],
-    "log": {
-      "loglevel": "warning"
-    },
-    "meta": {
-      "serverDescription": "🇳🇱 Netherlands #3-3 | LTE"
+      "serverDescription": "VLESS | Premium"
     },
     "outbounds": [
       {
@@ -3051,7 +2186,7 @@
           "vnext": [
             {
               "address": "95.163.212.38",
-              "port": 8443,
+              "port": 443,
               "users": [
                 {
                   "encryption": "none",
@@ -3068,8 +2203,7 @@
             "fingerprint": "chrome",
             "publicKey": "3dl4k-oMvO8XCmQQVq_FIA2z8l4V9ICskbQ542uF_Vg",
             "serverName": "st.vk.com",
-            "shortId": "eca27cd6bf",
-            "spiderX": "/"
+            "shortId": "95e2ab7c41d860f1"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -3106,7 +2240,7 @@
         "statsOutboundUplink": true
       }
     },
-    "remarks": "🇳🇱 Netherlands #3-3 | LTE",
+    "remarks": "🇩🇪 Germany #2-1 | LTE",
     "routing": {
       "domainStrategy": "IPIfNonMatch",
       "rules": [
@@ -3136,43 +2270,26 @@
         },
         {
           "domain": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru"
+            "domain:sparx.io"
           ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit",
-            "ip-api.com"
+            "geosite:whitelist"
           ],
           "outboundTag": "direct"
         },
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -3192,36 +2309,19 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru",
-            "ip-api.com"
+            "domain:sparx.io"
           ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit"
+            "geosite:whitelist"
           ]
         }
       ]
@@ -3268,7 +2368,7 @@
       "loglevel": "warning"
     },
     "meta": {
-      "serverDescription": "🇳🇱 Netherlands #3-3 | LTE"
+      "serverDescription": "VLESS | Premium"
     },
     "outbounds": [
       {
@@ -3277,7 +2377,7 @@
           "vnext": [
             {
               "address": "95.163.212.38",
-              "port": 8443,
+              "port": 443,
               "users": [
                 {
                   "encryption": "none",
@@ -3294,8 +2394,7 @@
             "fingerprint": "chrome",
             "publicKey": "3dl4k-oMvO8XCmQQVq_FIA2z8l4V9ICskbQ542uF_Vg",
             "serverName": "music.yandex.ru",
-            "shortId": "e6a3bbe8df297f03",
-            "spiderX": "/"
+            "shortId": "4bc0d31ea98f72d6"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -3332,7 +2431,7 @@
         "statsOutboundUplink": true
       }
     },
-    "remarks": "🇳🇱 Netherlands #3-3 | LTE",
+    "remarks": "🇩🇪 Germany #2-2 | LTE",
     "routing": {
       "domainStrategy": "IPIfNonMatch",
       "rules": [
@@ -3362,43 +2461,26 @@
         },
         {
           "domain": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru"
+            "domain:sparx.io"
           ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit",
-            "ip-api.com"
+            "geosite:whitelist"
           ],
           "outboundTag": "direct"
         },
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
@@ -3418,36 +2500,19 @@
         {
           "address": "https://8.8.8.8/dns-query",
           "domains": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru",
-            "ip-api.com"
+            "domain:sparx.io"
           ]
         },
         {
           "address": "https://77.88.8.8/dns-query",
           "domains": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit"
+            "geosite:whitelist"
           ]
         }
       ]
@@ -3494,7 +2559,7 @@
       "loglevel": "warning"
     },
     "meta": {
-      "serverDescription": "🇳🇱 Netherlands #3-3 | LTE"
+      "serverDescription": "VLESS | Premium"
     },
     "outbounds": [
       {
@@ -3503,7 +2568,7 @@
           "vnext": [
             {
               "address": "95.163.212.38",
-              "port": 8443,
+              "port": 443,
               "users": [
                 {
                   "encryption": "none",
@@ -3520,8 +2585,7 @@
             "fingerprint": "chrome",
             "publicKey": "3dl4k-oMvO8XCmQQVq_FIA2z8l4V9ICskbQ542uF_Vg",
             "serverName": "max.ru",
-            "shortId": "eca27cd6bf",
-            "spiderX": "/"
+            "shortId": "ef36a9b7421cd580"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -3558,7 +2622,7 @@
         "statsOutboundUplink": true
       }
     },
-    "remarks": "🇳🇱 Netherlands #3-3 | LTE",
+    "remarks": "🇩🇪 Germany #2-3 | LTE",
     "routing": {
       "domainStrategy": "IPIfNonMatch",
       "rules": [
@@ -3588,43 +2652,26 @@
         },
         {
           "domain": [
-            "geosite:google-play",
-            "geosite:github",
-            "geosite:twitch-ads",
-            "geosite:youtube",
-            "geosite:telegram",
             "domain:easebar.com",
             "domain:battle.net",
             "domain:blizzard.com",
             "domain:braze.com",
             "domain:sparxcdn.net",
-            "domain:sparx.io",
-            "domain:seasonvar.ru"
+            "domain:sparx.io"
           ],
           "outboundTag": "proxy"
         },
         {
           "domain": [
             "geosite:private",
-            "geosite:category-ru",
-            "geosite:whitelist",
-            "geosite:microsoft",
-            "geosite:apple",
-            "geosite:epicgames",
-            "geosite:riot",
-            "geosite:escapefromtarkov",
-            "geosite:steam",
-            "geosite:twitch",
-            "geosite:pinterest",
-            "geosite:faceit",
-            "ip-api.com"
+            "geosite:whitelist"
           ],
           "outboundTag": "direct"
         },
         {
           "ip": [
             "geoip:private",
-            "geoip:direct"
+            "geoip:whitelist"
           ],
           "outboundTag": "direct"
         }
