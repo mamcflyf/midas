@@ -96,7 +96,7 @@
             "fingerprint": "chrome",
             "publicKey": "PkonquQjHffrUL1SAl1B7MyhnQI6rfHOxorpEe3b6nw",
             "serverName": "login.vk.com",
-            "shortId": "5f8c1a72d4be9031"
+            "shortId": "4b0a81253be6"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -287,7 +287,7 @@
             "fingerprint": "chrome",
             "publicKey": "PkonquQjHffrUL1SAl1B7MyhnQI6rfHOxorpEe3b6nw",
             "serverName": "ads.x5.ru",
-            "shortId": "a9e47cbb128fd650"
+            "shortId": "0fdf"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -1623,7 +1623,7 @@
             "fingerprint": "chrome",
             "publicKey": "UOpEuuUA4c6X7JrprUUbV4T0OjJYBa2DCN5sFIt7PE8",
             "serverName": "st.vk.com",
-            "shortId": "f0b74d91ce2683aa"
+            "shortId": "cd11"
           },
           "security": "reality",
           "grpcSettings": {
@@ -1663,7 +1663,7 @@
         "statsOutboundUplink": true
       }
     },
-    "remarks": "🇳🇱 Netherlands #1-1 | LTE",
+    "remarks": "🇩🇪 Germany #3-1 | LTE",
     "routing": {
       "domainStrategy": "IPIfNonMatch",
       "rules": [
@@ -1816,7 +1816,7 @@
             "fingerprint": "chrome",
             "publicKey": "UOpEuuUA4c6X7JrprUUbV4T0OjJYBa2DCN5sFIt7PE8",
             "serverName": "music.yandex.ru",
-            "shortId": "29dc6f8ab1547e03"
+            "shortId": "bfde8d1b"
           },
           "security": "reality",
           "grpcSettings": {
@@ -2009,7 +2009,7 @@
             "fingerprint": "chrome",
             "publicKey": "UOpEuuUA4c6X7JrprUUbV4T0OjJYBa2DCN5sFIt7PE8",
             "serverName": "max.ru",
-            "shortId": "c41e95db70af3268"
+            "shortId": "98eb469615"
           },
           "security": "reality",
           "grpcSettings": {
@@ -2185,13 +2185,13 @@
         "settings": {
           "vnext": [
             {
-              "address": "81.200.149.170",
+              "address": "95.163.212.38",
               "port": 443,
               "users": [
                 {
                   "encryption": "none",
                   "flow": "xtls-rprx-vision",
-                  "id": "965f0180-43a0-4447-b011-9b78a0b5a49e"
+                  "id": "cc5305ba-c6dc-4eff-ae1e-d9c895762f85"
                 }
               ]
             }
@@ -2201,9 +2201,9 @@
           "network": "tcp",
           "realitySettings": {
             "fingerprint": "chrome",
-            "publicKey": "DmzcxY5l0chUswHEpfmE488t8kw_c77fRo-R_wCuxBw",
+            "publicKey": "3dl4k-oMvO8XCmQQVq_FIA2z8l4V9ICskbQ542uF_Vg",
             "serverName": "st.vk.com",
-            "shortId": "7bf2c8d149e60a5f"
+            "shortId": "eca27cd6bf"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -2376,13 +2376,13 @@
         "settings": {
           "vnext": [
             {
-              "address": "81.200.149.170",
+              "address": "95.163.212.38",
               "port": 443,
               "users": [
                 {
                   "encryption": "none",
                   "flow": "xtls-rprx-vision",
-                  "id": "965f0180-43a0-4447-b011-9b78a0b5a49e"
+                  "id": "cc5305ba-c6dc-4eff-ae1e-d9c895762f85"
                 }
               ]
             }
@@ -2392,9 +2392,9 @@
           "network": "tcp",
           "realitySettings": {
             "fingerprint": "chrome",
-            "publicKey": "DmzcxY5l0chUswHEpfmE488t8kw_c77fRo-R_wCuxBw",
+            "publicKey": "3dl4k-oMvO8XCmQQVq_FIA2z8l4V9ICskbQ542uF_Vg",
             "serverName": "music.yandex.ru",
-            "shortId": "d8a41f76bc2593ee"
+            "shortId": "e6a3bbe8df297f03"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -2567,13 +2567,13 @@
         "settings": {
           "vnext": [
             {
-              "address": "81.200.149.170",
+              "address": "95.163.212.38",
               "port": 443,
               "users": [
                 {
                   "encryption": "none",
                   "flow": "xtls-rprx-vision",
-                  "id": "965f0180-43a0-4447-b011-9b78a0b5a49e"
+                  "id": "cc5305ba-c6dc-4eff-ae1e-d9c895762f85"
                 }
               ]
             }
@@ -2583,9 +2583,9 @@
           "network": "tcp",
           "realitySettings": {
             "fingerprint": "chrome",
-            "publicKey": "DmzcxY5l0chUswHEpfmE488t8kw_c77fRo-R_wCuxBw",
+            "publicKey": "3dl4k-oMvO8XCmQQVq_FIA2z8l4V9ICskbQ542uF_Vg",
             "serverName": "max.ru",
-            "shortId": "01f79cb4d6ea328a"
+            "shortId": "eca27cd6bf"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -2623,579 +2623,6 @@
       }
     },
     "remarks": "🇳🇱 Netherlands #2-3 | LTE",
-    "routing": {
-      "domainStrategy": "IPIfNonMatch",
-      "rules": [
-        {
-          "outboundTag": "dns-out",
-          "port": 53
-        },
-        {
-          "domain": [
-            "geosite:win-spy",
-            "geosite:torrent",
-            "geosite:category-ads"
-          ],
-          "outboundTag": "block"
-        },
-        {
-          "ip": [
-            "77.88.8.8"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "ip": [
-            "8.8.8.8"
-          ],
-          "outboundTag": "proxy"
-        },
-        {
-          "domain": [
-            "domain:easebar.com",
-            "domain:battle.net",
-            "domain:blizzard.com",
-            "domain:braze.com",
-            "domain:sparxcdn.net",
-            "domain:sparx.io"
-          ],
-          "outboundTag": "proxy"
-        },
-        {
-          "domain": [
-            "geosite:private",
-            "geosite:whitelist"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "ip": [
-            "geoip:private",
-            "geoip:whitelist"
-          ],
-          "outboundTag": "direct"
-        }
-      ]
-    },
-    "stats": {}
-  },
-  {
-    "dns": {
-      "hosts": {
-        "lkfl2.nalog.ru": "213.24.64.175",
-        "lknpd.nalog.ru": "213.24.64.181"
-      },
-      "queryStrategy": "UseIPv4",
-      "servers": [
-        "https://8.8.8.8/dns-query",
-        {
-          "address": "https://8.8.8.8/dns-query",
-          "domains": [
-            "domain:easebar.com",
-            "domain:battle.net",
-            "domain:blizzard.com",
-            "domain:braze.com",
-            "domain:sparxcdn.net",
-            "domain:sparx.io"
-          ]
-        },
-        {
-          "address": "https://77.88.8.8/dns-query",
-          "domains": [
-            "geosite:private",
-            "geosite:whitelist"
-          ]
-        }
-      ]
-    },
-    "inbounds": [
-      {
-        "listen": "127.0.0.1",
-        "port": 10808,
-        "protocol": "socks",
-        "settings": {
-          "auth": "noauth",
-          "udp": true,
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": [
-            "http",
-            "quic",
-            "tls"
-          ],
-          "enabled": true
-        },
-        "tag": "socks"
-      },
-      {
-        "listen": "127.0.0.1",
-        "port": 10809,
-        "protocol": "http",
-        "settings": {
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": [
-            "http",
-            "quic",
-            "tls"
-          ],
-          "enabled": true
-        },
-        "tag": "http"
-      }
-    ],
-    "log": {
-      "loglevel": "warning"
-    },
-    "meta": {
-      "serverDescription": "VLESS | Premium"
-    },
-    "outbounds": [
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "95.163.212.38",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision",
-                  "id": "cc5305ba-c6dc-4eff-ae1e-d9c895762f85"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "realitySettings": {
-            "fingerprint": "chrome",
-            "publicKey": "3dl4k-oMvO8XCmQQVq_FIA2z8l4V9ICskbQ542uF_Vg",
-            "serverName": "st.vk.com",
-            "shortId": "95e2ab7c41d860f1"
-          },
-          "security": "reality",
-          "tcpSettings": {}
-        },
-        "tag": "proxy"
-      },
-      {
-        "protocol": "freedom",
-        "tag": "direct"
-      },
-      {
-        "protocol": "blackhole",
-        "tag": "block"
-      },
-      {
-        "protocol": "dns",
-        "proxySettings": {
-          "tag": "proxy"
-        },
-        "tag": "dns-out"
-      }
-    ],
-    "policy": {
-      "levels": {
-        "8": {
-          "connIdle": 300,
-          "downlinkOnly": 1,
-          "handshake": 4,
-          "uplinkOnly": 1
-        }
-      },
-      "system": {
-        "statsOutboundDownlink": true,
-        "statsOutboundUplink": true
-      }
-    },
-    "remarks": "🇳🇱 Netherlands #3-1 | LTE",
-    "routing": {
-      "domainStrategy": "IPIfNonMatch",
-      "rules": [
-        {
-          "outboundTag": "dns-out",
-          "port": 53
-        },
-        {
-          "domain": [
-            "geosite:win-spy",
-            "geosite:torrent",
-            "geosite:category-ads"
-          ],
-          "outboundTag": "block"
-        },
-        {
-          "ip": [
-            "77.88.8.8"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "ip": [
-            "8.8.8.8"
-          ],
-          "outboundTag": "proxy"
-        },
-        {
-          "domain": [
-            "domain:easebar.com",
-            "domain:battle.net",
-            "domain:blizzard.com",
-            "domain:braze.com",
-            "domain:sparxcdn.net",
-            "domain:sparx.io"
-          ],
-          "outboundTag": "proxy"
-        },
-        {
-          "domain": [
-            "geosite:private",
-            "geosite:whitelist"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "ip": [
-            "geoip:private",
-            "geoip:whitelist"
-          ],
-          "outboundTag": "direct"
-        }
-      ]
-    },
-    "stats": {}
-  },
-  {
-    "dns": {
-      "hosts": {
-        "lkfl2.nalog.ru": "213.24.64.175",
-        "lknpd.nalog.ru": "213.24.64.181"
-      },
-      "queryStrategy": "UseIPv4",
-      "servers": [
-        "https://8.8.8.8/dns-query",
-        {
-          "address": "https://8.8.8.8/dns-query",
-          "domains": [
-            "domain:easebar.com",
-            "domain:battle.net",
-            "domain:blizzard.com",
-            "domain:braze.com",
-            "domain:sparxcdn.net",
-            "domain:sparx.io"
-          ]
-        },
-        {
-          "address": "https://77.88.8.8/dns-query",
-          "domains": [
-            "geosite:private",
-            "geosite:whitelist"
-          ]
-        }
-      ]
-    },
-    "inbounds": [
-      {
-        "listen": "127.0.0.1",
-        "port": 10808,
-        "protocol": "socks",
-        "settings": {
-          "auth": "noauth",
-          "udp": true,
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": [
-            "http",
-            "quic",
-            "tls"
-          ],
-          "enabled": true
-        },
-        "tag": "socks"
-      },
-      {
-        "listen": "127.0.0.1",
-        "port": 10809,
-        "protocol": "http",
-        "settings": {
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": [
-            "http",
-            "quic",
-            "tls"
-          ],
-          "enabled": true
-        },
-        "tag": "http"
-      }
-    ],
-    "log": {
-      "loglevel": "warning"
-    },
-    "meta": {
-      "serverDescription": "VLESS | Premium"
-    },
-    "outbounds": [
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "95.163.212.38",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision",
-                  "id": "cc5305ba-c6dc-4eff-ae1e-d9c895762f85"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "realitySettings": {
-            "fingerprint": "chrome",
-            "publicKey": "3dl4k-oMvO8XCmQQVq_FIA2z8l4V9ICskbQ542uF_Vg",
-            "serverName": "music.yandex.ru",
-            "shortId": "4bc0d31ea98f72d6"
-          },
-          "security": "reality",
-          "tcpSettings": {}
-        },
-        "tag": "proxy"
-      },
-      {
-        "protocol": "freedom",
-        "tag": "direct"
-      },
-      {
-        "protocol": "blackhole",
-        "tag": "block"
-      },
-      {
-        "protocol": "dns",
-        "proxySettings": {
-          "tag": "proxy"
-        },
-        "tag": "dns-out"
-      }
-    ],
-    "policy": {
-      "levels": {
-        "8": {
-          "connIdle": 300,
-          "downlinkOnly": 1,
-          "handshake": 4,
-          "uplinkOnly": 1
-        }
-      },
-      "system": {
-        "statsOutboundDownlink": true,
-        "statsOutboundUplink": true
-      }
-    },
-    "remarks": "🇳🇱 Netherlands #3-2 | LTE",
-    "routing": {
-      "domainStrategy": "IPIfNonMatch",
-      "rules": [
-        {
-          "outboundTag": "dns-out",
-          "port": 53
-        },
-        {
-          "domain": [
-            "geosite:win-spy",
-            "geosite:torrent",
-            "geosite:category-ads"
-          ],
-          "outboundTag": "block"
-        },
-        {
-          "ip": [
-            "77.88.8.8"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "ip": [
-            "8.8.8.8"
-          ],
-          "outboundTag": "proxy"
-        },
-        {
-          "domain": [
-            "domain:easebar.com",
-            "domain:battle.net",
-            "domain:blizzard.com",
-            "domain:braze.com",
-            "domain:sparxcdn.net",
-            "domain:sparx.io"
-          ],
-          "outboundTag": "proxy"
-        },
-        {
-          "domain": [
-            "geosite:private",
-            "geosite:whitelist"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "ip": [
-            "geoip:private",
-            "geoip:whitelist"
-          ],
-          "outboundTag": "direct"
-        }
-      ]
-    },
-    "stats": {}
-  },
-  {
-    "dns": {
-      "hosts": {
-        "lkfl2.nalog.ru": "213.24.64.175",
-        "lknpd.nalog.ru": "213.24.64.181"
-      },
-      "queryStrategy": "UseIPv4",
-      "servers": [
-        "https://8.8.8.8/dns-query",
-        {
-          "address": "https://8.8.8.8/dns-query",
-          "domains": [
-            "domain:easebar.com",
-            "domain:battle.net",
-            "domain:blizzard.com",
-            "domain:braze.com",
-            "domain:sparxcdn.net",
-            "domain:sparx.io"
-          ]
-        },
-        {
-          "address": "https://77.88.8.8/dns-query",
-          "domains": [
-            "geosite:private",
-            "geosite:whitelist"
-          ]
-        }
-      ]
-    },
-    "inbounds": [
-      {
-        "listen": "127.0.0.1",
-        "port": 10808,
-        "protocol": "socks",
-        "settings": {
-          "auth": "noauth",
-          "udp": true,
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": [
-            "http",
-            "quic",
-            "tls"
-          ],
-          "enabled": true
-        },
-        "tag": "socks"
-      },
-      {
-        "listen": "127.0.0.1",
-        "port": 10809,
-        "protocol": "http",
-        "settings": {
-          "userLevel": 8
-        },
-        "sniffing": {
-          "destOverride": [
-            "http",
-            "quic",
-            "tls"
-          ],
-          "enabled": true
-        },
-        "tag": "http"
-      }
-    ],
-    "log": {
-      "loglevel": "warning"
-    },
-    "meta": {
-      "serverDescription": "VLESS | Premium"
-    },
-    "outbounds": [
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "95.163.212.38",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision",
-                  "id": "cc5305ba-c6dc-4eff-ae1e-d9c895762f85"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "realitySettings": {
-            "fingerprint": "chrome",
-            "publicKey": "3dl4k-oMvO8XCmQQVq_FIA2z8l4V9ICskbQ542uF_Vg",
-            "serverName": "max.ru",
-            "shortId": "ef36a9b7421cd580"
-          },
-          "security": "reality",
-          "tcpSettings": {}
-        },
-        "tag": "proxy"
-      },
-      {
-        "protocol": "freedom",
-        "tag": "direct"
-      },
-      {
-        "protocol": "blackhole",
-        "tag": "block"
-      },
-      {
-        "protocol": "dns",
-        "proxySettings": {
-          "tag": "proxy"
-        },
-        "tag": "dns-out"
-      }
-    ],
-    "policy": {
-      "levels": {
-        "8": {
-          "connIdle": 300,
-          "downlinkOnly": 1,
-          "handshake": 4,
-          "uplinkOnly": 1
-        }
-      },
-      "system": {
-        "statsOutboundDownlink": true,
-        "statsOutboundUplink": true
-      }
-    },
-    "remarks": "🇳🇱 Netherlands #3-3 | LTE",
     "routing": {
       "domainStrategy": "IPIfNonMatch",
       "rules": [
