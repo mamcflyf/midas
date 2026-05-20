@@ -96,7 +96,7 @@
             "fingerprint": "chrome",
             "publicKey": "PkonquQjHffrUL1SAl1B7MyhnQI6rfHOxorpEe3b6nw",
             "serverName": "login.vk.com",
-            "shortId": "4b0a81253be6"
+            "shortId": "5f8c1a72d4be9031"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -287,7 +287,7 @@
             "fingerprint": "chrome",
             "publicKey": "PkonquQjHffrUL1SAl1B7MyhnQI6rfHOxorpEe3b6nw",
             "serverName": "ads.x5.ru",
-            "shortId": "32a5dec7d10e4f"
+            "shortId": "a9e47cbb128fd650"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -478,7 +478,7 @@
             "fingerprint": "chrome",
             "publicKey": "Uv8syYANfix6DewS7rVWGs_GqmTO587zQRAnov-mfQA",
             "serverName": "eh.vk.ru",
-            "shortId": "04a5dec6d10e4f"
+            "shortId": "3c71f8de94ab2f6c"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -669,7 +669,7 @@
             "fingerprint": "chrome",
             "publicKey": "Uv8syYANfix6DewS7rVWGs_GqmTO587zQRAnov-mfQA",
             "serverName": "music.yandex.ru",
-            "shortId": "87cbf6e599921a"
+            "shortId": "e2b6490fd17ca835"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -860,7 +860,7 @@
             "fingerprint": "chrome",
             "publicKey": "Uv8syYANfix6DewS7rVWGs_GqmTO587zQRAnov-mfQA",
             "serverName": "ads.x5.ru",
-            "shortId": "75cbf6e1399721a"
+            "shortId": "8d3fa72bc41e9650"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -1051,7 +1051,7 @@
             "fingerprint": "chrome",
             "publicKey": "Uv8syYANfix6DewS7rVWGs_GqmTO587zQRAnov-mfQA",
             "serverName": "max.ru",
-            "shortId": "90cbf6e3411721a"
+            "shortId": "14c8e9ab76fd203d"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -1242,7 +1242,7 @@
             "fingerprint": "chrome",
             "publicKey": "kNO52JpKeKuantsDTqNo63NjtfCYKZISTKtdey9Ruk0",
             "serverName": "eh.vk.ru",
-            "shortId": "11cbf6e3411721a"
+            "shortId": "b57d21ce8a490f34"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -1433,7 +1433,7 @@
             "fingerprint": "chrome",
             "publicKey": "kNO52JpKeKuantsDTqNo63NjtfCYKZISTKtdey9Ruk0",
             "serverName": "max.ru",
-            "shortId": "22cbf6e3411721a"
+            "shortId": "6ae193fcb7428d15"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -1623,7 +1623,7 @@
             "fingerprint": "chrome",
             "publicKey": "UOpEuuUA4c6X7JrprUUbV4T0OjJYBa2DCN5sFIt7PE8",
             "serverName": "st.vk.com",
-            "shortId": "f1fa22fbd222"
+            "shortId": "f0b74d91ce2683aa"
           },
           "security": "reality",
           "grpcSettings": {
@@ -1816,7 +1816,7 @@
             "fingerprint": "chrome",
             "publicKey": "UOpEuuUA4c6X7JrprUUbV4T0OjJYBa2DCN5sFIt7PE8",
             "serverName": "music.yandex.ru",
-            "shortId": "f1fa33fbd333"
+            "shortId": "29dc6f8ab1547e03"
           },
           "security": "reality",
           "grpcSettings": {
@@ -2009,7 +2009,7 @@
             "fingerprint": "chrome",
             "publicKey": "UOpEuuUA4c6X7JrprUUbV4T0OjJYBa2DCN5sFIt7PE8",
             "serverName": "max.ru",
-            "shortId": "f1fa55fbd555"
+            "shortId": "c41e95db70af3268"
           },
           "security": "reality",
           "grpcSettings": {
@@ -2203,7 +2203,7 @@
             "fingerprint": "chrome",
             "publicKey": "DmzcxY5l0chUswHEpfmE488t8kw_c77fRo-R_wCuxBw",
             "serverName": "st.vk.com",
-            "shortId": "57b6306e338b"
+            "shortId": "7bf2c8d149e60a5f"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -2394,7 +2394,7 @@
             "fingerprint": "chrome",
             "publicKey": "DmzcxY5l0chUswHEpfmE488t8kw_c77fRo-R_wCuxBw",
             "serverName": "music.yandex.ru",
-            "shortId": "a2f02a6fe898"
+            "shortId": "d8a41f76bc2593ee"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -2585,7 +2585,7 @@
             "fingerprint": "chrome",
             "publicKey": "DmzcxY5l0chUswHEpfmE488t8kw_c77fRo-R_wCuxBw",
             "serverName": "max.ru",
-            "shortId": "f0fa43fbd850"
+            "shortId": "01f79cb4d6ea328a"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -2776,7 +2776,7 @@
             "fingerprint": "chrome",
             "publicKey": "3dl4k-oMvO8XCmQQVq_FIA2z8l4V9ICskbQ542uF_Vg",
             "serverName": "st.vk.com",
-            "shortId": "f1fa43fbd850"
+            "shortId": "95e2ab7c41d860f1"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -2967,7 +2967,7 @@
             "fingerprint": "chrome",
             "publicKey": "3dl4k-oMvO8XCmQQVq_FIA2z8l4V9ICskbQ542uF_Vg",
             "serverName": "music.yandex.ru",
-            "shortId": "f1fa53fbd850"
+            "shortId": "4bc0d31ea98f72d6"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -3158,7 +3158,7 @@
             "fingerprint": "chrome",
             "publicKey": "3dl4k-oMvO8XCmQQVq_FIA2z8l4V9ICskbQ542uF_Vg",
             "serverName": "max.ru",
-            "shortId": "f1fa78fbd850"
+            "shortId": "ef36a9b7421cd580"
           },
           "security": "reality",
           "tcpSettings": {}
