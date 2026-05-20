@@ -3033,7 +3033,7 @@
         "statsOutboundUplink": true
       }
     },
-    "remarks": "🇳🇱 Netherlands #2-1 | LTE",
+    "remarks": "🇳🇱 Netherlands #1-1 | LTE",
     "routing": {
       "domainStrategy": "IPIfNonMatch",
       "rules": [
@@ -3229,7 +3229,7 @@
         "statsOutboundUplink": true
       }
     },
-    "remarks": "🇳🇱 Netherlands #2-2 | LTE",
+    "remarks": "🇳🇱 Netherlands #1-2 | LTE",
     "routing": {
       "domainStrategy": "IPIfNonMatch",
       "rules": [
@@ -3425,7 +3425,7 @@
         "statsOutboundUplink": true
       }
     },
-    "remarks": "🇳🇱 Netherlands #3-1 | LTE",
+    "remarks": "🇳🇱 Netherlands #2-1 | LTE",
     "routing": {
       "domainStrategy": "IPIfNonMatch",
       "rules": [
@@ -3621,7 +3621,7 @@
         "statsOutboundUplink": true
       }
     },
-    "remarks": "🇳🇱 Netherlands #3-2 | LTE",
+    "remarks": "🇳🇱 Netherlands #2-2 | LTE",
     "routing": {
       "domainStrategy": "IPIfNonMatch",
       "rules": [
@@ -3817,7 +3817,7 @@
         "statsOutboundUplink": true
       }
     },
-    "remarks": "🇳🇱 Netherlands #3-3 | LTE",
+    "remarks": "🇳🇱 Netherlands #2-3 | LTE",
     "routing": {
       "domainStrategy": "IPIfNonMatch",
       "rules": [
