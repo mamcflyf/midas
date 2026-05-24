@@ -2579,7 +2579,7 @@
                 {
                   "encryption": "none",
                   "flow": "xtls-rprx-vision",
-                  "id": "20bf253a-60e1-46de-88e2-e0be4cd77a6f"
+                  "id": "c604a554-1944-4bd8-89b9-6a69113ef3b9"
                 }
               ]
             }
@@ -2589,9 +2589,9 @@
           "network": "tcp",
           "realitySettings": {
             "fingerprint": "chrome",
-            "publicKey": "kNO52JpKeKuantsDTqNo63NjtfCYKZISTKtdey9Ruk0",
+            "publicKey": "lgNnIUy_Urlls_PVTZJwtdgOPc9-pOjCXe-O2vRZd1k",
             "serverName": "eh.vk.ru",
-            "shortId": "ce2f77d06c"
+            "shortId": "54a49f5a836088c5"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -2628,7 +2628,7 @@
         "statsOutboundUplink": true
       }
     },
-    "remarks": "🇱🇹 Lithuania #1-1 | LTE",
+    "remarks": "🇫🇷 France #1-1 | LTE",
     "routing": {
       "domainStrategy": "IPIfNonMatch",
       "rules": [
@@ -2764,13 +2764,13 @@
         "settings": {
           "vnext": [
             {
-              "address": "89.208.221.76",
+              "address": "89.208.229.157",
               "port": 443,
               "users": [
                 {
                   "encryption": "none",
                   "flow": "xtls-rprx-vision",
-                  "id": "20bf253a-60e1-46de-88e2-e0be4cd77a6f"
+                  "id": "c604a554-1944-4bd8-89b9-6a69113ef3b9"
                 }
               ]
             }
@@ -2780,9 +2780,9 @@
           "network": "tcp",
           "realitySettings": {
             "fingerprint": "chrome",
-            "publicKey": "kNO52JpKeKuantsDTqNo63NjtfCYKZISTKtdey9Ruk0",
+            "publicKey": "lgNnIUy_Urlls_PVTZJwtdgOPc9-pOjCXe-O2vRZd1k",
             "serverName": "max.ru",
-            "shortId": "8ebc6f8933e6"
+            "shortId": "54a49f5a836088c5"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -2819,7 +2819,7 @@
         "statsOutboundUplink": true
       }
     },
-    "remarks": "🇱🇹 Lithuania #1-2 | LTE",
+    "remarks": "🇫🇷 France #1-2 | LTE",
     "routing": {
       "domainStrategy": "IPIfNonMatch",
       "rules": [
@@ -3375,7 +3375,7 @@
             "fingerprint": "chrome",
             "publicKey": "UPvZNz9XxdLDAHK_gixihQEBpQ5O2TlJKXmMtBI3tiI",
             "serverName": "st.vk.com",
-            "shortId": "28af7df59e",
+            "shortId": "d230",
             "show": false,
             "spiderX": "/"
           },
@@ -3571,7 +3571,7 @@
             "fingerprint": "chrome",
             "publicKey": "UPvZNz9XxdLDAHK_gixihQEBpQ5O2TlJKXmMtBI3tiI",
             "serverName": "music.yandex.ru",
-            "shortId": "28af7df59e",
+            "shortId": "594ed2e6ec",
             "show": false,
             "spiderX": "/"
           },
@@ -3767,7 +3767,7 @@
             "fingerprint": "chrome",
             "publicKey": "UPvZNz9XxdLDAHK_gixihQEBpQ5O2TlJKXmMtBI3tiI",
             "serverName": "max.ru",
-            "shortId": "a235c857d977b969",
+            "shortId": "2f4736b0",
             "show": false,
             "spiderX": "/"
           },
