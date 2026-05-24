@@ -657,13 +657,13 @@
         "settings": {
           "vnext": [
             {
-              "address": "95.163.212.38",
+              "address": "51.250.32.107",
               "port": 8443,
               "users": [
                 {
                   "encryption": "none",
                   "flow": "xtls-rprx-vision",
-                  "id": "cc5305ba-c6dc-4eff-ae1e-d9c895762f85"
+                  "id": "55685254-9a4e-45a9-b4fe-26ef98eb5732"
                 }
               ]
             }
@@ -673,9 +673,9 @@
           "network": "tcp",
           "realitySettings": {
             "fingerprint": "chrome",
-            "publicKey": "3dl4k-oMvO8XCmQQVq_FIA2z8l4V9ICskbQ542uF_Vg",
-            "serverName": "st.vk.com",
-            "shortId": "eca27cd6bf"
+            "publicKey": "qs_qyXphK9I8DBmH8Kx5MnU4xFSGsUg-YLNwphPMAE",
+            "serverName": "eh.vk.com",
+            "shortId": "107daba0a1d5"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -848,13 +848,13 @@
         "settings": {
           "vnext": [
             {
-              "address": "95.163.212.38",
+              "address": "51.250.32.107",
               "port": 8443,
               "users": [
                 {
                   "encryption": "none",
                   "flow": "xtls-rprx-vision",
-                  "id": "cc5305ba-c6dc-4eff-ae1e-d9c895762f85"
+                  "id": "55685254-9a4e-45a9-b4fe-26ef98eb5732"
                 }
               ]
             }
@@ -864,9 +864,9 @@
           "network": "tcp",
           "realitySettings": {
             "fingerprint": "chrome",
-            "publicKey": "3dl4k-oMvO8XCmQQVq_FIA2z8l4V9ICskbQ542uF_Vg",
-            "serverName": "music.yandex.ru",
-            "shortId": "e6a3bbe8df297f03"
+            "publicKey": "qs_qyXphK9I8DBmH8Kx5MnU4xFSGsUg-YLNwphPMAE",
+            "serverName": "event.yandex.ru",
+            "shortId": "290aa8d7b4a07181"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -1039,13 +1039,13 @@
         "settings": {
           "vnext": [
             {
-              "address": "95.163.212.38",
+              "address": "51.250.32.107",
               "port": 8443,
               "users": [
                 {
                   "encryption": "none",
                   "flow": "xtls-rprx-vision",
-                  "id": "cc5305ba-c6dc-4eff-ae1e-d9c895762f85"
+                  "id": "55685254-9a4e-45a9-b4fe-26ef98eb5732"
                 }
               ]
             }
@@ -1055,9 +1055,9 @@
           "network": "tcp",
           "realitySettings": {
             "fingerprint": "chrome",
-            "publicKey": "3dl4k-oMvO8XCmQQVq_FIA2z8l4V9ICskbQ542uF_Vg",
-            "serverName": "max.ru",
-            "shortId": "eca27cd6bf"
+            "publicKey": "qs_qyXphK9I8DBmH8Kx5MnU4xFSGsUg-YLNwphPMAE",
+            "serverName": "api-maps.yandex.ru",
+            "shortId": "6b8d47d71a671c"
           },
           "security": "reality",
           "tcpSettings": {}
