@@ -86,7 +86,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "lgNnIUy_Urlls_PVTZJwtdgOPc9-pOjCXe-O2vRZd1k",
             "serverName": "eh.vk.ru",
             "shortId": "3e94a819b5",
@@ -265,7 +265,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "lgNnIUy_Urlls_PVTZJwtdgOPc9-pOjCXe-O2vRZd1k",
             "serverName": "max.ru",
             "shortId": "54a49f5a836088c5",
@@ -444,7 +444,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "UPvZNz9XxdLDAHK_gixihQEBpQ5O2TlJKXmMtBI3tiI",
             "serverName": "st.vk.com",
             "shortId": "e9c911c94581",
@@ -623,7 +623,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "UPvZNz9XxdLDAHK_gixihQEBpQ5O2TlJKXmMtBI3tiI",
             "serverName": "music.yandex.ru",
             "shortId": "28af7df59e",
@@ -802,7 +802,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "UPvZNz9XxdLDAHK_gixihQEBpQ5O2TlJKXmMtBI3tiI",
             "serverName": "max.ru",
             "shortId": "27c82e02a16b",
@@ -989,7 +989,7 @@
           "network": "grpc",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "wx54k6q59xd0Y50zWRpyQfZRC-fe0w0DYL-twuuV6l4",
             "serverName": "ssdg.mediastreamer.online",
             "shortId": "7682da2f8d",
@@ -1171,7 +1171,7 @@
           "network": "grpc",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "wx54k6q59xd0Y50zWRpyQfZRC-fe0w0DYL-twuuV6l4",
             "serverName": "ssdg.mediastreamer.online",
             "shortId": "7682da2f8d",
@@ -1353,7 +1353,7 @@
           "network": "grpc",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "wx54k6q59xd0Y50zWRpyQfZRC-fe0w0DYL-twuuV6l4",
             "serverName": "ssdg.mediastreamer.online",
             "shortId": "c37c818d",
@@ -1527,7 +1527,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "rIRtUVLJfu1hpFNUWdYB54ppBN2kdFIlJlCJIgoLrBk",
             "serverName": "eh.vk.com",
             "shortId": "28511ded",
@@ -1706,7 +1706,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "rIRtUVLJfu1hpFNUWdYB54ppBN2kdFIlJlCJIgoLrBk",
             "serverName": "music.yandex.ru",
             "shortId": "80",
@@ -1885,7 +1885,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "rIRtUVLJfu1hpFNUWdYB54ppBN2kdFIlJlCJIgoLrBk",
             "serverName": "rutube.ru",
             "shortId": "cd2f3822",
@@ -2064,7 +2064,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "rIRtUVLJfu1hpFNUWdYB54ppBN2kdFIlJlCJIgoLrBk",
             "serverName": "login.vk.com",
             "shortId": "165ff5904814",
@@ -2243,7 +2243,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "rIRtUVLJfu1hpFNUWdYB54ppBN2kdFIlJlCJIgoLrBk",
             "serverName": "ads.x5.ru",
             "shortId": "80",
@@ -2422,7 +2422,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "rIRtUVLJfu1hpFNUWdYB54ppBN2kdFIlJlCJIgoLrBk",
             "serverName": "max.ru",
             "shortId": "cc91479a",
@@ -2601,7 +2601,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "SitiqCCmhRIROM493nhjjeWG36uf9xrrSwPNNC1CNSU",
             "serverName": "st.vk.com",
             "shortId": "4cc7ad40",
@@ -2780,7 +2780,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "SitiqCCmhRIROM493nhjjeWG36uf9xrrSwPNNC1CNSU",
             "serverName": "music.yandex.ru",
             "shortId": "4cc7ad40",
@@ -2959,7 +2959,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "SitiqCCmhRIROM493nhjjeWG36uf9xrrSwPNNC1CNSU",
             "serverName": "io.ozone.ru",
             "shortId": "234969b17b3600f1",
@@ -3138,7 +3138,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "sJ5D5c8obfbADTcVLQc6yeTLpE1d7544j1qYDDIZNTo",
             "serverName": "eh.vk.com",
             "shortId": "cbc408af5e",
@@ -3317,7 +3317,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "sJ5D5c8obfbADTcVLQc6yeTLpE1d7544j1qYDDIZNTo",
             "serverName": "mts.ru",
             "shortId": "799223039b",
@@ -3496,7 +3496,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "sJ5D5c8obfbADTcVLQc6yeTLpE1d7544j1qYDDIZNTo",
             "serverName": "event.yandex.ru",
             "shortId": "7e",
@@ -3675,7 +3675,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "sJ5D5c8obfbADTcVLQc6yeTLpE1d7544j1qYDDIZNTo",
             "serverName": "ads.x5.ru",
             "shortId": "cbc408af5e",
@@ -3854,7 +3854,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "sJ5D5c8obfbADTcVLQc6yeTLpE1d7544j1qYDDIZNTo",
             "serverName": "max.ru",
             "shortId": "799223039b",
@@ -4033,7 +4033,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "tXjFwldvnWRA_cFFx7Hb1bQnw6Xj3oUWlXn4BABSngs",
             "serverName": "eh.vk.com",
             "shortId": "a2",
@@ -4212,7 +4212,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "tXjFwldvnWRA_cFFx7Hb1bQnw6Xj3oUWlXn4BABSngs",
             "serverName": "megafon.ru",
             "shortId": "a287e7bc6411b8",
@@ -4391,7 +4391,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "tXjFwldvnWRA_cFFx7Hb1bQnw6Xj3oUWlXn4BABSngs",
             "serverName": "event.yandex.ru",
             "shortId": "a2",
@@ -4570,7 +4570,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "tXjFwldvnWRA_cFFx7Hb1bQnw6Xj3oUWlXn4BABSngs",
             "serverName": "api-maps.yandex.ru",
             "shortId": "c7",
@@ -4749,7 +4749,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "tXjFwldvnWRA_cFFx7Hb1bQnw6Xj3oUWlXn4BABSngs",
             "serverName": "ads.x5.ru",
             "shortId": "c7",
@@ -4928,7 +4928,7 @@
           "network": "tcp",
           "realitySettings": {
             "allowInsecure": false,
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "tXjFwldvnWRA_cFFx7Hb1bQnw6Xj3oUWlXn4BABSngs",
             "serverName": "max.ru",
             "shortId": "0431e0ee16",
