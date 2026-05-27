@@ -13,13 +13,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       
-      - name: Download and update routing file
+      - name: Download and update HAPP routing file
         run: |
-          curl -s https://raw.githubusercontent.com/hydraponique/roscomvpn-routing/main/HAPP/JSONSUB.JSON -o /tmp/jsonsub.json
-          sed -i 's/"Name": "RoscomVPN JSON"/"Name": "Midas-RU-JSON-routing"/g' /tmp/jsonsub.json
-          mkdir -p routing/happ routing/incy
-          cp /tmp/jsonsub.json routing/happ/default.json
-          cp /tmp/jsonsub.json routing/incy/default.json
+          curl -s https://raw.githubusercontent.com/hydraponique/roscomvpn-routing/main/HAPP/JSONSUB.JSON -o /tmp/happ_jsonsub.json
+          sed -i 's/"Name": "RoscomVPN JSON"/"Name": "Midas-RU-JSON-routing"/g' /tmp/happ_jsonsub.json
+          mkdir -p routing/happ
+          cp /tmp/happ_jsonsub.json routing/happ/default.json
+      
+      - name: Download and update INCY routing file
+        run: |
+          curl -s https://raw.githubusercontent.com/hydraponique/roscomvpn-routing/main/INCY/JSONSUB.JSON -o /tmp/incy_jsonsub.json
+          sed -i 's/"Name": "RoscomVPN JSON"/"Name": "Midas-RU-JSON-routing"/g' /tmp/incy_jsonsub.json
+          mkdir -p routing/incy
+          cp /tmp/incy_jsonsub.json routing/incy/default.json
       
       - name: Create deeplink files for happ
         run: |
