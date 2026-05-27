@@ -26,10 +26,10 @@ jobs:
           DEEPLINK_PREFIX="happ://routing/onadd/"
           FULL_STRING="${DEEPLINK_PREFIX}${JSON_CONTENT}"
           
-          # 1. deeplink.json - обычный текст с префиксом
-          echo "$FULL_STRING" > routing/happ/deeplink.json
+          # 1. deeplink.json - обычный JSON без префикса
+          echo "$JSON_CONTENT" > routing/happ/deeplink.json
           
-          # 2. deeplink-base64.json - только base64 без обёрток
+          # 2. deeplink-base64.json - base64 кодирование с префиксом, без обёрток
           BASE64_ENCODED=$(echo -n "$FULL_STRING" | base64 -w 0)
           echo "$BASE64_ENCODED" > routing/happ/deeplink-base64.json
       
