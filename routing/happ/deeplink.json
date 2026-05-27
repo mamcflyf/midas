@@ -1,4 +1,4 @@
-happ://routing/onadd/{
+{
   "Name": "Midas-RU-JSON-routing",
   "GlobalProxy": "true",
   "UseChunkFiles": "false",
