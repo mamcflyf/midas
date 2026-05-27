@@ -20,22 +20,19 @@ jobs:
           mkdir -p routing/happ
           cp /tmp/jsonsub.json routing/happ/default.json
       
-      - name: Create deeplink files
+      - name: Create deeplink file
         run: |
           JSON_CONTENT=$(cat routing/happ/default.json)
           
-          # 1. deeplink.json - обычный JSON
-          echo "$JSON_CONTENT" > routing/happ/deeplink.json
-          
-          # 2. deeplink-base64.json - base64 кодирование JSON с префиксом
+          # deeplink.json - base64 кодирование JSON с префиксом
           BASE64_ENCODED=$(echo -n "$JSON_CONTENT" | base64 -w 0)
-          echo "happ://routing/onadd/$BASE64_ENCODED" > routing/happ/deeplink-base64.json
+          echo "happ://routing/onadd/$BASE64_ENCODED" > routing/happ/deeplink.json
       
       - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add routing/happ/default.json routing/happ/deeplink.json routing/happ/deeplink-base64.json
+          git add routing/happ/default.json routing/happ/deeplink.json
           
           if git diff --cached --quiet; then
             echo "No changes to commit"
