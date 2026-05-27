@@ -1,5 +1,5 @@
 {
-  "Name": "RoscomVPN JSON",
+  "Name": "Midas-RU-JSON-routing",
   "GlobalProxy": "true",
   "UseChunkFiles": "false",
   "RemoteDns": "8.8.8.8",
