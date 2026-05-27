@@ -20,6 +20,12 @@ jobs:
           mkdir -p routing/happ
           cp /tmp/happ_jsonsub.json routing/happ/default.json
       
+      - name: Create MRM variant of HAPP routing file
+        run: |
+          curl -s https://raw.githubusercontent.com/hydraponique/roscomvpn-routing/main/HAPP/JSONSUB.JSON -o /tmp/happ_mrm.json
+          sed -i 's/"Name": "RoscomVPN JSON"/"Name": "MRM-RU-JSON-routing"/g' /tmp/happ_mrm.json
+          cp /tmp/happ_mrm.json routing/happ/default-mrm.json
+      
       - name: Download and update INCY routing file
         run: |
           curl -s https://raw.githubusercontent.com/hydraponique/roscomvpn-routing/main/INCY/JSONSUB.JSON -o /tmp/incy_jsonsub.json
@@ -33,6 +39,12 @@ jobs:
           BASE64_ENCODED=$(echo -n "$JSON_CONTENT" | base64 -w 0)
           echo "happ://routing/onadd/$BASE64_ENCODED" > routing/happ/deeplink.json
       
+      - name: Create deeplink files for happ-mrm
+        run: |
+          JSON_CONTENT=$(cat routing/happ/default-mrm.json)
+          BASE64_ENCODED=$(echo -n "$JSON_CONTENT" | base64 -w 0)
+          echo "happ://routing/onadd/$BASE64_ENCODED" > routing/happ/deeplink-mrm.json
+      
       - name: Create deeplink files for incy
         run: |
           JSON_CONTENT=$(cat routing/incy/default.json)
@@ -43,7 +55,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add routing/happ/default.json routing/happ/deeplink.json routing/incy/default.json routing/incy/deeplink.json
+          git add routing/happ/default.json routing/happ/default-mrm.json routing/happ/deeplink.json routing/happ/deeplink-mrm.json routing/incy/default.json routing/incy/deeplink.json
           
           if git diff --cached --quiet; then
             echo "No changes to commit"
