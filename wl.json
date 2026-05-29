@@ -2514,7 +2514,7 @@
     },
     "stats": {}
   },
-  {
+    {
     "dns": {
       "hosts": {
         "77.88.8.8": "77.88.8.8",
@@ -2583,13 +2583,12 @@
         "settings": {
           "vnext": [
             {
-              "address": "84.201.139.136",
+              "address": "31.129.42.150",
               "port": 443,
               "users": [
                 {
                   "encryption": "none",
-                  "flow": "xtls-rprx-vision",
-                  "id": "3561a24f-6d1d-4b31-8c21-103a0d87bf26",
+                  "id": "5db46679-d728-422b-aed6-7355a460d21f",
                   "level": 8,
                   "security": "auto"
                 }
@@ -2598,22 +2597,26 @@
           ]
         },
         "streamSettings": {
-          "network": "tcp",
+          "grpcSettings": {
+            "authority": "",
+            "health_check_timeout": 20,
+            "idle_timeout": 60,
+            "initial_windows_size": 0,
+            "multiMode": false,
+            "permit_without_stream": false,
+            "serviceName": ""
+          },
+          "network": "grpc",
           "realitySettings": {
             "allowInsecure": false,
             "fingerprint": "firefox",
-            "publicKey": "SitiqCCmhRIROM493nhjjeWG36uf9xrrSwPNNC1CNSU",
+            "publicKey": "UOpEuuUA4c6X7JrprUUbV4T0OjJYBa2DCN5sFIt7PE8",
             "serverName": "st.vk.com",
-            "shortId": "4cc7ad40",
+            "shortId": "9a18412111033bc1",
             "show": false,
             "spiderX": "/"
           },
-          "security": "reality",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          }
+          "security": "reality"
         },
         "tag": "proxy"
       },
@@ -2762,13 +2765,12 @@
         "settings": {
           "vnext": [
             {
-              "address": "84.201.139.136",
+              "address": "31.129.42.150",
               "port": 443,
               "users": [
                 {
                   "encryption": "none",
-                  "flow": "xtls-rprx-vision",
-                  "id": "3561a24f-6d1d-4b31-8c21-103a0d87bf26",
+                  "id": "5db46679-d728-422b-aed6-7355a460d21f",
                   "level": 8,
                   "security": "auto"
                 }
@@ -2777,22 +2779,26 @@
           ]
         },
         "streamSettings": {
-          "network": "tcp",
+          "grpcSettings": {
+            "authority": "",
+            "health_check_timeout": 20,
+            "idle_timeout": 60,
+            "initial_windows_size": 0,
+            "multiMode": false,
+            "permit_without_stream": false,
+            "serviceName": ""
+          },
+          "network": "grpc",
           "realitySettings": {
             "allowInsecure": false,
             "fingerprint": "firefox",
-            "publicKey": "SitiqCCmhRIROM493nhjjeWG36uf9xrrSwPNNC1CNSU",
+            "publicKey": "UOpEuuUA4c6X7JrprUUbV4T0OjJYBa2DCN5sFIt7PE8",
             "serverName": "music.yandex.ru",
-            "shortId": "4cc7ad40",
+            "shortId": "bfde8d1b",
             "show": false,
             "spiderX": "/"
           },
-          "security": "reality",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          }
+          "security": "reality"
         },
         "tag": "proxy"
       },
@@ -2941,13 +2947,12 @@
         "settings": {
           "vnext": [
             {
-              "address": "84.201.139.136",
+              "address": "31.129.42.150",
               "port": 443,
               "users": [
                 {
                   "encryption": "none",
-                  "flow": "xtls-rprx-vision",
-                  "id": "3561a24f-6d1d-4b31-8c21-103a0d87bf26",
+                  "id": "5db46679-d728-422b-aed6-7355a460d21f",
                   "level": 8,
                   "security": "auto"
                 }
@@ -2956,22 +2961,26 @@
           ]
         },
         "streamSettings": {
-          "network": "tcp",
+          "grpcSettings": {
+            "authority": "",
+            "health_check_timeout": 20,
+            "idle_timeout": 60,
+            "initial_windows_size": 0,
+            "multiMode": false,
+            "permit_without_stream": false,
+            "serviceName": ""
+          },
+          "network": "grpc",
           "realitySettings": {
             "allowInsecure": false,
             "fingerprint": "firefox",
-            "publicKey": "SitiqCCmhRIROM493nhjjeWG36uf9xrrSwPNNC1CNSU",
-            "serverName": "io.ozone.ru",
-            "shortId": "234969b17b3600f1",
+            "publicKey": "UOpEuuUA4c6X7JrprUUbV4T0OjJYBa2DCN5sFIt7PE8",
+            "serverName": "max.ru",
+            "shortId": "9a18412111033bc",
             "show": false,
             "spiderX": "/"
           },
-          "security": "reality",
-          "tcpSettings": {
-            "header": {
-              "type": "none"
-            }
-          }
+          "security": "reality"
         },
         "tag": "proxy"
       },
