@@ -155,7 +155,202 @@
         "statsOutboundUplink": true
       }
     },
-    "remarks": "CDN",
+    "remarks": "CDN MTS",
+    "routing": {
+      "domainStrategy": "IPIfNonMatch",
+      "rules": [
+        {
+          "ip": [
+            "8.8.8.8"
+          ],
+          "outboundTag": "proxy",
+          "port": 443
+        },
+        {
+          "ip": [
+            "77.88.8.8"
+          ],
+          "outboundTag": "direct",
+          "port": 443
+        },
+        {
+          "inboundTag": [
+            "metrics_in"
+          ],
+          "outboundTag": "metrics_out"
+        },
+        {
+          "ip": [
+            "10.0.0.0/8",
+            "172.16.0.0/12",
+            "192.168.0.0/16",
+            "169.254.0.0/16",
+            "224.0.0.0/4",
+            "255.255.255.255"
+          ],
+          "outboundTag": "direct"
+        }
+      ]
+    },
+    "stats": {}
+  },
+  {
+    "dns": {
+      "hosts": {
+        "77.88.8.8": "77.88.8.8",
+        "8.8.8.8": "8.8.8.8",
+        "lkfl2.nalog.ru": "213.24.64.175",
+        "lknpd.nalog.ru": "213.24.64.181"
+      },
+      "queryStrategy": "UseIPv4",
+      "servers": [
+        "https://8.8.8.8/dns-query",
+        {
+          "address": "https://8.8.8.8/dns-query",
+          "domains": []
+        },
+        {
+          "address": "https://77.88.8.8/dns-query",
+          "domains": []
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "listen": "127.0.0.1",
+        "port": 10808,
+        "protocol": "socks",
+        "settings": {
+          "auth": "noauth",
+          "udp": true
+        },
+        "sniffing": {
+          "destOverride": [
+            "http",
+            "tls",
+            "quic"
+          ],
+          "enabled": true,
+          "routeOnly": true
+        },
+        "tag": "socks"
+      },
+      {
+        "listen": "127.0.0.1",
+        "port": 10809,
+        "protocol": "http",
+        "settings": {
+          "allowTransparent": false
+        },
+        "sniffing": {
+          "destOverride": [
+            "http",
+            "tls",
+            "quic"
+          ],
+          "enabled": true,
+          "routeOnly": true
+        },
+        "tag": "http"
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "1snnlnfitf.cdn.twcstorage.ru",
+              "port": 443,
+              "users": [
+                {
+                  "id": "eba1fbc1-a2b8-5996-9d37-700418799c10",
+                  "encryption": "none",
+                  "flow": ""
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "xhttp",
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "1snnlnfitf.cdn.twcstorage.ru",
+            "alpn": [
+              "h2"
+            ],
+            "fingerprint": "firefox",
+            "allowInsecure": false
+          },
+          "xhttpSettings": {
+            "host": "1snnlnfitf.cdn.twcstorage.ru",
+            "path": "/assets/api/v1",
+            "mode": "packet-up",
+            "extra": {
+              "xmux": {
+                "cMaxReuseTimes": 0,
+                "maxConcurrency": "2-4",
+                "hKeepAlivePeriod": 30,
+                "hMaxRequestTimes": "800-1200",
+                "hMaxReusableSecs": "600-1000"
+              },
+              "sessionKey": "SESSIONID",
+              "XPaddingKey": "x_padding",
+              "noSSEHeader": true,
+              "noGRPCHeader": true,
+              "uplinkDataKey": "payload",
+              "xPaddingBytes": "20-50",
+              "xPaddingMethod": "tokenish",
+              "sessionPlacement": "cookie",
+              "uplinkHTTPMethod": "GET",
+              "downloadHTTPMethod": "GET",
+              "xPaddingObfsMode": true,
+              "xPaddingPlacement": "cookie",
+              "uplinkDataPlacement": "body"
+            }
+          }
+        }
+      },
+      {
+        "protocol": "freedom",
+        "settings": {
+          "domainStrategy": "UseIP"
+        },
+        "tag": "direct"
+      },
+      {
+        "protocol": "blackhole",
+        "settings": {
+          "response": {
+            "type": "http"
+          }
+        },
+        "tag": "block"
+      }
+    ],
+    "policy": {
+      "levels": {
+        "0": {
+          "statsUserDownlink": true,
+          "statsUserUplink": true
+        },
+        "8": {
+          "connIdle": 300,
+          "downlinkOnly": 1,
+          "handshake": 4,
+          "uplinkOnly": 1
+        }
+      },
+      "system": {
+        "statsInboundDownlink": true,
+        "statsInboundUplink": true,
+        "statsOutboundDownlink": true,
+        "statsOutboundUplink": true
+      }
+    },
+    "remarks": "CDN TW",
     "routing": {
       "domainStrategy": "IPIfNonMatch",
       "rules": [
