@@ -1611,6 +1611,174 @@
     "stats": {}
   },
   {
+    "burstObservatory": {
+      "pingConfig": {
+        "destination": "http://www.gstatic.com/generate_204",
+        "interval": "5m",
+        "sampling": 2,
+        "timeout": "10s"
+      },
+      "subjectSelector": [
+        "proxy"
+      ]
+    },
+    "dns": {
+      "queryStrategy": "UseIPv4",
+      "servers": [
+        "1.1.1.1",
+        "1.0.0.1"
+      ]
+    },
+    "inbounds": [
+      {
+        "listen": "127.0.0.1",
+        "port": 10808,
+        "protocol": "socks",
+        "settings": {
+          "auth": "noauth",
+          "udp": true
+        },
+        "sniffing": {
+          "destOverride": [
+            "http",
+            "tls",
+            "quic"
+          ],
+          "enabled": true,
+          "routeOnly": false
+        },
+        "tag": "socks"
+      },
+      {
+        "listen": "127.0.0.1",
+        "port": 10809,
+        "protocol": "http",
+        "settings": {
+          "allowTransparent": false
+        },
+        "sniffing": {
+          "destOverride": [
+            "http",
+            "tls",
+            "quic"
+          ],
+          "enabled": true,
+          "routeOnly": false
+        },
+        "tag": "http"
+      }
+    ],
+    "meta": null,
+    "outbounds": [
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "2f6jet4pye.a.trbcdn.net",
+              "port": 443,
+              "users": [
+                {
+                  "encryption": "none",
+                  "flow": "",
+                  "id": "a7184f2e-4c1c-42d1-9a9f-17ea8edcf169"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "xhttp",
+          "security": "tls",
+          "tlsSettings": {
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ],
+            "fingerprint": "firefox",
+            "serverName": "2f6jet4pye.a.trbcdn.net"
+          },
+          "xhttpSettings": {
+            "extra": {
+              "headers": {
+                "Accept": "application/vnd.api+json, application/json, text/plain, */*",
+                "Accept-Language": "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7",
+                "Cache-Control": "no-cache",
+                "Pragma": "no-cache"
+              },
+              "scMaxBufferedPosts": 64,
+              "scMaxEachPostBytes": "1000000",
+              "scMinPostsIntervalMs": "1-8",
+              "seqKey": "offset",
+              "seqPlacement": "query",
+              "sessionKey": "media_sid",
+              "sessionPlacement": "cookie",
+              "uplinkDataKey": "X-Playback-Token",
+              "uplinkDataPlacement": "body",
+              "uplinkHTTPMethod": "GET",
+              "xPaddingBytes": "48-256",
+              "xPaddingHeader": "X-Rewrite-URL",
+              "xPaddingKey": "q",
+              "xPaddingMethod": "tokenish",
+              "xPaddingObfsMode": true,
+              "xPaddingPlacement": "query",
+              "xmux": {
+                "cMaxReuseTimes": "48-128",
+                "hKeepAlivePeriod": 15,
+                "hMaxRequestTimes": "480-960",
+                "hMaxReusableSecs": "900-2400",
+                "maxConcurrency": "12-24"
+              }
+            },
+            "host": "2f6jet4pye.a.trbcdn.net",
+            "mode": "packet-up",
+            "path": "/content/media/stream"
+          }
+        },
+        "tag": "proxy-0"
+      },
+      {
+        "protocol": "freedom",
+        "tag": "direct"
+      },
+      {
+        "protocol": "blackhole",
+        "tag": "block"
+      }
+    ],
+    "remarks": "🇩🇪 Germany ☁️ | LTE",
+    "routing": {
+      "balancers": [
+        {
+          "fallbackTag": "proxy-0",
+          "selector": [
+            "proxy-0"
+          ],
+          "strategy": {
+            "type": "leastPing"
+          },
+          "tag": "bal"
+        }
+      ],
+      "domainMatcher": "hybrid",
+      "domainStrategy": "IPIfNonMatch",
+      "rules": [
+        {
+          "outboundTag": "direct",
+          "protocol": [
+            "bittorrent"
+          ],
+          "type": "field"
+        },
+        {
+          "balancerTag": "bal",
+          "network": "tcp,udp",
+          "type": "field"
+        }
+      ]
+    }
+  },
+  {
     "dns": {
       "hosts": {
         "77.88.8.8": "77.88.8.8",
@@ -2325,6 +2493,174 @@
       ]
     },
     "stats": {}
+  },
+  {
+    "burstObservatory": {
+      "pingConfig": {
+        "destination": "http://www.gstatic.com/generate_204",
+        "interval": "5m",
+        "sampling": 2,
+        "timeout": "10s"
+      },
+      "subjectSelector": [
+        "proxy"
+      ]
+    },
+    "dns": {
+      "queryStrategy": "UseIPv4",
+      "servers": [
+        "1.1.1.1",
+        "1.0.0.1"
+      ]
+    },
+    "inbounds": [
+      {
+        "listen": "127.0.0.1",
+        "port": 10808,
+        "protocol": "socks",
+        "settings": {
+          "auth": "noauth",
+          "udp": true
+        },
+        "sniffing": {
+          "destOverride": [
+            "http",
+            "tls",
+            "quic"
+          ],
+          "enabled": true,
+          "routeOnly": false
+        },
+        "tag": "socks"
+      },
+      {
+        "listen": "127.0.0.1",
+        "port": 10809,
+        "protocol": "http",
+        "settings": {
+          "allowTransparent": false
+        },
+        "sniffing": {
+          "destOverride": [
+            "http",
+            "tls",
+            "quic"
+          ],
+          "enabled": true,
+          "routeOnly": false
+        },
+        "tag": "http"
+      }
+    ],
+    "meta": null,
+    "outbounds": [
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "01kstqg6qu.cdn.twcstorage.ru",
+              "port": 443,
+              "users": [
+                {
+                  "encryption": "none",
+                  "flow": "",
+                  "id": "0a04395a-91d1-4e27-af7f-ccacdf33d697"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "xhttp",
+          "security": "tls",
+          "tlsSettings": {
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ],
+            "fingerprint": "firefox",
+            "serverName": "01kstqg6qu.cdn.twcstorage.ru"
+          },
+          "xhttpSettings": {
+            "extra": {
+              "headers": {
+                "Accept": "application/vnd.api+json, application/json, text/plain, */*",
+                "Accept-Language": "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7",
+                "Cache-Control": "no-cache",
+                "Pragma": "no-cache"
+              },
+              "scMaxBufferedPosts": 64,
+              "scMaxEachPostBytes": "1000000",
+              "scMinPostsIntervalMs": "1-8",
+              "seqKey": "offset",
+              "seqPlacement": "query",
+              "sessionKey": "media_sid",
+              "sessionPlacement": "cookie",
+              "uplinkDataKey": "X-Playback-Token",
+              "uplinkDataPlacement": "body",
+              "uplinkHTTPMethod": "GET",
+              "xPaddingBytes": "48-256",
+              "xPaddingHeader": "X-Rewrite-URL",
+              "xPaddingKey": "q",
+              "xPaddingMethod": "tokenish",
+              "xPaddingObfsMode": true,
+              "xPaddingPlacement": "query",
+              "xmux": {
+                "cMaxReuseTimes": "48-128",
+                "hKeepAlivePeriod": 15,
+                "hMaxRequestTimes": "480-960",
+                "hMaxReusableSecs": "900-2400",
+                "maxConcurrency": "12-24"
+              }
+            },
+            "host": "01kstqg6qu.cdn.twcstorage.ru",
+            "mode": "packet-up",
+            "path": "/content/media/stream"
+          }
+        },
+        "tag": "proxy-0"
+      },
+      {
+        "protocol": "freedom",
+        "tag": "direct"
+      },
+      {
+        "protocol": "blackhole",
+        "tag": "block"
+      }
+    ],
+    "remarks": "🇫🇮 Finland ☁️ | LTE",
+    "routing": {
+      "balancers": [
+        {
+          "fallbackTag": "proxy-0",
+          "selector": [
+            "proxy-0"
+          ],
+          "strategy": {
+            "type": "leastPing"
+          },
+          "tag": "bal"
+        }
+      ],
+      "domainMatcher": "hybrid",
+      "domainStrategy": "IPIfNonMatch",
+      "rules": [
+        {
+          "outboundTag": "direct",
+          "protocol": [
+            "bittorrent"
+          ],
+          "type": "field"
+        },
+        {
+          "balancerTag": "bal",
+          "network": "tcp,udp",
+          "type": "field"
+        }
+      ]
+    }
   },
   {
     "dns": {
