@@ -79,7 +79,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "OWsAwtVhnrVba5OIts6H1eAfJjWosbiI_8S1Ry0ilgk",
             "serverName": "bbf.mediastreamer.ru",
             "shortId": "61",
@@ -113,7 +113,7 @@
           },
           "network": "grpc",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "wx54k6q59xd0Y50zWRpyQfZRC-fe0w0DYL-twuuV6l4",
             "serverName": "ssdg.mediastreamer.online",
             "shortId": "03f47275c0",
@@ -147,7 +147,7 @@
           },
           "network": "grpc",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "wx54k6q59xd0Y50zWRpyQfZRC-fe0w0DYL-twuuV6l4",
             "serverName": "ssdg.mediastreamer.online",
             "shortId": "7a75f4a9a7",
@@ -181,7 +181,7 @@
           },
           "network": "grpc",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "wx54k6q59xd0Y50zWRpyQfZRC-fe0w0DYL-twuuV6l4",
             "serverName": "ssdg.mediastreamer.online",
             "shortId": "c37c818d",
@@ -315,7 +315,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "OWsAwtVhnrVba5OIts6H1eAfJjWosbiI_8S1Ry0ilgk",
             "serverName": "bbf.mediastreamer.ru",
             "shortId": "d8d267d810be50",
@@ -345,7 +345,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "KRTB8lPzONB2V3zmokGptpCUCabF_dRWFCU7p0eUpz0",
             "serverName": "eh.vk.com",
             "shortId": "64f6bc96d5",
@@ -375,7 +375,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "KRTB8lPzONB2V3zmokGptpCUCabF_dRWFCU7p0eUpz0",
             "serverName": "music.yandex.ru",
             "shortId": "64f6bc96d5",
@@ -405,7 +405,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "KRTB8lPzONB2V3zmokGptpCUCabF_dRWFCU7p0eUpz0",
             "serverName": "rutube.ru",
             "shortId": "5af8",
@@ -435,7 +435,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "KRTB8lPzONB2V3zmokGptpCUCabF_dRWFCU7p0eUpz0",
             "serverName": "login.vk.com",
             "shortId": "bbd59fa4c2",
@@ -465,7 +465,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "KRTB8lPzONB2V3zmokGptpCUCabF_dRWFCU7p0eUpz0",
             "serverName": "ads.x5.ru",
             "shortId": "e7943236e277658a",
@@ -495,7 +495,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "KRTB8lPzONB2V3zmokGptpCUCabF_dRWFCU7p0eUpz0",
             "serverName": "max.ru",
             "shortId": "64f6bc96d5",
@@ -632,7 +632,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "Xe8anOAhmd1iV8Z1w6zojslBgrmWAAl1J9Oxw637nDA",
             "serverName": "mbg.fasssst.ru",
             "shortId": "1181d7272332d96c",
@@ -662,7 +662,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "aguwLeBJ3VmyResJB57vVaaNC7Gh1l0rf4vpI8bo1Fw",
             "serverName": "eh.vk.com",
             "shortId": "bedd7006",
@@ -692,7 +692,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "aguwLeBJ3VmyResJB57vVaaNC7Gh1l0rf4vpI8bo1Fw",
             "serverName": "mts.ru",
             "shortId": "bedd7006",
@@ -722,7 +722,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "aguwLeBJ3VmyResJB57vVaaNC7Gh1l0rf4vpI8bo1Fw",
             "serverName": "event.yandex.ru",
             "shortId": "2b0d5f8c6d",
@@ -752,7 +752,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "aguwLeBJ3VmyResJB57vVaaNC7Gh1l0rf4vpI8bo1Fw",
             "serverName": "ads.x5.ru",
             "shortId": "95d1",
@@ -782,7 +782,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "aguwLeBJ3VmyResJB57vVaaNC7Gh1l0rf4vpI8bo1Fw",
             "serverName": "max.ru",
             "shortId": "b6",
@@ -918,7 +918,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "Xe8anOAhmd1iV8Z1w6zojslBgrmWAAl1J9Oxw637nDA",
             "serverName": "mbg.fasssst.ru",
             "shortId": "ece140a3f9",
@@ -952,7 +952,7 @@
           },
           "network": "grpc",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "qs_qyXphK9I8DBmH8Kx5MnU4xFSGsUg-YLNwphPMAEg",
             "serverName": "eh.vk.com",
             "shortId": "107daba0a1d5",
@@ -986,7 +986,7 @@
           },
           "network": "grpc",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "qs_qyXphK9I8DBmH8Kx5MnU4xFSGsUg-YLNwphPMAEg",
             "serverName": "megafon.ru",
             "shortId": "d60dc2b454a67c",
@@ -1020,7 +1020,7 @@
           },
           "network": "grpc",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "qs_qyXphK9I8DBmH8Kx5MnU4xFSGsUg-YLNwphPMAEg",
             "serverName": "event.yandex.ru",
             "shortId": "a7c9d56c75",
@@ -1054,7 +1054,7 @@
           },
           "network": "grpc",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "qs_qyXphK9I8DBmH8Kx5MnU4xFSGsUg-YLNwphPMAEg",
             "serverName": "api-maps.yandex.ru",
             "shortId": "6b8d47d71a671c",
@@ -1189,7 +1189,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "-T1a6SruorzqkXp-4YHr8RzgVjdFLcB2R0VPLM36jVg",
             "serverName": "u.stackline.online",
             "shortId": "6510b723",
@@ -1219,7 +1219,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "lgNnIUy_Urlls_PVTZJwtdgOPc9-pOjCXe-O2vRZd1k",
             "serverName": "eh.vk.ru",
             "shortId": "1cb2",
@@ -1249,7 +1249,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "lgNnIUy_Urlls_PVTZJwtdgOPc9-pOjCXe-O2vRZd1k",
             "serverName": "max.ru",
             "shortId": "54a49f5a836088c5",
@@ -1382,7 +1382,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "-T1a6SruorzqkXp-4YHr8RzgVjdFLcB2R0VPLM36jVg",
             "serverName": "u.stackline.online",
             "shortId": "c45e37d0a6",
@@ -1412,7 +1412,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "UPvZNz9XxdLDAHK_gixihQEBpQ5O2TlJKXmMtBI3tiI",
             "serverName": "st.vk.com",
             "shortId": "2f4736b0",
@@ -1442,7 +1442,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "UPvZNz9XxdLDAHK_gixihQEBpQ5O2TlJKXmMtBI3tiI",
             "serverName": "music.yandex.ru",
             "shortId": "27c82e02a16b",
@@ -1472,7 +1472,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "UPvZNz9XxdLDAHK_gixihQEBpQ5O2TlJKXmMtBI3tiI",
             "serverName": "max.ru",
             "shortId": "e9c911c94581",
@@ -1606,7 +1606,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "nyVVQV1uQLvPX4umPeykx_V4cwMHNx-XwO12l796-w0",
             "serverName": "llm.stackline.online",
             "shortId": "aa944488bc2cb5f9",
@@ -1636,7 +1636,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "tXjFwldvnWRA_cFFx7Hb1bQnw6Xj3oUWlXn4BABSngs",
             "serverName": "eh.vk.com",
             "shortId": "a287e7bc6411b8",
@@ -1666,7 +1666,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "tXjFwldvnWRA_cFFx7Hb1bQnw6Xj3oUWlXn4BABSngs",
             "serverName": "megafon.ru",
             "shortId": "9089a03a0cd3ea",
@@ -1696,7 +1696,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "tXjFwldvnWRA_cFFx7Hb1bQnw6Xj3oUWlXn4BABSngs",
             "serverName": "event.yandex.ru",
             "shortId": "9089a03a0cd3ea",
@@ -1726,7 +1726,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "tXjFwldvnWRA_cFFx7Hb1bQnw6Xj3oUWlXn4BABSngs",
             "serverName": "api-maps.yandex.ru",
             "shortId": "20f8ab63919c",
@@ -1756,7 +1756,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "tXjFwldvnWRA_cFFx7Hb1bQnw6Xj3oUWlXn4BABSngs",
             "serverName": "ads.x5.ru",
             "shortId": "c7",
@@ -1786,7 +1786,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "tXjFwldvnWRA_cFFx7Hb1bQnw6Xj3oUWlXn4BABSngs",
             "serverName": "max.ru",
             "shortId": "46e93eac52",
@@ -1923,7 +1923,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "OoJ-UIYMWb1ThMe1FHPfsj9p6T5x50imfDk-u-mnfic",
             "serverName": "fs.stackline.online",
             "shortId": "f6",
@@ -1953,7 +1953,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "SitiqCCmhRIROM493nhjjeWG36uf9xrrSwPNNC1CNSU",
             "serverName": "st.vk.com",
             "shortId": "0274bd6caa",
@@ -1983,7 +1983,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "SitiqCCmhRIROM493nhjjeWG36uf9xrrSwPNNC1CNSU",
             "serverName": "music.yandex.ru",
             "shortId": "0d",
@@ -2013,7 +2013,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "SitiqCCmhRIROM493nhjjeWG36uf9xrrSwPNNC1CNSU",
             "serverName": "io.ozone.ru",
             "shortId": "0d",
@@ -2147,7 +2147,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "OoJ-UIYMWb1ThMe1FHPfsj9p6T5x50imfDk-u-mnfic",
             "serverName": "fs.stackline.online",
             "shortId": "fbf46d28",
@@ -2181,7 +2181,7 @@
           },
           "network": "grpc",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "k4cvYbqk4ZMQvCYlVne7NNxurwvSHNxaqXOaZlBSMQs",
             "serverName": "st.vk.com",
             "shortId": "7234a0fd8e0ac3",
@@ -2215,7 +2215,7 @@
           },
           "network": "grpc",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "k4cvYbqk4ZMQvCYlVne7NNxurwvSHNxaqXOaZlBSMQs",
             "serverName": "music.yandex.ru",
             "shortId": "6fbbe7243011585b",
@@ -2249,7 +2249,7 @@
           },
           "network": "grpc",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "k4cvYbqk4ZMQvCYlVne7NNxurwvSHNxaqXOaZlBSMQs",
             "serverName": "max.ru",
             "shortId": "1eb2ca1a4a",
@@ -2383,7 +2383,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "OoJ-UIYMWb1ThMe1FHPfsj9p6T5x50imfDk-u-mnfic",
             "serverName": "fs.stackline.online",
             "shortId": "fbf46d28",
@@ -2417,7 +2417,7 @@
           },
           "network": "grpc",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "UOpEuuUA4c6X7JrprUUbV4T0OjJYBa2DCN5sFIt7PE8",
             "serverName": "st.vk.com",
             "shortId": "98eb469615",
@@ -2451,7 +2451,7 @@
           },
           "network": "grpc",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "UOpEuuUA4c6X7JrprUUbV4T0OjJYBa2DCN5sFIt7PE8",
             "serverName": "music.yandex.ru",
             "shortId": "1941f753",
@@ -2485,7 +2485,7 @@
           },
           "network": "grpc",
           "realitySettings": {
-            "fingerprint": "chrome",
+            "fingerprint": "firefox",
             "publicKey": "UOpEuuUA4c6X7JrprUUbV4T0OjJYBa2DCN5sFIt7PE8",
             "serverName": "max.ru",
             "shortId": "98eb469615",
