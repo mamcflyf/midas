@@ -2901,7 +2901,7 @@
         "statsOutboundUplink": true
       }
     },
-    "remarks": "🇱🇹 Lithuania #3-3 | LTE",
+    "remarks": "🇱🇹 Lithuania #4-3 | LTE",
     "routing": {
       "domainStrategy": "IPIfNonMatch",
       "rules": [
