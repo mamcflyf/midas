@@ -745,7 +745,7 @@
         "settings": {
           "vnext": [
             {
-              "address": "188.68.218.72",
+              "address": "84.capycore.ru",
               "port": 443,
               "users": [
                 {
@@ -761,9 +761,9 @@
           "network": "tcp",
           "realitySettings": {
             "fingerprint": "firefox",
-            "publicKey": "fLBaSnICDNyn0zZ-YqzdnoE9ZrlXZ7F7bXH46WkuGEI",
-            "serverName": "www.vk.com",
-            "shortId": "a2668873387ce099"
+            "publicKey": "RJtIKw17_0x-zmAL0vL4FrgeKqxHt2Faai-oSTBPmWI",
+            "serverName": "smartcaptcha.yandexcloud.net",
+            "shortId": "ef276a7580e24ac8"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -936,7 +936,7 @@
         "settings": {
           "vnext": [
             {
-              "address": "188.68.218.72",
+              "address": "84.capycore.ru",
               "port": 443,
               "users": [
                 {
@@ -952,9 +952,9 @@
           "network": "tcp",
           "realitySettings": {
             "fingerprint": "firefox",
-            "publicKey": "yp2vFOv-6UbPxYnCbjsQGbOoU5bhr7bjdzkhGo7fen0",
-            "serverName": "max.ru",
-            "shortId": "f3cb3c2f7790bc8f"
+            "publicKey": "qpyc7QJdCOHqHOkdzoQeH7leZKi8c_ldUAhPmxImWFo",
+            "serverName": "api-maps.yandex.ru",
+            "shortId": "e11822a0958dd1a3"
           },
           "security": "reality",
           "tcpSettings": {}
@@ -1127,7 +1127,7 @@
         "settings": {
           "vnext": [
             {
-              "address": "188.68.218.72",
+              "address": "84.capycore.ru",
               "port": 443,
               "users": [
                 {
@@ -1143,9 +1143,9 @@
           "network": "tcp",
           "realitySettings": {
             "fingerprint": "firefox",
-            "publicKey": "id2bTxg98QfB21HhGUl5OBN1qifL-W_t5f_SJf8QACo",
-            "serverName": "yandex.ru",
-            "shortId": "e0850aee0392d49c"
+            "publicKey": "73LOtZvtJoUx42LIIHdr6GTrzZkA_5RJy_olEG2qQXQo",
+            "serverName": "ads.x5.ru",
+            "shortId": "e11822a0958dd1a3"
           },
           "security": "reality",
           "tcpSettings": {}
