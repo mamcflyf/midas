@@ -77,13 +77,13 @@
         "settings": {
           "vnext": [
             {
-              "address": "37.9.4.147",
+              "address": "85.118.165.38",
               "port": 443,
               "users": [
                 {
                   "encryption": "none",
                   "flow": "xtls-rprx-vision",
-                  "id": "6503327c-5931-4fa4-a1e5-d640a66076d4"
+                  "id": "7528578f-cd0c-45ce-925f-ff562b14ea0d"
                 }
               ]
             }
@@ -93,9 +93,9 @@
           "network": "tcp",
           "realitySettings": {
             "fingerprint": "firefox",
-            "publicKey": "yp2vFOv-6UbPxYnCbjsQGbOoU5bhr7bjdzkhGo7fen0",
-            "serverName": "max.ru",
-            "shortId": "f3cb3c2f7790bc8f",
+            "publicKey": "-tePObR3oZwGAUOb5kqTYkNWl6rtUKl0RFuzuu06wgw",
+            "serverName": "ads.x5.ru",
+            "shortId": "50",
             "spiderX": "/"
           },
           "security": "reality",
