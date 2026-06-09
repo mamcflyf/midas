@@ -77,7 +77,7 @@
         "settings": {
           "vnext": [
             {
-              "address": "85.118.165.38",
+              "address": "test.rare-glen.test-cdn-kkk.com",
               "port": 443,
               "users": [
                 {
@@ -92,7 +92,7 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "firefox",
+            "fingerprint": "qq",
             "publicKey": "-tePObR3oZwGAUOb5kqTYkNWl6rtUKl0RFuzuu06wgw",
             "serverName": "ads.x5.ru",
             "shortId": "50",
