@@ -2185,9 +2185,9 @@
         "streamSettings": {
           "network": "tcp",
           "realitySettings": {
-            "fingerprint": "firefox",
+            "fingerprint": "qq",
             "publicKey": "id2bTxg98QfB21HhGUl5OBN1qifL-W_t5f_SJf8QACo",
-            "serverName": "yandex.ru",
+            "serverName": "api-maps.yandex.ru",
             "shortId": "e0850aee0392d49c"
           },
           "security": "reality",
