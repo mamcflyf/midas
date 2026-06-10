@@ -1,5 +1,9 @@
 [
   {
+    "remarks": "🇱🇹 Lithuania | Auto",
+    "meta": {
+      "serverDescription": "VLESS | Premium"
+    },
     "dns": {
       "servers": [
         "8.8.8.8",
@@ -582,10 +586,6 @@
       "subjectSelector": [
         "bypass"
       ]
-    },
-    "remarks": "🇱🇹 Lithuania | Auto",
-    "meta": {
-      "serverDescription": "VLESS | Premium"
     }
   },
   {
