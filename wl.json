@@ -399,353 +399,6 @@
         "settings": {
           "vnext": [
             {
-              "address": "s60427.cdn.ngenix.net",
-              "port": 443,
-              "users": [
-                {
-                  "encryption": "none",
-                  "id": "fa6acbbd-83cd-4d65-8457-a93eecb2a208"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "ws",
-          "security": "tls",
-          "tlsSettings": {
-            "fingerprint": "firefox",
-            "serverName": "s60427.cdn.ngenix.net",
-            "alpn": [
-              "h3",
-              "h2",
-              "http/1.1"
-            ]
-          },
-          "wsSettings": {
-            "path": "/api/user",
-            "headers": {
-              "Host": "s60427.cdn.ngenix.net"
-            }
-          }
-        },
-        "tag": "proxy"
-      },
-      {
-        "protocol": "freedom",
-        "tag": "direct"
-      },
-      {
-        "protocol": "blackhole",
-        "tag": "block"
-      }
-    ],
-    "routing": {
-      "domainMatcher": "hybrid",
-      "domainStrategy": "IPIfNonMatch",
-      "rules": [
-        {
-          "type": "field",
-          "ip": [
-            "0.0.0.0/8",
-            "10.0.0.0/8",
-            "100.64.0.0/10",
-            "127.0.0.0/8",
-            "169.254.0.0/16",
-            "172.16.0.0/12",
-            "192.0.0.0/24",
-            "192.0.2.0/24",
-            "192.88.99.0/24",
-            "192.168.0.0/16",
-            "198.18.0.0/15",
-            "198.51.100.0/24",
-            "203.0.113.0/24",
-            "224.0.0.0/3",
-            "0000::/127",
-            "fc00::/7",
-            "fe80::/10",
-            "ff00::/8"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "protocol": [
-            "bittorrent"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "domain": [
-            "rutracker.org",
-            "rutor.info",
-            "nnmclub.to",
-            "kinozal.tv",
-            "rutracker.net",
-            "torrentgalaxy.to",
-            "1337x.to",
-            "rarbg.to",
-            "nyaa.si",
-            "thepiratebay.org",
-            "limetorrents.info",
-            "bt.t-ru.org",
-            "bt2.t-ru.org",
-            "bt3.t-ru.org",
-            "bt4.t-ru.org"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "domain": [
-            "gosuslugi.ru",
-            "mos.ru",
-            "nalog.gov.ru",
-            "government.ru",
-            "kremlin.ru",
-            "duma.gov.ru",
-            "digital.gov.ru",
-            "gu-st.ru",
-            "cikrf.ru",
-            "izbirkom.ru",
-            "vk.com",
-            "vk.ru",
-            "ok.ru",
-            "dzen.ru",
-            "max.ru",
-            "oneme.ru",
-            "apptracer.ru",
-            "userapi.com",
-            "vk-portal.net",
-            "cdn-vk.ru",
-            "okcdn.ru",
-            "yandex.ru",
-            "yandex.com",
-            "ya.ru",
-            "yandex.net",
-            "yastatic.net",
-            "auto.ru",
-            "mail.ru",
-            "sberbank.ru",
-            "sberbank.com",
-            "sber.ru",
-            "sbrf.ru",
-            "sberdevices.ru",
-            "sber247.ru",
-            "sberbusiness.live",
-            "sbermarketing.ru",
-            "sberanalytics.ru",
-            "sberclickstream.ru",
-            "sberindex.ru",
-            "sberfiles.com",
-            "sbertv.ru",
-            "sberbankvmeste.ru",
-            "sberbankaktivno.ru",
-            "sberbankactivno.ru",
-            "sberactivno.ru",
-            "sberimpulse.com",
-            "sberimpulse.ru",
-            "sber-impulse.com",
-            "sber-impulse.ru",
-            "sberpravo.ru",
-            "sberpravo.com",
-            "sberpravo.info",
-            "sberpravo.tech",
-            "sber-pravo.ru",
-            "sber-pravo.com",
-            "sber-pravo.tech",
-            "sber-solutions.com",
-            "sber-solutions.ru",
-            "sber-solutions.kz",
-            "sberbank1.ru",
-            "sber.pro",
-            "sber-spief.ru",
-            "sber9may.ru",
-            "sber-unity.ru",
-            "sber-agent.ru",
-            "sberegiplanetu.ru",
-            "sberxba.ru",
-            "sberpb.ru",
-            "spasibosberbank.ru",
-            "mysbertips.ru",
-            "sbercrm.com",
-            "sbercrm.ru",
-            "domclick.ru",
-            "samokat.ru",
-            "sbermarket.ru",
-            "kuper.ru",
-            "youla.ru",
-            "megamarket.ru",
-            "salute.ru",
-            "nspk.ru",
-            "mir-pay.ru",
-            "mironline.ru",
-            "tinkoff.ru",
-            "tbank.ru",
-            "cdn-tinkoff.ru",
-            "vtb.ru",
-            "vtb-leasing.ru",
-            "vtb-capital.com",
-            "alfabank.ru",
-            "raiffeisen.ru",
-            "rosbank.ru",
-            "rosbank-dom.ru",
-            "rosbank-auto.ru",
-            "rosbank-leasing.ru",
-            "rosbank-capital.ru",
-            "psbank.ru",
-            "ozon.ru",
-            "ozone.ru",
-            "wildberries.ru",
-            "wb.ru",
-            "avito.ru",
-            "avito.st",
-            "dns-shop.ru",
-            "mvideo.ru",
-            "eldorado.ru",
-            "lamoda.ru",
-            "citilink.ru",
-            "lemanapro.ru",
-            "delivery-club.ru",
-            "eda.yandex.ru",
-            "taxi.yandex.ru",
-            "city-mobil.ru",
-            "rzd.ru",
-            "tutu.ru",
-            "kinopoisk.ru",
-            "ivi.ru",
-            "okko.tv",
-            "more.tv",
-            "music.yandex.ru",
-            "zvuk.com",
-            "rutube.ru",
-            "rutubelist.ru",
-            "megafon.ru",
-            "mts.ru",
-            "beeline.ru",
-            "tele2.ru",
-            "t2.ru",
-            "motivtelecom.ru",
-            "ria.ru",
-            "rbc.ru",
-            "lenta.ru",
-            "gazeta.ru",
-            "kp.ru",
-            "aif.ru",
-            "forbes.ru",
-            "rg.ru",
-            "hh.ru",
-            "2gis.ru",
-            "2gis.com",
-            "pochta.ru",
-            "rambler.ru",
-            "domain:xn--90acagbhgpca7c8c7f.xn--p1ai",
-            "domain:xn--80ajghhoc2aj1c8b.xn--p1ai",
-            "domain:xn--90aivcdt6dxbc.xn--p1ai",
-            "domain:xn--b1aew.xn--p1ai",
-            "domain:aeroflot.ru",
-            "domain:flypobeda.ru",
-            "domain:sirena-travel.ru",
-            "domain:tutu.ru",
-            "domain:taximaxim.ru",
-            "domain:trvl.yandex.net",
-            "domain:drive2.ru",
-            "domain:gazprombank.ru",
-            "domain:tank-online.com",
-            "domain:tbank-online.com",
-            "domain:sravni.ru",
-            "domain:moex.com",
-            "domain:dellin.ru",
-            "domain:kontur.ru",
-            "domain:kontur.host",
-            "domain:reg.ru",
-            "domain:tildaapi.com",
-            "domain:megamarket.tech",
-            "domain:burgerkingrus.ru",
-            "domain:pervye.ru",
-            "domain:t-j.ru",
-            "domain:rambler-co.ru",
-            "domain:ruwiki.ru",
-            "domain:vkvideo.ru",
-            "domain:rustore.ru",
-            "domain:tns-counter.ru",
-            "domain:vk-analytics.ru",
-            "domain:yandexcloud.net",
-            "domain:gismeteo.ru"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "network": "tcp,udp",
-          "outboundTag": "proxy"
-        }
-      ],
-      "balancers": []
-    },
-    "remarks": "🇳🇱 Nederlands",
-    "meta": {
-      "serverDescription": "VLESS | LTE | Premium"
-    },
-    "log": {
-      "dnsLog": true,
-      "loglevel": "Warning"
-    }
-  },
-  {
-    "dns": {
-      "queryStrategy": "UseIP",
-      "servers": [
-        "1.1.1.1",
-        "1.0.0.1"
-      ]
-    },
-    "inbounds": [
-      {
-        "listen": "127.0.0.1",
-        "port": 10808,
-        "protocol": "socks",
-        "settings": {
-          "auth": "noauth",
-          "udp": true
-        },
-        "sniffing": {
-          "destOverride": [
-            "http",
-            "tls",
-            "quic"
-          ],
-          "enabled": true,
-          "routeOnly": false
-        },
-        "tag": "socks"
-      },
-      {
-        "listen": "127.0.0.1",
-        "port": 10809,
-        "protocol": "http",
-        "settings": {
-          "allowTransparent": false
-        },
-        "sniffing": {
-          "destOverride": [
-            "http",
-            "tls",
-            "quic"
-          ],
-          "enabled": true,
-          "routeOnly": false
-        },
-        "tag": "http"
-      }
-    ],
-    "outbounds": [
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
               "address": "s84772.cdn.ngenix.net",
               "port": 443,
               "users": [
@@ -1032,6 +685,353 @@
       "balancers": []
     },
     "remarks": "🇪🇪 Estonia",
+    "meta": {
+      "serverDescription": "VLESS | LTE | Premium"
+    },
+    "log": {
+      "dnsLog": true,
+      "loglevel": "Warning"
+    }
+  },
+    {
+    "dns": {
+      "queryStrategy": "UseIP",
+      "servers": [
+        "1.1.1.1",
+        "1.0.0.1"
+      ]
+    },
+    "inbounds": [
+      {
+        "listen": "127.0.0.1",
+        "port": 10808,
+        "protocol": "socks",
+        "settings": {
+          "auth": "noauth",
+          "udp": true
+        },
+        "sniffing": {
+          "destOverride": [
+            "http",
+            "tls",
+            "quic"
+          ],
+          "enabled": true,
+          "routeOnly": false
+        },
+        "tag": "socks"
+      },
+      {
+        "listen": "127.0.0.1",
+        "port": 10809,
+        "protocol": "http",
+        "settings": {
+          "allowTransparent": false
+        },
+        "sniffing": {
+          "destOverride": [
+            "http",
+            "tls",
+            "quic"
+          ],
+          "enabled": true,
+          "routeOnly": false
+        },
+        "tag": "http"
+      }
+    ],
+    "outbounds": [
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "s60427.cdn.ngenix.net",
+              "port": 443,
+              "users": [
+                {
+                  "encryption": "none",
+                  "id": "fa6acbbd-83cd-4d65-8457-a93eecb2a208"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "ws",
+          "security": "tls",
+          "tlsSettings": {
+            "fingerprint": "firefox",
+            "serverName": "s60427.cdn.ngenix.net",
+            "alpn": [
+              "h3",
+              "h2",
+              "http/1.1"
+            ]
+          },
+          "wsSettings": {
+            "path": "/api/user",
+            "headers": {
+              "Host": "s60427.cdn.ngenix.net"
+            }
+          }
+        },
+        "tag": "proxy"
+      },
+      {
+        "protocol": "freedom",
+        "tag": "direct"
+      },
+      {
+        "protocol": "blackhole",
+        "tag": "block"
+      }
+    ],
+    "routing": {
+      "domainMatcher": "hybrid",
+      "domainStrategy": "IPIfNonMatch",
+      "rules": [
+        {
+          "type": "field",
+          "ip": [
+            "0.0.0.0/8",
+            "10.0.0.0/8",
+            "100.64.0.0/10",
+            "127.0.0.0/8",
+            "169.254.0.0/16",
+            "172.16.0.0/12",
+            "192.0.0.0/24",
+            "192.0.2.0/24",
+            "192.88.99.0/24",
+            "192.168.0.0/16",
+            "198.18.0.0/15",
+            "198.51.100.0/24",
+            "203.0.113.0/24",
+            "224.0.0.0/3",
+            "0000::/127",
+            "fc00::/7",
+            "fe80::/10",
+            "ff00::/8"
+          ],
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "domain": [
+            "rutracker.org",
+            "rutor.info",
+            "nnmclub.to",
+            "kinozal.tv",
+            "rutracker.net",
+            "torrentgalaxy.to",
+            "1337x.to",
+            "rarbg.to",
+            "nyaa.si",
+            "thepiratebay.org",
+            "limetorrents.info",
+            "bt.t-ru.org",
+            "bt2.t-ru.org",
+            "bt3.t-ru.org",
+            "bt4.t-ru.org"
+          ],
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "domain": [
+            "gosuslugi.ru",
+            "mos.ru",
+            "nalog.gov.ru",
+            "government.ru",
+            "kremlin.ru",
+            "duma.gov.ru",
+            "digital.gov.ru",
+            "gu-st.ru",
+            "cikrf.ru",
+            "izbirkom.ru",
+            "vk.com",
+            "vk.ru",
+            "ok.ru",
+            "dzen.ru",
+            "max.ru",
+            "oneme.ru",
+            "apptracer.ru",
+            "userapi.com",
+            "vk-portal.net",
+            "cdn-vk.ru",
+            "okcdn.ru",
+            "yandex.ru",
+            "yandex.com",
+            "ya.ru",
+            "yandex.net",
+            "yastatic.net",
+            "auto.ru",
+            "mail.ru",
+            "sberbank.ru",
+            "sberbank.com",
+            "sber.ru",
+            "sbrf.ru",
+            "sberdevices.ru",
+            "sber247.ru",
+            "sberbusiness.live",
+            "sbermarketing.ru",
+            "sberanalytics.ru",
+            "sberclickstream.ru",
+            "sberindex.ru",
+            "sberfiles.com",
+            "sbertv.ru",
+            "sberbankvmeste.ru",
+            "sberbankaktivno.ru",
+            "sberbankactivno.ru",
+            "sberactivno.ru",
+            "sberimpulse.com",
+            "sberimpulse.ru",
+            "sber-impulse.com",
+            "sber-impulse.ru",
+            "sberpravo.ru",
+            "sberpravo.com",
+            "sberpravo.info",
+            "sberpravo.tech",
+            "sber-pravo.ru",
+            "sber-pravo.com",
+            "sber-pravo.tech",
+            "sber-solutions.com",
+            "sber-solutions.ru",
+            "sber-solutions.kz",
+            "sberbank1.ru",
+            "sber.pro",
+            "sber-spief.ru",
+            "sber9may.ru",
+            "sber-unity.ru",
+            "sber-agent.ru",
+            "sberegiplanetu.ru",
+            "sberxba.ru",
+            "sberpb.ru",
+            "spasibosberbank.ru",
+            "mysbertips.ru",
+            "sbercrm.com",
+            "sbercrm.ru",
+            "domclick.ru",
+            "samokat.ru",
+            "sbermarket.ru",
+            "kuper.ru",
+            "youla.ru",
+            "megamarket.ru",
+            "salute.ru",
+            "nspk.ru",
+            "mir-pay.ru",
+            "mironline.ru",
+            "tinkoff.ru",
+            "tbank.ru",
+            "cdn-tinkoff.ru",
+            "vtb.ru",
+            "vtb-leasing.ru",
+            "vtb-capital.com",
+            "alfabank.ru",
+            "raiffeisen.ru",
+            "rosbank.ru",
+            "rosbank-dom.ru",
+            "rosbank-auto.ru",
+            "rosbank-leasing.ru",
+            "rosbank-capital.ru",
+            "psbank.ru",
+            "ozon.ru",
+            "ozone.ru",
+            "wildberries.ru",
+            "wb.ru",
+            "avito.ru",
+            "avito.st",
+            "dns-shop.ru",
+            "mvideo.ru",
+            "eldorado.ru",
+            "lamoda.ru",
+            "citilink.ru",
+            "lemanapro.ru",
+            "delivery-club.ru",
+            "eda.yandex.ru",
+            "taxi.yandex.ru",
+            "city-mobil.ru",
+            "rzd.ru",
+            "tutu.ru",
+            "kinopoisk.ru",
+            "ivi.ru",
+            "okko.tv",
+            "more.tv",
+            "music.yandex.ru",
+            "zvuk.com",
+            "rutube.ru",
+            "rutubelist.ru",
+            "megafon.ru",
+            "mts.ru",
+            "beeline.ru",
+            "tele2.ru",
+            "t2.ru",
+            "motivtelecom.ru",
+            "ria.ru",
+            "rbc.ru",
+            "lenta.ru",
+            "gazeta.ru",
+            "kp.ru",
+            "aif.ru",
+            "forbes.ru",
+            "rg.ru",
+            "hh.ru",
+            "2gis.ru",
+            "2gis.com",
+            "pochta.ru",
+            "rambler.ru",
+            "domain:xn--90acagbhgpca7c8c7f.xn--p1ai",
+            "domain:xn--80ajghhoc2aj1c8b.xn--p1ai",
+            "domain:xn--90aivcdt6dxbc.xn--p1ai",
+            "domain:xn--b1aew.xn--p1ai",
+            "domain:aeroflot.ru",
+            "domain:flypobeda.ru",
+            "domain:sirena-travel.ru",
+            "domain:tutu.ru",
+            "domain:taximaxim.ru",
+            "domain:trvl.yandex.net",
+            "domain:drive2.ru",
+            "domain:gazprombank.ru",
+            "domain:tank-online.com",
+            "domain:tbank-online.com",
+            "domain:sravni.ru",
+            "domain:moex.com",
+            "domain:dellin.ru",
+            "domain:kontur.ru",
+            "domain:kontur.host",
+            "domain:reg.ru",
+            "domain:tildaapi.com",
+            "domain:megamarket.tech",
+            "domain:burgerkingrus.ru",
+            "domain:pervye.ru",
+            "domain:t-j.ru",
+            "domain:rambler-co.ru",
+            "domain:ruwiki.ru",
+            "domain:vkvideo.ru",
+            "domain:rustore.ru",
+            "domain:tns-counter.ru",
+            "domain:vk-analytics.ru",
+            "domain:yandexcloud.net",
+            "domain:gismeteo.ru"
+          ],
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        }
+      ],
+      "balancers": []
+    },
+    "remarks": "🇳🇱 Nederlands",
     "meta": {
       "serverDescription": "VLESS | LTE | Premium"
     },
