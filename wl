@@ -2,7 +2,7 @@
 #profile-title: Midas (WL)
 #support-url: https://t.me/srydave
 #announce: base64:0KLQvtC70YzQutC+INC00LvRjyDQvtCx0YXQvtC00LAg0LHQtdC70YvRhSDRgdC/0LjRgdC60L7QsiDQvdCwINC80L7QsdC40LvRjNC90L7QuSDRgdC10YLQuCEKMe+4j+KDoyDQndCw0LbQsNGC0Ywg0YHQv9C40LTQvtC80LXRgtGAICjQv9GA0L7QstC10YDQuNGC0Ywg0L/QuNC90LMpCjLvuI/ig6Mg0JLRi9Cx0YDQsNGC0Ywg0YHQtdGA0LLQtdGAINGBINC70YPRh9GI0LjQvCDQv9C40L3Qs9C+0LwKM++4j+KDoyDQl9Cw0L/Rg9GB0YLQuNGC0YwgVlBO
-#auto-selected-at: 2026-07-18 11:03:32
+#auto-selected-at: 2026-07-18 11:58:53
 #servers-count: 207
 
 vless://00000000-0000-0000-0000-000000000000@0.0.0.0:1?flow=xtls-rprx-vision&encryption=none&type=tcp&security=reality&fp=chrome&sni=zieng2.org&pbk=dE3wtv44FXcZGAp0MYiYYa79zxJlcVNmPN5t8qa0cTs&sid=7a69656e6732&spx=%2F#%E2%9A%A0%EF%B8%8F%20Lite-%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F%20%D0%BF%D0%BE%D0%B4%D0%BF%D0%B8%D1%81%D0%BA%D0%B8%20%D1%83%D1%81%D1%82%D0%B0%D1%80%D0%B5%D0%BB%D0%B0
