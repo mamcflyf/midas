@@ -1,6 +1,5 @@
 [
   {
-    "remarks": "🇩🇪Germany #1",
     "dns": {
       "hosts": {
         "cloudflare-dns.com": [
@@ -21,6 +20,8 @@
         ]
       },
       "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true,
+      "disableFallbackIfMatch": false,
       "servers": [
         {
           "address": "https://cloudflare-dns.com/dns-query",
@@ -42,7 +43,9 @@
           "domains": [
             "geosite:private"
           ],
-          "tag": "localhost-dns"
+          "tag": "localhost-dns",
+          "finalQuery": true,
+          "skipFallback": true
         }
       ]
     },
@@ -62,7 +65,15 @@
             "quic"
           ],
           "enabled": true,
-          "routeOnly": false
+          "routeOnly": false,
+          "domainsExcluded": [
+            "domain:push.apple.com",
+            "domain:google.com",
+            "domain:ads.x5.ru",
+            "domain:vk.com",
+            "domain:proxius.ru",
+            "domain:sub.proxius.ru"
+          ]
         },
         "tag": "socks"
       },
@@ -80,7 +91,15 @@
             "quic"
           ],
           "enabled": true,
-          "routeOnly": false
+          "routeOnly": false,
+          "domainsExcluded": [
+            "domain:push.apple.com",
+            "domain:google.com",
+            "domain:ads.x5.ru",
+            "domain:vk.com",
+            "domain:proxius.ru",
+            "domain:sub.proxius.ru"
+          ]
         },
         "tag": "http"
       }
@@ -108,7 +127,7 @@
           "realitySettings": {
             "fingerprint": "firefox",
             "publicKey": "ITd6cmCxudmTvGcwnAzpd0VRe8jS9KJAQ1tmtVN3mCM",
-            "serverName": "ads.x5.ru",
+            "serverName": "web.max.ru",
             "shortId": "9e15546f267baa64"
           },
           "grpcSettings": {
@@ -117,6 +136,67 @@
           }
         },
         "tag": "proxy"
+      },
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "31.129.42.9",
+              "port": 8443,
+              "users": [
+                {
+                  "encryption": "none",
+                  "id": "fa6acbbd-83cd-4d65-8457-a93eecb2a208"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "xhttp",
+          "security": "reality",
+          "realitySettings": {
+            "fingerprint": "firefox",
+            "publicKey": "ITd6cmCxudmTvGcwnAzpd0VRe8jS9KJAQ1tmtVN3mCM",
+            "serverName": "web.max.ru",
+            "shortId": "9e15546f267baa64"
+          },
+          "xhttpSettings": {
+            "mode": "auto",
+            "path": "/vless-xhttp"
+          }
+        },
+        "tag": "proxy-2"
+      },
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "31.129.42.9",
+              "port": 443,
+              "users": [
+                {
+                  "encryption": "none",
+                  "id": "fa6acbbd-83cd-4d65-8457-a93eecb2a208",
+                  "flow": "xtls-rprx-vision"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "security": "reality",
+          "realitySettings": {
+            "fingerprint": "firefox",
+            "publicKey": "ITd6cmCxudmTvGcwnAzpd0VRe8jS9KJAQ1tmtVN3mCM",
+            "serverName": "web.max.ru",
+            "shortId": "9e15546f267baa64"
+          }
+        },
+        "tag": "proxy-3"
       },
       {
         "protocol": "freedom",
@@ -129,7 +209,7 @@
     ],
     "routing": {
       "domainMatcher": "hybrid",
-      "domainStrategy": "AsIs",
+      "domainStrategy": "IPIfNonMatch",
       "rules": [
         {
           "type": "field",
@@ -150,7 +230,7 @@
             "domain:t-cdn.net",
             "domain:t-static.ru"
           ],
-          "outboundTag": "proxy"
+          "balancerTag": "Super_Balancer"
         },
         {
           "type": "field",
@@ -171,7 +251,7 @@
             "217.14.19.0/24",
             "217.14.23.0/24"
           ],
-          "outboundTag": "proxy"
+          "balancerTag": "Super_Balancer"
         },
         {
           "type": "field",
@@ -194,7 +274,7 @@
             "domain:sber247.ru",
             "domain:sberbusiness.live"
           ],
-          "outboundTag": "proxy"
+          "balancerTag": "Super_Balancer"
         },
         {
           "type": "field",
@@ -217,7 +297,7 @@
             "domain:ipapi.co",
             "domain:ip-api.com"
           ],
-          "outboundTag": "proxy"
+          "balancerTag": "Super_Balancer"
         },
         {
           "type": "field",
@@ -228,14 +308,14 @@
             "domain:mtalk4.google.com",
             "domain:android.apis.google.com"
           ],
-          "outboundTag": "proxy"
+          "balancerTag": "Super_Balancer"
         },
         {
           "type": "field",
           "ip": [
             "17.0.0.0/8"
           ],
-          "outboundTag": "proxy"
+          "balancerTag": "Super_Balancer"
         },
         {
           "type": "field",
@@ -1380,18 +1460,47 @@
         {
           "type": "field",
           "network": "tcp,udp",
-          "outboundTag": "proxy"
+          "balancerTag": "Super_Balancer"
         }
       ],
-      "balancers": []
+      "balancers": [
+        {
+          "tag": "Super_Balancer",
+          "selector": [
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "expected": 1,
+              "maxRTT": "3s",
+              "tolerance": 0.3
+            }
+          },
+          "fallbackTag": "direct"
+        }
+      ]
     },
+    "remarks": "🇩🇪Germany #1",
     "log": {
       "dnsLog": true,
       "loglevel": "Warning"
+    },
+    "burstObservatory": {
+      "subjectSelector": [
+        "proxy"
+      ],
+      "pingConfig": {
+        "destination": "http://www.gstatic.com/generate_204",
+        "interval": "20s",
+        "sampling": 3,
+        "timeout": "5s",
+        "httpMethod": "GET",
+        "connectivity": "http://connectivitycheck.platform.hicloud.com/generate_204"
+      }
     }
   },
   {
-    "remarks": "🇳🇱Netherlands #1",
     "dns": {
       "hosts": {
         "cloudflare-dns.com": [
@@ -1412,6 +1521,8 @@
         ]
       },
       "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true,
+      "disableFallbackIfMatch": false,
       "servers": [
         {
           "address": "https://cloudflare-dns.com/dns-query",
@@ -1433,7 +1544,9 @@
           "domains": [
             "geosite:private"
           ],
-          "tag": "localhost-dns"
+          "tag": "localhost-dns",
+          "finalQuery": true,
+          "skipFallback": true
         }
       ]
     },
@@ -1453,7 +1566,15 @@
             "quic"
           ],
           "enabled": true,
-          "routeOnly": false
+          "routeOnly": false,
+          "domainsExcluded": [
+            "domain:push.apple.com",
+            "domain:google.com",
+            "domain:ads.x5.ru",
+            "domain:vk.com",
+            "domain:proxius.ru",
+            "domain:sub.proxius.ru"
+          ]
         },
         "tag": "socks"
       },
@@ -1471,7 +1592,15 @@
             "quic"
           ],
           "enabled": true,
-          "routeOnly": false
+          "routeOnly": false,
+          "domainsExcluded": [
+            "domain:push.apple.com",
+            "domain:google.com",
+            "domain:ads.x5.ru",
+            "domain:vk.com",
+            "domain:proxius.ru",
+            "domain:sub.proxius.ru"
+          ]
         },
         "tag": "http"
       }
@@ -1500,11 +1629,40 @@
           "realitySettings": {
             "fingerprint": "firefox",
             "publicKey": "ITd6cmCxudmTvGcwnAzpd0VRe8jS9KJAQ1tmtVN3mCM",
-            "serverName": "ads.x5.ru",
+            "serverName": "eh.vk.ru",
             "shortId": "9e15546f267baa64"
           }
         },
         "tag": "proxy"
+      },
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "176.109.92.20",
+              "port": 8445,
+              "users": [
+                {
+                  "encryption": "none",
+                  "id": "fa6acbbd-83cd-4d65-8457-a93eecb2a208",
+                  "flow": "xtls-rprx-vision"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "security": "reality",
+          "realitySettings": {
+            "fingerprint": "firefox",
+            "publicKey": "ITd6cmCxudmTvGcwnAzpd0VRe8jS9KJAQ1tmtVN3mCM",
+            "serverName": "web.max.ru",
+            "shortId": "9e15546f267baa64"
+          }
+        },
+        "tag": "proxy-2"
       },
       {
         "protocol": "freedom",
@@ -1538,7 +1696,7 @@
             "domain:t-cdn.net",
             "domain:t-static.ru"
           ],
-          "outboundTag": "proxy"
+          "balancerTag": "Super_Balancer"
         },
         {
           "type": "field",
@@ -1559,7 +1717,7 @@
             "217.14.19.0/24",
             "217.14.23.0/24"
           ],
-          "outboundTag": "proxy"
+          "balancerTag": "Super_Balancer"
         },
         {
           "type": "field",
@@ -1582,7 +1740,7 @@
             "domain:sber247.ru",
             "domain:sberbusiness.live"
           ],
-          "outboundTag": "proxy"
+          "balancerTag": "Super_Balancer"
         },
         {
           "type": "field",
@@ -1605,7 +1763,7 @@
             "domain:ipapi.co",
             "domain:ip-api.com"
           ],
-          "outboundTag": "proxy"
+          "balancerTag": "Super_Balancer"
         },
         {
           "type": "field",
@@ -1616,14 +1774,14 @@
             "domain:mtalk4.google.com",
             "domain:android.apis.google.com"
           ],
-          "outboundTag": "proxy"
+          "balancerTag": "Super_Balancer"
         },
         {
           "type": "field",
           "ip": [
             "17.0.0.0/8"
           ],
-          "outboundTag": "proxy"
+          "balancerTag": "Super_Balancer"
         },
         {
           "type": "field",
@@ -2424,18 +2582,46 @@
         {
           "type": "field",
           "network": "tcp,udp",
-          "outboundTag": "proxy"
+          "balancerTag": "Super_Balancer"
         }
       ],
-      "balancers": []
+      "balancers": [
+        {
+          "tag": "Super_Balancer",
+          "selector": [
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "expected": 1,
+              "maxRTT": "3s",
+              "tolerance": 0.3
+            }
+          },
+          "fallbackTag": "direct"
+        }
+      ]
     },
+    "remarks": "🇳🇱 Netherlands #1",
     "log": {
       "dnsLog": true,
       "loglevel": "Warning"
+    },
+    "burstObservatory": {
+      "subjectSelector": [
+        "proxy"
+      ],
+      "pingConfig": {
+        "destination": "http://www.gstatic.com/generate_204",
+        "interval": "1m",
+        "sampling": 2,
+        "timeout": "5s",
+        "httpMethod": "GET"
+      }
     }
   },
   {
-    "remarks": "🇳🇱Netherlands #2",
     "dns": {
       "hosts": {
         "cloudflare-dns.com": [
@@ -2456,6 +2642,8 @@
         ]
       },
       "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true,
+      "disableFallbackIfMatch": false,
       "servers": [
         {
           "address": "https://cloudflare-dns.com/dns-query",
@@ -2477,7 +2665,9 @@
           "domains": [
             "geosite:private"
           ],
-          "tag": "localhost-dns"
+          "tag": "localhost-dns",
+          "finalQuery": true,
+          "skipFallback": true
         }
       ]
     },
@@ -2497,7 +2687,15 @@
             "quic"
           ],
           "enabled": true,
-          "routeOnly": false
+          "routeOnly": false,
+          "domainsExcluded": [
+            "domain:push.apple.com",
+            "domain:google.com",
+            "domain:ads.x5.ru",
+            "domain:vk.com",
+            "domain:proxius.ru",
+            "domain:sub.proxius.ru"
+          ]
         },
         "tag": "socks"
       },
@@ -2515,7 +2713,15 @@
             "quic"
           ],
           "enabled": true,
-          "routeOnly": false
+          "routeOnly": false,
+          "domainsExcluded": [
+            "domain:push.apple.com",
+            "domain:google.com",
+            "domain:ads.x5.ru",
+            "domain:vk.com",
+            "domain:proxius.ru",
+            "domain:sub.proxius.ru"
+          ]
         },
         "tag": "http"
       }
@@ -2544,11 +2750,40 @@
           "realitySettings": {
             "fingerprint": "firefox",
             "publicKey": "ITd6cmCxudmTvGcwnAzpd0VRe8jS9KJAQ1tmtVN3mCM",
-            "serverName": "ads.x5.ru",
+            "serverName": "eh.vk.ru",
             "shortId": "9e15546f267baa64"
           }
         },
         "tag": "proxy"
+      },
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "176.109.85.90",
+              "port": 8445,
+              "users": [
+                {
+                  "encryption": "none",
+                  "id": "fa6acbbd-83cd-4d65-8457-a93eecb2a208",
+                  "flow": "xtls-rprx-vision"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "security": "reality",
+          "realitySettings": {
+            "fingerprint": "firefox",
+            "publicKey": "ITd6cmCxudmTvGcwnAzpd0VRe8jS9KJAQ1tmtVN3mCM",
+            "serverName": "web.max.ru",
+            "shortId": "9e15546f267baa64"
+          }
+        },
+        "tag": "proxy-2"
       },
       {
         "protocol": "freedom",
@@ -2582,7 +2817,7 @@
             "domain:t-cdn.net",
             "domain:t-static.ru"
           ],
-          "outboundTag": "proxy"
+          "balancerTag": "Super_Balancer"
         },
         {
           "type": "field",
@@ -2603,7 +2838,7 @@
             "217.14.19.0/24",
             "217.14.23.0/24"
           ],
-          "outboundTag": "proxy"
+          "balancerTag": "Super_Balancer"
         },
         {
           "type": "field",
@@ -2626,7 +2861,7 @@
             "domain:sber247.ru",
             "domain:sberbusiness.live"
           ],
-          "outboundTag": "proxy"
+          "balancerTag": "Super_Balancer"
         },
         {
           "type": "field",
@@ -2649,7 +2884,7 @@
             "domain:ipapi.co",
             "domain:ip-api.com"
           ],
-          "outboundTag": "proxy"
+          "balancerTag": "Super_Balancer"
         },
         {
           "type": "field",
@@ -2660,14 +2895,14 @@
             "domain:mtalk4.google.com",
             "domain:android.apis.google.com"
           ],
-          "outboundTag": "proxy"
+          "balancerTag": "Super_Balancer"
         },
         {
           "type": "field",
           "ip": [
             "17.0.0.0/8"
           ],
-          "outboundTag": "proxy"
+          "balancerTag": "Super_Balancer"
         },
         {
           "type": "field",
@@ -3468,18 +3703,46 @@
         {
           "type": "field",
           "network": "tcp,udp",
-          "outboundTag": "proxy"
+          "balancerTag": "Super_Balancer"
         }
       ],
-      "balancers": []
+      "balancers": [
+        {
+          "tag": "Super_Balancer",
+          "selector": [
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "expected": 1,
+              "maxRTT": "3s",
+              "tolerance": 0.3
+            }
+          },
+          "fallbackTag": "direct"
+        }
+      ]
     },
+    "remarks": "🇳🇱 Netherlands #2",
     "log": {
       "dnsLog": true,
       "loglevel": "Warning"
+    },
+    "burstObservatory": {
+      "subjectSelector": [
+        "proxy"
+      ],
+      "pingConfig": {
+        "destination": "http://www.gstatic.com/generate_204",
+        "interval": "1m",
+        "sampling": 2,
+        "timeout": "5s",
+        "httpMethod": "GET"
+      }
     }
   },
   {
-    "remarks": "🇳🇱Netherlands #3 | Auto",
     "dns": {
       "hosts": {
         "cloudflare-dns.com": [
@@ -3500,6 +3763,8 @@
         ]
       },
       "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true,
+      "disableFallbackIfMatch": false,
       "servers": [
         {
           "address": "https://cloudflare-dns.com/dns-query",
@@ -3521,7 +3786,9 @@
           "domains": [
             "geosite:private"
           ],
-          "tag": "localhost-dns"
+          "tag": "localhost-dns",
+          "finalQuery": true,
+          "skipFallback": true
         }
       ]
     },
@@ -3541,7 +3808,15 @@
             "quic"
           ],
           "enabled": true,
-          "routeOnly": false
+          "routeOnly": false,
+          "domainsExcluded": [
+            "domain:push.apple.com",
+            "domain:google.com",
+            "domain:ads.x5.ru",
+            "domain:vk.com",
+            "domain:proxius.ru",
+            "domain:sub.proxius.ru"
+          ]
         },
         "tag": "socks"
       },
@@ -3559,7 +3834,15 @@
             "quic"
           ],
           "enabled": true,
-          "routeOnly": false
+          "routeOnly": false,
+          "domainsExcluded": [
+            "domain:push.apple.com",
+            "domain:google.com",
+            "domain:ads.x5.ru",
+            "domain:vk.com",
+            "domain:proxius.ru",
+            "domain:sub.proxius.ru"
+          ]
         },
         "tag": "http"
       }
@@ -3635,7 +3918,7 @@
     ],
     "routing": {
       "domainMatcher": "hybrid",
-      "domainStrategy": "AsIs",
+      "domainStrategy": "IPIfNonMatch",
       "rules": [
         {
           "type": "field",
@@ -4919,6 +5202,10 @@
         }
       ]
     },
+    "remarks": "🇳🇱 Netherlands #3 | Auto",
+    "meta": {
+      "serverDescription": "Включайте когда глушат связь LTE"
+    },
     "log": {
       "dnsLog": true,
       "loglevel": "Warning"
@@ -4932,12 +5219,12 @@
         "interval": "10s",
         "sampling": 2,
         "timeout": "3s",
+        "httpMethod": "GET",
         "connectivity": "https://sub.proxius.ru/generate_204"
       }
     }
   },
   {
-    "remarks": "🇳🇱Netherlands #4 | Auto",
     "dns": {
       "hosts": {
         "cloudflare-dns.com": [
@@ -4958,6 +5245,8 @@
         ]
       },
       "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true,
+      "disableFallbackIfMatch": false,
       "servers": [
         {
           "address": "https://cloudflare-dns.com/dns-query",
@@ -4979,7 +5268,9 @@
           "domains": [
             "geosite:private"
           ],
-          "tag": "localhost-dns"
+          "tag": "localhost-dns",
+          "finalQuery": true,
+          "skipFallback": true
         }
       ]
     },
@@ -4999,7 +5290,15 @@
             "quic"
           ],
           "enabled": true,
-          "routeOnly": false
+          "routeOnly": false,
+          "domainsExcluded": [
+            "domain:push.apple.com",
+            "domain:google.com",
+            "domain:ads.x5.ru",
+            "domain:vk.com",
+            "domain:proxius.ru",
+            "domain:sub.proxius.ru"
+          ]
         },
         "tag": "socks"
       },
@@ -5017,7 +5316,15 @@
             "quic"
           ],
           "enabled": true,
-          "routeOnly": false
+          "routeOnly": false,
+          "domainsExcluded": [
+            "domain:push.apple.com",
+            "domain:google.com",
+            "domain:ads.x5.ru",
+            "domain:vk.com",
+            "domain:proxius.ru",
+            "domain:sub.proxius.ru"
+          ]
         },
         "tag": "http"
       }
@@ -5094,7 +5401,7 @@
     ],
     "routing": {
       "domainMatcher": "hybrid",
-      "domainStrategy": "AsIs",
+      "domainStrategy": "IPIfNonMatch",
       "rules": [
         {
           "type": "field",
@@ -6378,6 +6685,7 @@
         }
       ]
     },
+    "remarks": "🇳🇱 Netherlands #4 | Auto",
     "log": {
       "dnsLog": true,
       "loglevel": "Warning"
@@ -6391,12 +6699,12 @@
         "interval": "10s",
         "sampling": 2,
         "timeout": "3s",
+        "httpMethod": "GET",
         "connectivity": "https://sub.proxius.ru/generate_204"
       }
     }
   },
   {
-    "remarks": "🇳🇱Netherlands #5 | Auto",
     "dns": {
       "hosts": {
         "cloudflare-dns.com": [
@@ -6417,6 +6725,8 @@
         ]
       },
       "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true,
+      "disableFallbackIfMatch": false,
       "servers": [
         {
           "address": "https://cloudflare-dns.com/dns-query",
@@ -6438,7 +6748,9 @@
           "domains": [
             "geosite:private"
           ],
-          "tag": "localhost-dns"
+          "tag": "localhost-dns",
+          "finalQuery": true,
+          "skipFallback": true
         }
       ]
     },
@@ -6458,7 +6770,15 @@
             "quic"
           ],
           "enabled": true,
-          "routeOnly": false
+          "routeOnly": false,
+          "domainsExcluded": [
+            "domain:push.apple.com",
+            "domain:google.com",
+            "domain:ads.x5.ru",
+            "domain:vk.com",
+            "domain:proxius.ru",
+            "domain:sub.proxius.ru"
+          ]
         },
         "tag": "socks"
       },
@@ -6476,7 +6796,15 @@
             "quic"
           ],
           "enabled": true,
-          "routeOnly": false
+          "routeOnly": false,
+          "domainsExcluded": [
+            "domain:push.apple.com",
+            "domain:google.com",
+            "domain:ads.x5.ru",
+            "domain:vk.com",
+            "domain:proxius.ru",
+            "domain:sub.proxius.ru"
+          ]
         },
         "tag": "http"
       }
@@ -6553,7 +6881,7 @@
     ],
     "routing": {
       "domainMatcher": "hybrid",
-      "domainStrategy": "AsIs",
+      "domainStrategy": "IPIfNonMatch",
       "rules": [
         {
           "type": "field",
@@ -7837,6 +8165,7 @@
         }
       ]
     },
+    "remarks": "🇳🇱 Netherlands #5 | Auto",
     "log": {
       "dnsLog": true,
       "loglevel": "Warning"
@@ -7850,6 +8179,7 @@
         "interval": "10s",
         "sampling": 2,
         "timeout": "3s",
+        "httpMethod": "GET",
         "connectivity": "https://sub.proxius.ru/generate_204"
       }
     }
