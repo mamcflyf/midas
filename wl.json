@@ -115,53 +115,27 @@
               "users": [
                 {
                   "encryption": "none",
-                  "id": "fa6acbbd-83cd-4d65-8457-a93eecb2a208",
-                  "flow": "xtls-rprx-vision"
+                  "id": "fa6acbbd-83cd-4d65-8457-a93eecb2a208"
                 }
               ]
             }
           ]
         },
         "streamSettings": {
-          "network": "tcp",
+          "network": "grpc",
           "security": "reality",
           "realitySettings": {
             "fingerprint": "firefox",
             "publicKey": "ITd6cmCxudmTvGcwnAzpd0VRe8jS9KJAQ1tmtVN3mCM",
-            "serverName": "eh.vk.ru",
+            "serverName": "ads.x5.ru",
             "shortId": "9e15546f267baa64"
+          },
+          "grpcSettings": {
+            "multiMode": false,
+            "serviceName": "grpc-reality"
           }
         },
         "tag": "proxy"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "176.109.92.20",
-              "port": 8445,
-              "users": [
-                {
-                  "encryption": "none",
-                  "id": "fa6acbbd-83cd-4d65-8457-a93eecb2a208",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "security": "reality",
-          "realitySettings": {
-            "fingerprint": "firefox",
-            "publicKey": "ITd6cmCxudmTvGcwnAzpd0VRe8jS9KJAQ1tmtVN3mCM",
-            "serverName": "web.max.ru",
-            "shortId": "9e15546f267baa64"
-          }
-        },
-        "tag": "proxy-2"
       },
       {
         "protocol": "freedom",
@@ -195,7 +169,7 @@
             "domain:t-cdn.net",
             "domain:t-static.ru"
           ],
-          "balancerTag": "Super_Balancer"
+          "outboundTag": "proxy"
         },
         {
           "type": "field",
@@ -216,7 +190,7 @@
             "217.14.19.0/24",
             "217.14.23.0/24"
           ],
-          "balancerTag": "Super_Balancer"
+          "outboundTag": "proxy"
         },
         {
           "type": "field",
@@ -239,7 +213,7 @@
             "domain:sber247.ru",
             "domain:sberbusiness.live"
           ],
-          "balancerTag": "Super_Balancer"
+          "outboundTag": "proxy"
         },
         {
           "type": "field",
@@ -262,7 +236,7 @@
             "domain:ipapi.co",
             "domain:ip-api.com"
           ],
-          "balancerTag": "Super_Balancer"
+          "outboundTag": "proxy"
         },
         {
           "type": "field",
@@ -273,14 +247,14 @@
             "domain:mtalk4.google.com",
             "domain:android.apis.google.com"
           ],
-          "balancerTag": "Super_Balancer"
+          "outboundTag": "proxy"
         },
         {
           "type": "field",
           "ip": [
             "17.0.0.0/8"
           ],
-          "balancerTag": "Super_Balancer"
+          "outboundTag": "proxy"
         },
         {
           "type": "field",
@@ -1081,43 +1055,15 @@
         {
           "type": "field",
           "network": "tcp,udp",
-          "balancerTag": "Super_Balancer"
+          "outboundTag": "proxy"
         }
       ],
-      "balancers": [
-        {
-          "tag": "Super_Balancer",
-          "selector": [
-            "proxy"
-          ],
-          "strategy": {
-            "type": "leastLoad",
-            "settings": {
-              "expected": 1,
-              "maxRTT": "3s",
-              "tolerance": 0.3
-            }
-          },
-          "fallbackTag": "direct"
-        }
-      ]
+      "balancers": []
     },
     "remarks": "🇩🇪Germany #1",
     "log": {
       "dnsLog": true,
       "loglevel": "Warning"
-    },
-    "burstObservatory": {
-      "subjectSelector": [
-        "proxy"
-      ],
-      "pingConfig": {
-        "destination": "http://www.gstatic.com/generate_204",
-        "interval": "1m",
-        "sampling": 2,
-        "timeout": "5s",
-        "httpMethod": "GET"
-      }
     }
   },
   {
@@ -5176,13 +5122,12 @@
         "settings": {
           "vnext": [
             {
-              "address": "94.183.254.248",
+              "address": "5.129.246.130",
               "port": 443,
               "users": [
                 {
                   "encryption": "none",
-                  "id": "fa6acbbd-83cd-4d65-8457-a93eecb2a208",
-                  "flow": "xtls-rprx-vision"
+                  "id": "fa6acbbd-83cd-4d65-8457-a93eecb2a208"
                 }
               ]
             }
@@ -5193,9 +5138,9 @@
           "security": "reality",
           "realitySettings": {
             "fingerprint": "firefox",
-            "publicKey": "ITd6cmCxudmTvGcwnAzpd0VRe8jS9KJAQ1tmtVN3mCM",
-            "serverName": "n31.clouderiux.com",
-            "shortId": "9e15546f267baa64"
+            "publicKey": "RCKb6lBrk7tlTQGITA67fdi1Xgp9yiZsA6YfF2-O1TM",
+            "serverName": "upload.connectiux.com",
+            "shortId": "15de5658"
           }
         },
         "tag": "proxy"
@@ -5205,7 +5150,7 @@
         "settings": {
           "vnext": [
             {
-              "address": "185.91.53.130",
+              "address": "185.91.53.15",
               "port": 8445,
               "users": [
                 {
@@ -6507,19 +6452,7 @@
             "settings": {
               "expected": 1,
               "maxRTT": "3s",
-              "tolerance": 0.3,
-              "costs": [
-                {
-                  "match": "^proxy$",
-                  "regexp": true,
-                  "value": 100
-                },
-                {
-                  "match": "^proxy\\-2$",
-                  "regexp": true,
-                  "value": 1000000
-                }
-              ]
+              "tolerance": 0.3
             }
           },
           "fallbackTag": "direct"
