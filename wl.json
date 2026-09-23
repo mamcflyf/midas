@@ -1,5 +1,363 @@
 [
   {
+    "remarks": "🇫🇮Finland (Auto)",
+    "log": {
+      "loglevel": "Warning",
+      "dnsLog": true
+    },
+    "meta": {
+      "routeLabels": [
+        "experimental-timeweb-spb01"
+      ],
+      "perDeviceAuth": true,
+      "userSlug": "tg-7601790896",
+      "canaryScope": "global"
+    },
+    "dns": {
+      "disableCache": false,
+      "queryStrategy": "UseIPv4",
+      "servers": [
+        "https://8.8.8.8/dns-query",
+        "https://1.1.1.1/dns-query"
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "listen": "127.0.0.1",
+        "port": 10808,
+        "protocol": "socks",
+        "settings": {
+          "auth": "noauth",
+          "udp": true
+        },
+        "sniffing": {
+          "enabled": true,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic"
+          ],
+          "routeOnly": false
+        }
+      },
+      {
+        "tag": "http",
+        "listen": "127.0.0.1",
+        "port": 10809,
+        "protocol": "http",
+        "settings": {
+          "allowTransparent": false
+        },
+        "sniffing": {
+          "enabled": true,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic"
+          ],
+          "routeOnly": false
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy-auto-experimental-bypass-experimental-timeweb-spb01",
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "89.223.121.124",
+              "port": 443,
+              "users": [
+                {
+                  "id": "7006eaab-008a-426d-962f-295f6b5d689f",
+                  "encryption": "none"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "xhttp",
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "exp-spb.byteflows.cc",
+            "fingerprint": "chrome",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          },
+          "xhttpSettings": {
+            "path": "/api/v2/",
+            "mode": "packet-up",
+            "host": "exp-spb.byteflows.cc",
+            "extra": {
+              "mode": "packet-up",
+              "noGRPCHeader": false,
+              "xPaddingBytes": "100-300",
+              "xmux": {
+                "maxConcurrency": "4-8",
+                "maxConnections": 0,
+                "cMaxReuseTimes": "24-64",
+                "hMaxRequestTimes": "80-160",
+                "hMaxReusableSecs": "300-900",
+                "hKeepAlivePeriod": 0
+              }
+            }
+          },
+          "sockopt": {
+            "dialerProxy": "fragment",
+            "tcpKeepAliveIdle": 30,
+            "tcpKeepAliveInterval": 10
+          }
+        }
+      },
+      {
+        "protocol": "freedom",
+        "tag": "direct"
+      },
+      {
+        "protocol": "blackhole",
+        "tag": "block"
+      },
+      {
+        "tag": "fragment",
+        "protocol": "freedom",
+        "settings": {
+          "fragment": {
+            "packets": "tlshello",
+            "length": "100-200",
+            "interval": "10-20"
+          }
+        }
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "connectivity": "",
+        "destination": "http://www.gstatic.com/generate_204",
+        "interval": "30s",
+        "sampling": 2,
+        "timeout": "5s"
+      },
+      "subjectSelector": [
+        "proxy-auto-experimental-bypass-"
+      ]
+    },
+    "routing": {
+      "domainMatcher": "hybrid",
+      "domainStrategy": "IPIfNonMatch",
+      "rules": [
+        {
+          "ip": [
+            "10.0.0.0/8",
+            "100.64.0.0/10",
+            "127.0.0.0/8",
+            "169.254.0.0/16",
+            "172.16.0.0/12",
+            "192.168.0.0/16",
+            "::1/128",
+            "fc00::/7",
+            "fe80::/10"
+          ],
+          "outboundTag": "direct",
+          "type": "field"
+        },
+        {
+          "outboundTag": "block",
+          "protocol": [
+            "bittorrent"
+          ],
+          "type": "field"
+        },
+        {
+          "domain": [
+            "domain:yandex.ru",
+            "domain:yandex.net",
+            "domain:yandex.com",
+            "domain:ya.ru",
+            "domain:yandexbank.ru",
+            "domain:yastatic.net",
+            "domain:yandexcloud.net",
+            "domain:vk.com",
+            "domain:vk.ru",
+            "domain:vkuseraudio.net",
+            "domain:vkuservideo.net",
+            "domain:userapi.com",
+            "domain:vk-portal.net",
+            "domain:vk.me",
+            "domain:vk.cc",
+            "domain:vkcdn.net",
+            "domain:vk-cdn.net",
+            "domain:cdn-vk.ru",
+            "domain:vkontakte.ru",
+            "domain:vkvideo.ru",
+            "domain:ok.ru",
+            "domain:okcdn.ru",
+            "domain:odkl.ru",
+            "domain:odnoklassniki.ru",
+            "domain:mail.ru",
+            "domain:imgsmail.ru",
+            "domain:mycdn.me",
+            "domain:dzen.ru",
+            "domain:dzeninfra.ru",
+            "domain:max.ru",
+            "domain:oneme.ru",
+            "domain:ozon.ru",
+            "domain:ozoncdn.net",
+            "domain:ozone.ru",
+            "domain:ozonusercontent.com",
+            "domain:wildberries.ru",
+            "domain:wbbasket.ru",
+            "domain:wb.ru",
+            "domain:wbstatic.net",
+            "domain:avito.ru",
+            "domain:avito.st",
+            "domain:samokat.ru",
+            "domain:kuper.ru",
+            "domain:magnit.ru",
+            "domain:perekrestok.ru",
+            "domain:vprok.ru",
+            "domain:5ka.ru",
+            "domain:megamarket.ru",
+            "domain:sbermegamarket.ru",
+            "domain:detmir.ru",
+            "domain:rutube.ru",
+            "domain:kinopoisk.ru",
+            "domain:kpcdn.net",
+            "domain:okko.tv",
+            "domain:ivi.ru",
+            "domain:ivi.tv",
+            "domain:wink.ru",
+            "domain:premier.one",
+            "domain:ngenix.net",
+            "domain:cdnvideo.ru",
+            "domain:gosuslugi.ru",
+            "domain:gu-st.ru",
+            "domain:gov.ru",
+            "domain:nalog.ru",
+            "domain:mos.ru",
+            "domain:cbr.ru",
+            "domain:mts.ru",
+            "domain:mtscdn.ru",
+            "domain:mymts.ru",
+            "domain:megafon.ru",
+            "domain:beeline.ru",
+            "domain:tele2.ru",
+            "domain:t2.ru",
+            "domain:yota.ru",
+            "domain:rostelecom.ru",
+            "domain:rt.ru",
+            "domain:vtb.ru",
+            "domain:psbank.ru",
+            "domain:alfabank.ru",
+            "domain:alfa-bank.ru",
+            "domain:alfabank.com",
+            "domain:alfa-bank.com",
+            "domain:mtsbank.ru",
+            "domain:mtsdengi.ru",
+            "domain:moex.com",
+            "domain:nspk.ru",
+            "domain:mir-platform.ru",
+            "domain:mirpay.ru",
+            "domain:mironline.ru",
+            "domain:sbpay.ru",
+            "domain:hh.ru",
+            "domain:hhcdn.ru",
+            "domain:2gis.ru",
+            "domain:gis.ru",
+            "domain:domclick.ru",
+            "domain:gismeteo.ru",
+            "domain:rzd.ru",
+            "domain:tutu.ru",
+            "domain:aeroflot.ru",
+            "domain:pobeda.aero",
+            "domain:citydrive.ru",
+            "domain:cdek.ru",
+            "domain:pochta.ru",
+            "domain:dellin.ru",
+            "domain:rambler.ru",
+            "domain:lenta.ru",
+            "domain:gazeta.ru",
+            "domain:ria.ru",
+            "domain:tass.ru",
+            "domain:rbc.ru",
+            "domain:kp.ru",
+            "domain:checkip.amazonaws.com",
+            "domain:ipinfo.io",
+            "domain:ipapi.co",
+            "domain:ip-api.com",
+            "domain:ifconfig.me",
+            "domain:icanhazip.com",
+            "domain:ipify.org",
+            "domain:2ip.ru",
+            "domain:whatismyip.com",
+            "domain:whatismyipaddress.com",
+            "domain:myip.com",
+            "domain:ipleak.net",
+            "domain:browserleaks.com",
+            "domain:showmyip.com",
+            "domain:adriver.ru",
+            "domain:hybrid.ai",
+            "domain:edgecdn.ru",
+            "domain:whoer.net",
+            "domain:au.ru",
+            "domain:vkuser.net",
+            "domain:vkuserlive.net",
+            "domain:vkuseraudio.com",
+            "domain:vkuservideo.com",
+            "domain:mvk.com",
+            "domain:vkmessenger.com",
+            "domain:vk-apps.ru",
+            "domain:vk-apps.com",
+            "domain:mradx.net",
+            "domain:yandexcloud.ru",
+            "domain:yandexcloud.com",
+            "domain:yandex-team.ru",
+            "domain:yandex-team.com",
+            "domain:yandexadexchange.net",
+            "domain:yandexcdn.net",
+            "domain:edadeal.ru",
+            "domain:auto.ru",
+            "domain:yoomoney.ru",
+            "domain:yookassa.ru"
+          ],
+          "outboundTag": "direct",
+          "type": "field"
+        },
+        {
+          "type": "field",
+          "network": "tcp,udp",
+          "balancerTag": "KotikVPN_Experimental_Bypass"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "KotikVPN_Experimental_Bypass",
+          "selector": [
+            "proxy-auto-experimental-bypass-"
+          ],
+          "fallbackTag": "proxy-auto-experimental-bypass-experimental-timeweb-spb01",
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "baselines": [
+                "120ms",
+                "250ms",
+                "500ms"
+              ],
+              "expected": 1,
+              "maxRTT": "3s",
+              "tolerance": 0.05
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
     "remarks": "🇩🇪Germany #1 (Auto)",
     "log": {
       "loglevel": "Warning",
