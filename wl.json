@@ -1,6 +1,6 @@
 [
   {
-    "remarks": "🇩🇪Germany #1(Auto)",
+    "remarks": "🇩🇪Germany #1 (Auto)",
     "log": {
       "loglevel": "Warning",
       "dnsLog": true
@@ -401,7 +401,7 @@
     }
   },
   {
-    "remarks": "🇩🇪Germany #2(Auto)",
+    "remarks": "🇩🇪Germany #2 (Auto)",
     "log": {
       "loglevel": "Warning",
       "dnsLog": true
@@ -802,7 +802,7 @@
     }
   },
   {
-    "remarks": "🇩🇪Germany #3(Auto)",
+    "remarks": "🇩🇪Germany #3 (Auto)",
     "log": {
       "loglevel": "Warning",
       "dnsLog": true
