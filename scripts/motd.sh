@@ -716,10 +716,16 @@ show_session_info() {
 show_system_info() {
     echo -e "\n${COLOR_TITLE}• System Details${RESET}"
     
+    if [[ -n "${SERVER_LABEL:-}" ]]; then
+        printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "Server name:" "$SERVER_LABEL"
+    fi
     local hostname_value
     hostname_value=$(safe_cmd "${HOSTNAME}")
     printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "Hostname:" "${hostname_value:-Unknown}"
     
+    if [[ "${SHOW_HOSTING:-true}" == "true" ]]; then
+        printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "Hosting:" "$(midas_provider)"
+    fi
     local os_info
     if [[ -x "${LSB_RELEASE}" ]]; then
         os_info=$(safe_cmd "${LSB_RELEASE}" -ds)
@@ -730,6 +736,10 @@ show_system_info() {
     fi
     printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "OS:" "${os_info}"
     
+    local kernel_version
+    kernel_version=$(safe_cmd "${UNAME}" -r)
+    printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "Kernel:" "${kernel_version:-Unknown}"
+
     local ipv4 ipv6
     if [[ -x "${IP}" ]]; then
         ipv4=$(safe_cmd "${IP}" -4 addr show scope global | "${AWK}" '/inet/ {print $2}' | "${CUT}" -d/ -f1 | "${HEAD}" -n1)
@@ -738,9 +748,6 @@ show_system_info() {
     printf "${COLOR_LABEL}%-22s${COLOR_YELLOW}%s${RESET}\n" "External IP (v4):" "${ipv4:-N/A}"
     printf "${COLOR_LABEL}%-22s${COLOR_YELLOW}%s${RESET}\n" "External IP (v6):" "${ipv6:-N/A}"
     
-    local kernel_version
-    kernel_version=$(safe_cmd "${UNAME}" -r)
-    printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "Kernel:" "${kernel_version:-Unknown}"
 }
 
 midas_label() {
@@ -1122,7 +1129,6 @@ main() {
     show_logo
     show_session_info
     show_system_info
-    midas_extra_system
     show_cpu_info
     show_memory_info
     show_network_info
