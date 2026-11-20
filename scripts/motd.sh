@@ -3,6 +3,10 @@
 set -Eeuo pipefail
 [[ $EUID == 0 ]] || { echo 'Run as root / Запустите от root' >&2; exit 1; }
 [[ -f /etc/debian_version ]] || { echo 'Debian/Ubuntu only' >&2; exit 1; }
+if ! command -v whiptail >/dev/null 2>&1 && ! command -v dialog >/dev/null 2>&1; then
+  echo 'Installing whiptail for interactive menu (maximum 60 seconds)...'
+  timeout 60 apt-get install -y -qq whiptail >/dev/null 2>&1 || echo 'whiptail unavailable: text menu fallback'
+fi
 BASE=/opt/midas-motd
 CFG=/etc/midas-motd.conf
 MOTD=/etc/update-motd.d/00-midas
@@ -35,7 +39,7 @@ cat > "$BASE/render.sh" <<'RENDER'
 #!/usr/bin/env bash
 set -u
 source /opt/midas-motd/lib.sh
-export LC_ALL=C
+export LC_ALL=C.UTF-8
 if [[ $THEME == none ]]; then BLUE=''; WHITE=''; GREEN=''; PINK=''; ORANGE=''; RESET=''
 else
  BLUE=$'\033[1;34m'; WHITE=$'\033[1;37m'; GREEN=$'\033[0;32m'
@@ -213,39 +217,103 @@ PY
  echo "Hostname: $old -> $new"
  echo "Backup: $backup"
 }
-menu() {
+ui() {
+ local title=$1; shift
+ if command -v whiptail >/dev/null 2>&1; then
+  whiptail --title "$title" "$@" 3>&1 1>&2 2>&3
+ elif command -v dialog >/dev/null 2>&1; then
+  dialog --stdout --title "$title" "$@"
+ else
+  return 127
+ fi
+}
+notice() {
+ if command -v whiptail >/dev/null 2>&1 || command -v dialog >/dev/null 2>&1; then
+  ui "MIDAS MOTD" --msgbox "$1" 10 65 || true
+ else printf '%s\n' "$1"; fi
+}
+choose() {
+ local title=$1; shift
+ if command -v whiptail >/dev/null 2>&1 || command -v dialog >/dev/null 2>&1; then
+  ui "$title" --menu "$(trn 'Выберите действие:' 'Choose an action:')" 22 76 13 "$@"
+ else
+  local i=1 tag label
+  printf '\n%s\n' "$title" >&2
+  while (($#)); do tag=$1; label=$2; shift 2; printf '%s) %s\n' "$tag" "$label" >&2; done
+  read -r -p '> ' tag < /dev/tty
+  printf '%s' "$tag"
+ fi
+}
+prompt_value() {
+ local title=$1 default=${2:-}
+ if command -v whiptail >/dev/null 2>&1 || command -v dialog >/dev/null 2>&1; then
+  ui "MIDAS MOTD" --inputbox "$title" 10 70 "$default"
+ else
+  read -r -p "$title: " REPLY < /dev/tty
+  printf '%s' "${REPLY:-$default}"
+ fi
+}
+confirm_action() {
+ local message=$1
+ if command -v whiptail >/dev/null 2>&1 || command -v dialog >/dev/null 2>&1; then
+  ui "MIDAS MOTD" --yesno "$message" 10 70
+ else
+  read -r -p "$message [y/N]: " REPLY < /dev/tty
+  [[ $REPLY == y || $REPLY == Y ]]
+ fi
+}
+toggle_menu() {
+ local key label selected
  while true; do
   source /opt/midas-motd/lib.sh
-  printf '\n=== MIDAS MOTD ===\n'
-  printf ' 1) %s: %s\n' "$(trn 'Язык' 'Language')" "$LANGUAGE"
-  printf ' 2) %s: %s\n' "$(trn 'Тема' 'Theme')" "$THEME"
-  printf ' 3) %s\n' "$(trn 'Изменить hostname Linux' 'Change Linux hostname')"
-  printf ' 4) %s: %s\n' "$(trn 'Название сервера' 'Server label')" "${SERVER_LABEL:-auto}"
-  printf ' 5) %s: %s\n' "$(trn 'Название хостера' 'Hosting name')" "${HOSTING_NAME:-auto}"
-  local i=6 k
-  for k in SHOW_IP4 SHOW_IP6 SHOW_HOSTING SHOW_KERNEL SHOW_UPDATES SHOW_UFW SHOW_CPU SHOW_RAM SHOW_DISK SHOW_DOCKER SHOW_UPTIME SHOW_LOAD SHOW_OS; do
-    printf '%2d) %-17s [%s]\n' "$i" "${k#SHOW_}" "${!k}"
-    ((i+=1))
-  done
-  printf '19) %s\n20) %s\n21) %s\n 0) %s\n' "$(trn 'Показать MOTD' 'Preview MOTD')" "$(trn 'Обновить данные хостера' 'Refresh hosting info')" "$(trn 'Удалить MIDAS MOTD' 'Uninstall MIDAS MOTD')" "$(trn 'Выход' 'Exit')"
-  ask '> '
-  case $REPLY in
+  selected=$(choose "$(trn 'Настроить отображение MOTD' 'Configure MOTD display')" \
+   1 "IPv4: $SHOW_IP4" 2 "IPv6: $SHOW_IP6" 3 "$(trn 'Хостер' 'Hosting'): $SHOW_HOSTING" \
+   4 "$(trn 'Ядро' 'Kernel'): $SHOW_KERNEL" 5 "$(trn 'Обновления' 'Updates'): $SHOW_UPDATES" \
+   6 "UFW: $SHOW_UFW" 7 "CPU: $SHOW_CPU" 8 "RAM: $SHOW_RAM" 9 "$(trn 'Диск' 'Disk'): $SHOW_DISK" \
+   10 "Docker: $SHOW_DOCKER" 11 "$(trn 'Сеть' 'Network'): $SHOW_NET" \
+   12 "$(trn 'Правила UFW' 'UFW rules'): $SHOW_UFW_RULES" 0 "$(trn 'Назад' 'Back')" ) || return 0
+  [[ $selected == 0 ]] && return 0
+  local keys=(SHOW_IP4 SHOW_IP6 SHOW_HOSTING SHOW_KERNEL SHOW_UPDATES SHOW_UFW SHOW_CPU SHOW_RAM SHOW_DISK SHOW_DOCKER SHOW_NET SHOW_UFW_RULES)
+  [[ $selected =~ ^[0-9]+$ ]] && ((selected>=1 && selected<=12)) || continue
+  key=${keys[selected-1]}
+  if [[ ${!key} == 1 ]]; then write_setting "$key" 0; else write_setting "$key" 1; fi
+ done
+}
+menu() {
+ local selected val
+ while true; do
+  source /opt/midas-motd/lib.sh
+  selected=$(choose "MIDAS MOTD" \
+   1 "$(trn 'Настроить отображение MOTD' 'Configure MOTD display')" \
+   2 "$(trn 'Настроить Services Status' 'Configure Services Status')" \
+   3 "$(trn 'Удалить MIDAS MOTD' 'Uninstall MIDAS MOTD')" \
+   4 "$(trn 'Показать статус установки' 'Installation status')" \
+   5 "$(trn 'Цветовая тема' 'Color theme'): $THEME" \
+   6 "$(trn 'Язык' 'Language'): $LANGUAGE" \
+   7 "$(trn 'Изменить имя машины (hostname)' 'Change machine hostname')" \
+   8 "$(trn 'Название сервера' 'Server display name'): ${SERVER_LABEL:-auto}" \
+   9 "$(trn 'Название хостера' 'Hosting name'): ${HOSTING_NAME:-auto}" \
+   10 "$(trn 'Обновить информацию о хостере' 'Refresh hosting information')" \
+   11 "$(trn 'Предпросмотр MOTD' 'Preview MOTD')" \
+   0 "$(trn 'Выход' 'Exit')" ) || break
+  case $selected in
    0) break;;
-   1) if [[ $LANGUAGE == ru ]]; then write_setting LANGUAGE en; else write_setting LANGUAGE ru; fi;;
-   2) ask 'cyan / green / purple / blue / none: '; case $REPLY in cyan|green|purple|blue|none) write_setting THEME "$REPLY";; esac;;
-   3) rename_host || true;;
-   4) ask "$(trn 'Название сервера (пусто = hostname)' 'Server label (empty = hostname)'): "; write_setting SERVER_LABEL "$REPLY";;
-   5) ask "$(trn 'Хостер (пусто = авто)' 'Hosting (empty = auto)'): "; write_setting HOSTING_NAME "$REPLY";;
-   19) /opt/midas-motd/render.sh;;
-   20) /opt/midas-motd/refresh-provider.sh;;
-   21) ask 'Type REMOVE to uninstall / Введите REMOVE для удаления: '; if [[ $REPLY == REMOVE ]]; then /opt/midas-motd/uninstall.sh; exit 0; fi;;
-   *) if [[ $REPLY =~ ^([0-9]+)$ ]] && (( REPLY >= 6 && REPLY <= 18 )); then
-      local keys=(SHOW_IP4 SHOW_IP6 SHOW_HOSTING SHOW_KERNEL SHOW_UPDATES SHOW_UFW SHOW_CPU SHOW_RAM SHOW_DISK SHOW_DOCKER SHOW_UPTIME SHOW_LOAD SHOW_OS)
-      k=${keys[REPLY-6]}; if [[ ${!k} == 1 ]]; then write_setting "$k" 0; else write_setting "$k" 1; fi
-      fi;;
+   1) toggle_menu;;
+   2) notice "$(trn 'Статус Docker доступен в настройках отображения. Отдельные проверки служб появятся в следующем обновлении.' 'Docker status is available under display settings. Custom service checks are not yet implemented.')";;
+   3) if confirm_action "$(trn 'Удалить MIDAS MOTD? Имя машины останется прежним.' 'Uninstall MIDAS MOTD? Hostname will remain unchanged.')"; then /opt/midas-motd/uninstall.sh; exit 0; fi;;
+   4) notice "$(trn 'MIDAS MOTD установлен. Конфигурация:' 'MIDAS MOTD installed. Configuration:') $CFG";;
+   5) val=$(choose "$(trn 'Цветовая тема' 'Color theme')" cyan Cyan green Green purple Purple blue Blue none None) || continue
+      case $val in cyan|green|purple|blue|none) write_setting THEME "$val";; esac;;
+   6) if [[ $LANGUAGE == ru ]]; then write_setting LANGUAGE en; else write_setting LANGUAGE ru; fi;;
+   7) rename_host || true;;
+   8) val=$(prompt_value "$(trn 'Название сервера (пусто = hostname)' 'Server name (empty = hostname)')" "$SERVER_LABEL") || continue; write_setting SERVER_LABEL "$val";;
+   9) val=$(prompt_value "$(trn 'Название хостера (пусто = автоматически)' 'Hosting name (empty = auto)')" "$HOSTING_NAME") || continue; write_setting HOSTING_NAME "$val";;
+   10) /opt/midas-motd/refresh-provider.sh || notice "$(trn 'Не удалось получить данные хостера' 'Hosting lookup failed')";;
+   11) clear; /opt/midas-motd/render.sh; read -r -p "$(trn 'Нажмите Enter...' 'Press Enter...')" REPLY < /dev/tty;;
   esac
  done
 }
+
 menu
 SETTINGS
 cat > "$BASE/refresh-provider.sh" <<'PROVIDER'
@@ -318,8 +386,9 @@ for f in /etc/update-motd.d/00-header /etc/update-motd.d/10-help-text /etc/updat
 done
 # Do not edit PAM, SSH or restart sshd: existing pam_motd will execute update-motd.d.
 touch "$BASE/installed"
-if [[ -r /dev/tty ]]; then
- printf '\nMIDAS MOTD installed. Initial setup / Первоначальная настройка:\n'
- /opt/midas-motd/settings.sh </dev/tty
+if [[ ! -f "$BASE/setup-complete" && -r /dev/tty ]]; then
+ printf '\nMIDAS MOTD: first-time setup / Первоначальная настройка\n'
+ /opt/midas-motd/settings.sh </dev/tty || true
+ touch "$BASE/setup-complete"
 fi
 printf '\nCommands: motd, motd-set\n'
