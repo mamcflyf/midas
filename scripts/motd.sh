@@ -1,401 +1,1896 @@
-#!/usr/bin/env bash
-# MIDAS MOTD - self-contained Debian/Ubuntu installer (MIT)
-set -Eeuo pipefail
-[[ $EUID == 0 ]] || { echo 'Run as root / Запустите от root' >&2; exit 1; }
-[[ -f /etc/debian_version ]] || { echo 'Debian/Ubuntu only' >&2; exit 1; }
-if ! command -v whiptail >/dev/null 2>&1 && ! command -v dialog >/dev/null 2>&1; then
-  echo 'Installing whiptail for interactive menu (maximum 60 seconds)...'
-  DEBIAN_FRONTEND=noninteractive timeout 30 apt-get install -y -qq whiptail >/dev/null 2>&1 || echo 'whiptail unavailable: text menu fallback'
-fi
-BASE=/opt/midas-motd
-CFG=/etc/midas-motd.conf
-MOTD=/etc/update-motd.d/00-midas
-BACK=$BASE/backup
-mkdir -p "$BASE" "$BACK"
-if [[ ! -f $BASE/installed ]]; then
-  for f in /etc/update-motd.d/00-header /etc/update-motd.d/10-help-text /etc/update-motd.d/50-motd-news /etc/update-motd.d/00-dist-motd /usr/local/bin/motd /usr/local/bin/motd-set; do
-    [[ ! -e $f ]] || { mkdir -p "$BACK$(dirname "$f")"; cp -a "$f" "$BACK$f"; }
-  done
-fi
-cat > "$BASE/lib.sh" <<'LIB'
-#!/usr/bin/env bash
-CFG=/etc/midas-motd.conf
-# Only root-controlled configuration is sourced.
-LANGUAGE=ru; THEME=cyan; SERVER_LABEL=''; HOSTING_NAME=''
-SHOW_IP4=1; SHOW_IP6=1; SHOW_HOSTING=1; SHOW_KERNEL=1; SHOW_UPDATES=1
-SHOW_UFW=1; SHOW_CPU=1; SHOW_RAM=1; SHOW_DISK=1; SHOW_DOCKER=1
-SHOW_UPTIME=1; SHOW_LOAD=1; SHOW_OS=1; SHOW_NET=1; SHOW_UFW_RULES=1; SHOW_LASTLOGIN=0
-[[ ! -r $CFG ]] || source "$CFG"
-trn() { if [[ $LANGUAGE == ru ]]; then printf '%s' "$1"; else printf '%s' "$2"; fi; }
-color() { case $THEME in green) printf '\033[1;32m';; purple) printf '\033[1;35m';; blue) printf '\033[1;34m';; none) printf '';; *) printf '\033[1;36m';; esac; }
-reset() { printf '\033[0m'; }
-line() { printf '  %-17s %s\n' "$1" "$2"; }
-heading() { printf '\n'; color; printf '  ── %s ──────────────────────────────\n' "$1"; reset; }
-flag() { [[ ${!1:-0} == 1 ]]; }
-# The external lookup is done by a cache refresh command, never on SSH login.
-provider() { [[ -n $HOSTING_NAME ]] && printf '%s' "$HOSTING_NAME" || { [[ ! -s /var/cache/midas-motd-provider ]] || head -n1 /var/cache/midas-motd-provider; }; }
-LIB
-cat > "$BASE/render.sh" <<'RENDER'
-#!/usr/bin/env bash
-set -u
-source /opt/midas-motd/lib.sh
-export LC_ALL=C.UTF-8
-if [[ $THEME == none ]]; then BLUE=''; WHITE=''; GREEN=''; PINK=''; ORANGE=''; RESET=''
-else
- BLUE=$'\033[1;34m'; WHITE=$'\033[1;37m'; GREEN=$'\033[0;32m'
- PINK=$'\033[1;35m'; ORANGE=$'\033[1;33m'; RESET=$'\033[0m'
-fi
-# Distillium-style fixed columns and progress bars
-# Width-aware labels: UTF-8 Cyrillic is multi-byte, but each letter is one terminal cell.
-label() { local text=$1; printf '%b%s%b' "$BLUE" "$text" "$RESET"; local pad=$((22-${#text})); ((pad<1)) && pad=1; printf '%*s' "$pad" ''; }
-field() { label "$1"; printf '%b%s%b\n' "$2" "$3" "$RESET"; }
-section() { printf '\n%b• %s%b\n' "$WHITE" "$1" "$RESET"; }
-bar() {
- local used=${1:-0} total=${2:-0} width=30 filled=0 pct=0 i
- if ((total>0)); then pct=$((used*100/total)); filled=$((pct*width/100)); fi
- ((pct>100)) && pct=100
- printf '%b[' "$BLUE"
- for ((i=0;i<width;i++)); do
-  if ((i<filled)); then printf '%b=' "$GREEN"; else printf '%b-' "$BLUE"; fi
- done
- printf '%b] %b%s%%%b' "$BLUE" "$GREEN" "$pct" "$RESET"
-}
-human_bytes() { numfmt --to=iec --suffix=B "${1:-0}" 2>/dev/null || printf '%s B' "${1:-0}"; }
-printf '%bMessage Of The Day by MIDAS MOTD%b\n' "$WHITE" "$RESET"
-printf '%b====================================%b\n' "$WHITE" "$RESET"
-section "$(trn 'Сведения о сеансе' 'Session Details')"
-field "$(trn 'Пользователь:' 'User:')" "$ORANGE" "$(id -un)"
-field "$(trn 'Имя сервера:' 'Server:')" "$GREEN" "${SERVER_LABEL:-$(hostname)}"
-if flag SHOW_UPTIME; then field "$(trn 'Время работы:' 'Uptime:')" "$GREEN" "$(uptime -p 2>/dev/null | sed 's/^up //')"; fi
-section "$(trn 'Сведения о системе' 'System Details')"
-field "$(trn 'Имя машины:' 'Hostname:')" "$GREEN" "$(hostname)"
-if flag SHOW_OS; then . /etc/os-release 2>/dev/null || true; field "$(trn 'ОС:' 'OS:')" "$GREEN" "${PRETTY_NAME:-Linux}"; fi
-for fam in 4 6; do
- flag "SHOW_IP$fam" || continue
- dest=1.1.1.1; [[ $fam == 6 ]] && dest=2606:4700:4700::1111
- addr=$(ip -"$fam" route get "$dest" 2>/dev/null | sed -n 's/.* src \([^ ]*\).*/\1/p' | head -n1)
- field "External IP (v$fam):" "$PINK" "${addr:-N/A}"
-done
-if flag SHOW_KERNEL; then field "$(trn 'Ядро:' 'Kernel:')" "$GREEN" "$(uname -r)"; fi
-if flag SHOW_HOSTING; then field "$(trn 'Хостер:' 'Hosting:')" "$GREEN" "$(provider || true)"; fi
-if flag SHOW_CPU; then
- section 'CPU'
- cpu=$(lscpu 2>/dev/null | sed -n 's/^Model name:[[:space:]]*//p' | head -n1)
- [[ -n $cpu ]] || cpu=$(awk -F: '/model name/ {gsub(/^[ \t]+/,"",$2);print $2;exit}' /proc/cpuinfo)
- field "$(trn 'Модель:' 'Model:')" "$ORANGE" "${cpu:-Unknown} ($(nproc 2>/dev/null || echo '?') vCPU)"
- # Actual short CPU utilization sample from /proc/stat (not load average).
- read -r _ u n sy idle io irq soft steal _ < /proc/stat
- t1=$((u+n+sy+idle+io+irq+soft+steal)); idle1=$((idle+io))
- sleep 0.15
- read -r _ u n sy idle io irq soft steal _ < /proc/stat
- t2=$((u+n+sy+idle+io+irq+soft+steal)); idle2=$((idle+io))
- delta=$((t2-t1)); cpu_pct=0
- if ((delta>0)); then cpu_pct=$((100*(delta-idle2+idle1)/delta)); fi
- label "$(trn 'Нагрузка:' 'Usage:')"
- bar "$cpu_pct" 100; printf '\n'
- if flag SHOW_LOAD; then field 'Load average:' "$GREEN" "$(cut -d' ' -f1-3 /proc/loadavg)"; fi
-fi
-if flag SHOW_RAM || flag SHOW_DISK; then section "$(trn 'ОЗУ и диск' 'RAM & Disk')"; fi
-if flag SHOW_RAM; then
- read -r mem_total mem_avail < <(awk '/^MemTotal:/ {t=$2} /^MemAvailable:/ {a=$2} END {print t,a}' /proc/meminfo)
- mem_used=$((mem_total-mem_avail))
- label 'RAM:'; bar "$mem_used" "$mem_total"
- printf ' %b(%s / %s)%b\n' "$GREEN" "$(human_bytes $((mem_used*1024)))" "$(human_bytes $((mem_total*1024)))" "$RESET"
-fi
-if flag SHOW_DISK; then
- read -r disk_total disk_used < <(df -B1 -P / | awk 'NR==2{print $2,$3}')
- label "$(trn 'Диск:' 'Disk:')"; bar "$disk_used" "$disk_total"
- printf ' %b(%s / %s)%b\n' "$GREEN" "$(human_bytes "$disk_used")" "$(human_bytes "$disk_total")" "$RESET"
- dev=$(findmnt -n -o SOURCE / 2>/dev/null || true)
- parent=$(lsblk -no PKNAME "$dev" 2>/dev/null | head -n1 || true)
- [[ -n $parent ]] || parent=$(lsblk -no NAME "$dev" 2>/dev/null | head -n1 || true)
- if [[ -n $parent && -b /dev/$parent ]]; then
-  model=$(lsblk -dn -o MODEL "/dev/$parent" 2>/dev/null | xargs || true)
-  [[ -z $model ]] || field "$(trn 'Накопитель:' 'Storage:')" "$GREEN" "$model"
- fi
-fi
-if [[ ${SHOW_NET:-1} == 1 ]]; then
- section "$(trn 'Сеть' 'Network')"
- iface=$(ip -4 route show default 2>/dev/null | awk '/default/{for(i=1;i<=NF;i++)if($i=="dev"){print $(i+1);exit}}')
- if [[ -n $iface && -r /sys/class/net/$iface/statistics/rx_bytes ]]; then
-  field "$(trn 'Интерфейс:' 'Interface:')" "$GREEN" "$iface"
-  field "$(trn 'Получено:' 'Received:')" "$GREEN" "$(human_bytes "$(cat /sys/class/net/"$iface"/statistics/rx_bytes)")"
-  field "$(trn 'Отправлено:' 'Transmitted:')" "$GREEN" "$(human_bytes "$(cat /sys/class/net/"$iface"/statistics/tx_bytes)")"
- fi
-fi
-if flag SHOW_UFW; then
- section "$(trn 'Брандмауэр' 'Firewall')"
- if ! command -v ufw >/dev/null 2>&1; then st=$(trn 'не установлен' 'not installed')
- elif ufw status 2>/dev/null | grep -q '^Status: active'; then st='active'
- else st='inactive'; fi
- field "$(trn 'Статус UFW:' 'UFW Status:')" "$GREEN" "$st"
- if [[ ${SHOW_UFW_RULES:-1} == 1 && $st == active ]]; then
-  rules=$(ufw status 2>/dev/null | sed -n '/^--/,$p' | tail -n +2 | head -n 8)
-  if [[ -n $rules ]]; then
-   printf '%b%s%b\n' "$BLUE" "$(trn 'Правила:' 'Rules:')" "$RESET"
-   while IFS= read -r rule; do printf '  %s\n' "$rule"; done <<< "$rules"
-  fi
- fi
-fi
-if flag SHOW_DOCKER && command -v docker >/dev/null 2>&1; then
- section 'Docker'
- total=$(timeout 2 docker ps -aq 2>/dev/null | wc -l)
- running=$(timeout 2 docker ps -q 2>/dev/null | wc -l)
- field "$(trn 'Контейнеры:' 'Containers:')" "$GREEN" "$running / $total"
- names=$(timeout 2 docker ps --format '{{.Names}}' 2>/dev/null | head -n 10)
- if [[ -n $names ]]; then
-  printf '%b%s%b\n' "$BLUE" "$(trn 'Запущенные контейнеры:' 'Running Containers:')" "$RESET"
-  printf '  %s\n' "$names"
- fi
-fi
-if flag SHOW_UPDATES; then
- section "$(trn 'Доступные обновления' 'Updates Available')"
- count=$(apt list --upgradable 2>/dev/null | awk 'NR>1 && /\[upgradable from:/ {n++} END {print n+0}')
- field "$(trn 'Всего обновлений:' 'Total updates:')" "$ORANGE" "$count $(trn 'пакетов' 'packages')"
- if ((count>0)); then printf '%b%s%b\n' "$BLUE" "$(trn 'Для установки: apt upgrade' 'Run apt upgrade to install updates')" "$RESET"; fi
-fi
-printf '\n'
-RENDER
-cat > "$BASE/settings.sh" <<'SETTINGS'
-#!/usr/bin/env bash
-set -Eeuo pipefail
-[[ $EUID == 0 ]] || { echo 'Root required'; exit 1; }
-source /opt/midas-motd/lib.sh
-TTY=/dev/tty
-[[ -r $TTY ]] || { echo 'Interactive terminal required'; exit 1; }
-ask() { read -r -p "$1" REPLY < "$TTY"; }
-write_setting() {
- local key=$1 value=$2 temp
- [[ $key =~ ^[A-Z][A-Z0-9_]*$ ]] || return 1
- temp=$(mktemp)
- if [[ -f $CFG ]]; then grep -v -E "^${key}=" "$CFG" > "$temp" || true; fi
- printf '%s=%q\n' "$key" "$value" >> "$temp"
- chmod 600 "$temp"; mv "$temp" "$CFG"
- printf -v "$key" '%s' "$value"
-}
-rename_host() {
- local new old backup cloud_file=/etc/cloud/cloud.cfg.d/99-zz-midas-hostname.cfg
- old=$(hostname)
- printf '%s: %s\n' "$(trn 'Текущее имя' 'Current hostname')" "$old"
- ask "$(trn 'Новое имя (пусто = отмена)' 'New hostname (empty = cancel)'): "
- new=${REPLY,,}; [[ -n $new ]] || return 0
- [[ $new =~ ^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$ ]] || { echo 'Invalid hostname'; return 1; }
- [[ $new != "$old" ]] || return 0
- printf '%s\n' "$(trn 'Внимание: проверьте зависимости сервисов от старого hostname.' 'Warning: check services that depend on the old hostname.')"
- ask "$(trn 'Введите YES для подтверждения' 'Type YES to confirm'): "
- [[ $REPLY == YES ]] || return 0
- backup=$(mktemp -d /root/midas-hostname-backup.XXXXXXXX)
- cp -a /etc/hostname "$backup/hostname" 2>/dev/null || true
- cp -a /etc/hosts "$backup/hosts"
- if [[ -f /etc/cloud/cloud.cfg ]]; then
-   mkdir -p /etc/cloud/cloud.cfg.d
-   if [[ -e $cloud_file ]]; then cp -a "$cloud_file" "$backup/cloud"; else touch "$backup/cloud-absent"; fi
- fi
- if ! hostnamectl set-hostname "$new"; then echo 'hostnamectl failed'; return 1; fi
- if ! NEW_NAME="$new" OLD_NAME="$old" python3 - <<'PY'
-import os
-from pathlib import Path
-p=Path('/etc/hosts')
-old=os.environ['OLD_NAME']; new=os.environ['NEW_NAME']
-lines=[]; found=False
-for line in p.read_text().splitlines(keepends=True):
-    parts=line.partition('#')
-    fields=parts[0].split()
-    if fields and fields[0]=='127.0.1.1':
-        aliases=[new]+[x for x in fields[1:] if x not in (old,new)]
-        line='\t'.join(['127.0.1.1']+aliases)+(' #'+parts[2].rstrip('\n') if parts[1] else '')+'\n'
-        found=True
-    lines.append(line)
-if not found: lines.append('127.0.1.1\t'+new+'\n')
-p.write_text(''.join(lines))
-PY
- then
-   cp -a "$backup/hosts" /etc/hosts; hostnamectl set-hostname "$old" || true; return 1
- fi
- if [[ -f /etc/cloud/cloud.cfg ]]; then
-   printf '# MIDAS MOTD: preserve manually configured hostname\npreserve_hostname: true\n' > "$cloud_file"
- fi
- if [[ $(hostname) != "$new" ]]; then
-   cp -a "$backup/hosts" /etc/hosts
-   [[ ! -f $backup/hostname ]] || cp -a "$backup/hostname" /etc/hostname
-   if [[ -f $backup/cloud ]]; then cp -a "$backup/cloud" "$cloud_file"; elif [[ -f $backup/cloud-absent ]]; then rm -f "$cloud_file"; fi
-   hostnamectl set-hostname "$old" || true
-   echo 'Verification failed; rolled back'; return 1
- fi
- echo "Hostname: $old -> $new"
- echo "Backup: $backup"
-}
-ui() {
- local title=$1; shift
- if command -v whiptail >/dev/null 2>&1; then
-  whiptail --title "$title" "$@" 3>&1 1>&2 2>&3
- elif command -v dialog >/dev/null 2>&1; then
-  dialog --stdout --title "$title" "$@"
- else
-  return 127
- fi
-}
-notice() {
- if command -v whiptail >/dev/null 2>&1 || command -v dialog >/dev/null 2>&1; then
-  ui "MIDAS MOTD" --msgbox "$1" 10 65 || true
- else printf '%s\n' "$1"; fi
-}
-choose() {
- local title=$1; shift
- if command -v whiptail >/dev/null 2>&1 || command -v dialog >/dev/null 2>&1; then
-  ui "$title" --menu "$(trn 'Выберите действие:' 'Choose an action:')" 22 76 13 "$@"
- else
-  local i=1 tag label
-  printf '\n%s\n' "$title" >&2
-  while (($#)); do tag=$1; label=$2; shift 2; printf '%s) %s\n' "$tag" "$label" >&2; done
-  read -r -p '> ' tag < /dev/tty
-  printf '%s' "$tag"
- fi
-}
-prompt_value() {
- local title=$1 default=${2:-}
- if command -v whiptail >/dev/null 2>&1 || command -v dialog >/dev/null 2>&1; then
-  ui "MIDAS MOTD" --inputbox "$title" 10 70 "$default"
- else
-  read -r -p "$title: " REPLY < /dev/tty
-  printf '%s' "${REPLY:-$default}"
- fi
-}
-confirm_action() {
- local message=$1
- if command -v whiptail >/dev/null 2>&1 || command -v dialog >/dev/null 2>&1; then
-  ui "MIDAS MOTD" --yesno "$message" 10 70
- else
-  read -r -p "$message [y/N]: " REPLY < /dev/tty
-  [[ $REPLY == y || $REPLY == Y ]]
- fi
-}
-toggle_menu() {
- local key label selected
- while true; do
-  source /opt/midas-motd/lib.sh
-  selected=$(choose "$(trn 'Настроить отображение MOTD' 'Configure MOTD display')" \
-   1 "IPv4: $SHOW_IP4" 2 "IPv6: $SHOW_IP6" 3 "$(trn 'Хостер' 'Hosting'): $SHOW_HOSTING" \
-   4 "$(trn 'Ядро' 'Kernel'): $SHOW_KERNEL" 5 "$(trn 'Обновления' 'Updates'): $SHOW_UPDATES" \
-   6 "UFW: $SHOW_UFW" 7 "CPU: $SHOW_CPU" 8 "RAM: $SHOW_RAM" 9 "$(trn 'Диск' 'Disk'): $SHOW_DISK" \
-   10 "Docker: $SHOW_DOCKER" 11 "$(trn 'Сеть' 'Network'): $SHOW_NET" \
-   12 "$(trn 'Правила UFW' 'UFW rules'): $SHOW_UFW_RULES" 0 "$(trn 'Назад' 'Back')" ) || return 0
-  [[ $selected == 0 ]] && return 0
-  local keys=(SHOW_IP4 SHOW_IP6 SHOW_HOSTING SHOW_KERNEL SHOW_UPDATES SHOW_UFW SHOW_CPU SHOW_RAM SHOW_DISK SHOW_DOCKER SHOW_NET SHOW_UFW_RULES)
-  [[ $selected =~ ^[0-9]+$ ]] && ((selected>=1 && selected<=12)) || continue
-  key=${keys[selected-1]}
-  if [[ ${!key} == 1 ]]; then write_setting "$key" 0; else write_setting "$key" 1; fi
- done
-}
-menu() {
- local selected val
- while true; do
-  source /opt/midas-motd/lib.sh
-  selected=$(choose "MIDAS MOTD" \
-   1 "$(trn 'Настроить отображение MOTD' 'Configure MOTD display')" \
-   2 "$(trn 'Настроить Services Status' 'Configure Services Status')" \
-   3 "$(trn 'Удалить MIDAS MOTD' 'Uninstall MIDAS MOTD')" \
-   4 "$(trn 'Показать статус установки' 'Installation status')" \
-   5 "$(trn 'Цветовая тема' 'Color theme'): $THEME" \
-   6 "$(trn 'Язык' 'Language'): $LANGUAGE" \
-   7 "$(trn 'Изменить имя машины (hostname)' 'Change machine hostname')" \
-   8 "$(trn 'Название сервера' 'Server display name'): ${SERVER_LABEL:-auto}" \
-   9 "$(trn 'Название хостера' 'Hosting name'): ${HOSTING_NAME:-auto}" \
-   10 "$(trn 'Обновить информацию о хостере' 'Refresh hosting information')" \
-   11 "$(trn 'Предпросмотр MOTD' 'Preview MOTD')" \
-   0 "$(trn 'Выход' 'Exit')" ) || break
-  case $selected in
-   0) break;;
-   1) toggle_menu;;
-   2) notice "$(trn 'Статус Docker доступен в настройках отображения. Отдельные проверки служб появятся в следующем обновлении.' 'Docker status is available under display settings. Custom service checks are not yet implemented.')";;
-   3) if confirm_action "$(trn 'Удалить MIDAS MOTD? Имя машины останется прежним.' 'Uninstall MIDAS MOTD? Hostname will remain unchanged.')"; then /opt/midas-motd/uninstall.sh; exit 0; fi;;
-   4) notice "$(trn 'MIDAS MOTD установлен. Конфигурация:' 'MIDAS MOTD installed. Configuration:') $CFG";;
-   5) val=$(choose "$(trn 'Цветовая тема' 'Color theme')" cyan Cyan green Green purple Purple blue Blue none None) || continue
-      case $val in cyan|green|purple|blue|none) write_setting THEME "$val";; esac;;
-   6) if [[ $LANGUAGE == ru ]]; then write_setting LANGUAGE en; else write_setting LANGUAGE ru; fi;;
-   7) rename_host || true;;
-   8) val=$(prompt_value "$(trn 'Название сервера (пусто = hostname)' 'Server name (empty = hostname)')" "$SERVER_LABEL") || continue; write_setting SERVER_LABEL "$val";;
-   9) val=$(prompt_value "$(trn 'Название хостера (пусто = автоматически)' 'Hosting name (empty = auto)')" "$HOSTING_NAME") || continue; write_setting HOSTING_NAME "$val";;
-   10) /opt/midas-motd/refresh-provider.sh || notice "$(trn 'Не удалось получить данные хостера' 'Hosting lookup failed')";;
-   11) clear; /opt/midas-motd/render.sh; read -r -p "$(trn 'Нажмите Enter...' 'Press Enter...')" REPLY < /dev/tty;;
-  esac
- done
+#!/bin/bash
+
+set -euo pipefail
+
+readonly SCRIPT_NAME="$(basename "$0")"
+readonly CONFIG_FILE="/etc/dist-motd.conf"
+readonly MOTD_SCRIPT="/etc/update-motd.d/00-dist-motd"
+readonly APT_CONF_FILE="/etc/apt/apt.conf.d/99force-ipv4"
+readonly CMD_MOTD="/usr/local/bin/motd"
+readonly CMD_SETTINGS="/usr/local/bin/motd-set"
+
+readonly BACKUP_ROOT="/opt/motd/complete-backup"
+readonly INSTALL_MARKER="/opt/motd/custom_motd_installed"
+
+readonly DIRECTORIES_TO_BACKUP=(
+    "/etc/update-motd.d"
+    "/etc/pam.d"
+    "/etc/ssh"
+    "/usr/local/bin"
+)
+
+readonly APT_GET="/usr/bin/apt-get"
+readonly FIND="/usr/bin/find"
+readonly CHMOD="/bin/chmod"
+readonly MKDIR="/bin/mkdir"
+readonly SYSTEMCTL="/bin/systemctl"
+readonly SED="/bin/sed"
+readonly GREP="/bin/grep"
+readonly LN="/bin/ln"
+readonly RM="/bin/rm"
+readonly CP="/bin/cp"
+readonly MV="/bin/mv"
+readonly LS="/bin/ls"
+readonly DATE="/bin/date"
+readonly TAR="/bin/tar"
+readonly RSYNC="/usr/bin/rsync"
+
+INSTALLER_LANG="ru"
+
+select_language() {
+    echo ""
+    echo "Select language / Выберите язык:"
+    echo "  1) Русский (ru)"
+    echo "  2) English (en)"
+    echo ""
+    local choice
+    if [[ -t 0 ]]; then
+        read -r -p "Выбор / Choice [1-2, default 1]: " choice
+    else
+        read -r -p "Выбор / Choice [1-2, default 1]: " choice < /dev/tty
+    fi
+    case "${choice}" in
+        2) INSTALLER_LANG="en" ;;
+        *) INSTALLER_LANG="ru" ;;
+    esac
 }
 
-menu
-SETTINGS
-cat > "$BASE/refresh-provider.sh" <<'PROVIDER'
-#!/usr/bin/env bash
-set -Eeuo pipefail
-command -v curl >/dev/null || { echo 'curl not installed'; exit 1; }
-mkdir -p /var/cache
-value=$(curl -4fsSL --connect-timeout 3 --max-time 8 https://ipinfo.io/org | head -c 120)
-[[ -n $value ]] || exit 1
-printf '%s\n' "$value" > /var/cache/midas-motd-provider
-printf 'Hosting ASN: %s\n' "$value"
-PROVIDER
-cat > "$BASE/uninstall.sh" <<'UNINSTALL'
-#!/usr/bin/env bash
-set -Eeuo pipefail
-[[ $EUID == 0 ]] || exit 1
-BASE=/opt/midas-motd
-BACK=$BASE/backup
-rm -f /etc/update-motd.d/00-midas /usr/local/bin/motd /usr/local/bin/motd-set
-for f in /etc/update-motd.d/00-header /etc/update-motd.d/10-help-text /etc/update-motd.d/50-motd-news /etc/update-motd.d/00-dist-motd /usr/local/bin/motd /usr/local/bin/motd-set; do
- [[ ! -e $BACK$f ]] || { mkdir -p "$(dirname "$f")"; cp -a "$BACK$f" "$f"; }
-done
-rm -f /etc/midas-motd.conf
-# Intentionally preserve the system hostname and cloud-init hostname policy.
-# A renamed machine must not be silently renamed back on uninstall.
-echo 'MIDAS MOTD removed. Hostname and cloud-init hostname policy preserved.'
-UNINSTALL
-for f in "$BASE"/*.sh; do chmod 755 "$f"; done
-if [[ ! -f $CFG ]]; then
- cat > "$CFG" <<'CONFIG'
-LANGUAGE=ru
-THEME=cyan
-SERVER_LABEL=''
-HOSTING_NAME=''
-SHOW_IP4=1
-SHOW_IP6=1
-SHOW_HOSTING=1
-SHOW_KERNEL=1
-SHOW_UPDATES=1
-SHOW_UFW=1
-SHOW_CPU=1
-SHOW_RAM=1
-SHOW_DISK=1
-SHOW_DOCKER=1
-SHOW_UPTIME=1
-SHOW_LOAD=1
-SHOW_OS=1
-SHOW_NET=1
-SHOW_UFW_RULES=1
-CONFIG
- chmod 600 "$CFG"
+load_language_strings() {
+    if [[ "${INSTALLER_LANG}" == "en" ]]; then
+        L_REINSTALL_DETECTED="Existing custom MOTD installation detected"
+        L_REINSTALL_PROMPT="Do you want to reinstall? (this will completely remove the current installation and create a new one)"
+        L_REINSTALL_CONFIRM="Continue? [y/N]: "
+        L_REINSTALL_CONFIRMED="User confirmed reinstall"
+        L_REINSTALL_DONE="Previous installation fully removed, continuing..."
+        L_INSTALL_CANCELLED="Installation cancelled by user"
+        L_ROOT_REQUIRED="Script must be run as superuser"
+        L_DEBIAN_ONLY="This script is intended for Debian/Ubuntu systems only"
+        L_CMD_NOT_FOUND="Command not found or unavailable"
+        L_BACKUP_START="Creating full directory backup..."
+        L_BACKUP_DIR="Creating full backup of directory"
+        L_BACKUP_SAVED="Backup saved"
+        L_BACKUP_NOT_FOUND="Directory not found for backup"
+        L_BACKUP_DONE="Full directory backup completed"
+        L_BACKUP_FILE="File saved to backup"
+        L_RESTORE_START="Restoring directories from backup..."
+        L_RESTORE_NO_BACKUP="Backups not found. Cannot restore."
+        L_RESTORE_DIR="Restoring directory"
+        L_RESTORE_DIR_DONE="Directory restored"
+        L_RESTORE_DIR_MISSING="Backup not found for directory"
+        L_RESTORE_FILE="File restored"
+        L_RESTORE_DONE="Full directory restore completed"
+        L_CLEANUP_START="Cleaning up all custom MOTD traces..."
+        L_CLEANUP_DONE="Full cleanup completed"
+        L_REGEN_START="Force regenerating standard MOTD..."
+        L_REGEN_DONE="Standard MOTD regeneration completed"
+        L_UNINSTALL_START="Performing full removal of custom MOTD..."
+        L_UNINSTALL_DONE="Full removal completed, system restored"
+        L_ERROR_ROLLBACK="An error occurred during installation. Rolling back..."
+        L_DEPS_START="Installing dependencies..."
+        L_DEPS_UPDATE_FAIL="Failed to update package list, continuing installation"
+        L_DEPS_INSTALL_FAIL="Failed to install required packages"
+        L_CONFIG_START="Creating MOTD configuration..."
+        L_CONFIG_FAIL="Failed to create configuration file"
+        L_MOTD_SCRIPT_START="Installing MOTD script..."
+        L_MOTD_SCRIPT_FAIL="Failed to create executable MOTD script"
+        L_SETTINGS_CMD_START="Creating motd-set configuration menu..."
+        L_SETTINGS_CMD_FAIL="Failed to create settings command"
+        L_MOTD_CMD_START="Creating MOTD launch command..."
+        L_MOTD_CMD_FAIL="Failed to create MOTD launch command"
+        L_PAM_START="Configuring PAM and SSH for MOTD..."
+        L_SSH_RESTART_FAIL="Failed to restart SSH"
+        L_FINALIZE_START="Finalizing setup..."
+        L_INSTALL_START="Starting custom MOTD installation with full directory backup..."
+        L_INSTALL_DONE="Installation completed successfully!"
+        L_BANNER_TITLE="Custom MOTD installed!"
+        L_BANNER_COMMANDS="Available commands:"
+        L_BANNER_MOTD="  motd         - Show MOTD"
+        L_BANNER_SET="  motd-set     - Settings and management"
+        L_BANNER_BACKUPS="Full directory backups"
+        L_BANNER_REMOVE="To remove: motd-set -> Remove"
+        L_BANNER_TZ="To change your VPS local timezone for correct time display in MOTD,"
+        L_BANNER_TZ_CMD="run:"
+        L_BANNER_TZ_NOTE="This example sets Moscow timezone UTC+3"
+    else
+        L_REINSTALL_DETECTED="Обнаружена существующая установка кастомного MOTD"
+        L_REINSTALL_PROMPT="Хотите переустановить? (это полностью удалит текущую установку и создаст новую)"
+        L_REINSTALL_CONFIRM="Продолжить? [y/N]: "
+        L_REINSTALL_CONFIRMED="Пользователь подтвердил переустановку"
+        L_REINSTALL_DONE="Предыдущая установка полностью удалена, продолжаем установку..."
+        L_INSTALL_CANCELLED="Установка отменена пользователем"
+        L_ROOT_REQUIRED="Скрипт должен выполняться с правами суперпользователя"
+        L_DEBIAN_ONLY="Скрипт предназначен только для систем Debian/Ubuntu"
+        L_CMD_NOT_FOUND="Команда не найдена или недоступна"
+        L_BACKUP_START="Создание полного бэкапа директорий..."
+        L_BACKUP_DIR="Создание полного бэкапа директории"
+        L_BACKUP_SAVED="Бэкап сохранен"
+        L_BACKUP_NOT_FOUND="Не найдена директория для бэкапа"
+        L_BACKUP_DONE="Полный бэкап директорий завершен"
+        L_BACKUP_FILE="Файл сохранен в бэкап"
+        L_RESTORE_START="Полное восстановление директорий из бэкапа..."
+        L_RESTORE_NO_BACKUP="Бэкапы не найдены. Невозможно выполнить восстановление."
+        L_RESTORE_DIR="Восстановление директории"
+        L_RESTORE_DIR_DONE="Директория восстановлена"
+        L_RESTORE_DIR_MISSING="Бэкап директории не найден"
+        L_RESTORE_FILE="Файл восстановлен"
+        L_RESTORE_DONE="Полное восстановление директорий завершено"
+        L_CLEANUP_START="Полная очистка всех следов кастомного MOTD..."
+        L_CLEANUP_DONE="Полная очистка завершена"
+        L_REGEN_START="Принудительная регенерация стандартного MOTD..."
+        L_REGEN_DONE="Регенерация стандартного MOTD завершена"
+        L_UNINSTALL_START="Выполняется полное удаление кастомного MOTD..."
+        L_UNINSTALL_DONE="Полное удаление завершено, система восстановлена"
+        L_ERROR_ROLLBACK="Произошла ошибка во время установки. Выполняется полный откат..."
+        L_DEPS_START="Установка зависимостей..."
+        L_DEPS_UPDATE_FAIL="Не удалось обновить список пакетов, продолжаем установку"
+        L_DEPS_INSTALL_FAIL="Не удалось установить необходимые пакеты"
+        L_CONFIG_START="Создание конфигурации MOTD..."
+        L_CONFIG_FAIL="Не удалось создать конфигурационный файл"
+        L_MOTD_SCRIPT_START="Установка скрипта MOTD..."
+        L_MOTD_SCRIPT_FAIL="Не удалось создать исполняемый MOTD скрипт"
+        L_SETTINGS_CMD_START="Создание меню конфигурации motd-set..."
+        L_SETTINGS_CMD_FAIL="Не удалось создать команду настройки"
+        L_MOTD_CMD_START="Создание команды запуска MOTD..."
+        L_MOTD_CMD_FAIL="Не удалось создать команду запуска MOTD"
+        L_PAM_START="Настройка PAM и SSH для MOTD..."
+        L_SSH_RESTART_FAIL="Не удалось перезапустить SSH"
+        L_FINALIZE_START="Завершаем настройку..."
+        L_INSTALL_START="Начинается установка кастомного MOTD с полным бэкапом директорий..."
+        L_INSTALL_DONE="Установка завершена успешно!"
+        L_BANNER_TITLE="Кастомный MOTD установлен!"
+        L_BANNER_COMMANDS="Доступные команды:"
+        L_BANNER_MOTD="  motd         - Показать MOTD"
+        L_BANNER_SET="  motd-set     - Настройки и управление"
+        L_BANNER_BACKUPS="Полные бэкапы директорий"
+        L_BANNER_REMOVE="Для удаления: motd-set -> Удалить"
+        L_BANNER_TZ="Для смены локального времени VPS и комфортного отображения в MOTD,"
+        L_BANNER_TZ_CMD="введите команду:"
+        L_BANNER_TZ_NOTE="Данный пример установит московский часовой пояс UTC+3"
+    fi
+}
+
+select_theme() {
+    echo ""
+    if [[ "${INSTALLER_LANG}" == "en" ]]; then
+        echo "Select color theme / Выберите цветовую тему:"
+        echo "  1) Dark  (for dark terminal backgrounds)"
+        echo "  2) Light (for light terminal backgrounds)"
+        echo "  3) Auto  (may not work on some terminals)"
+        echo ""
+        echo "  Tip: you can change this later in motd-set -> Color Theme"
+        echo ""
+        local choice
+        if [[ -t 0 ]]; then
+            read -r -p "Choice [1-3, default 1]: " choice
+        else
+            read -r -p "Choice [1-3, default 1]: " choice < /dev/tty
+        fi
+    else
+        echo "Выберите цветовую тему / Select color theme:"
+        echo "  1) Тёмная  (для тёмного фона терминала)"
+        echo "  2) Светлая (для светлого фона терминала)"
+        echo "  3) Авто    (автоопределение может не работать в вашем терминале)"
+        echo ""
+        echo "  Совет: тему можно сменить в motd-set -> Цветовая тема"
+        echo ""
+        local choice
+        if [[ -t 0 ]]; then
+            read -r -p "Выбор [1-3, по умолчанию 1]: " choice
+        else
+            read -r -p "Выбор [1-3, по умолчанию 1]: " choice < /dev/tty
+        fi
+    fi
+    case "${choice}" in
+        2) THEME_CHOICE="light" ;;
+        3) THEME_CHOICE="auto"  ;;
+        *) THEME_CHOICE="dark"  ;;
+    esac
+}
+
+log_info() {
+    echo "[+] $*" >&2
+}
+
+log_warn() {
+    echo "[!] Warning: $*" >&2
+}
+
+log_error() {
+    echo "[!] Error: $*" >&2
+}
+
+check_backup_exists() {
+    [[ -f "${INSTALL_MARKER}" ]] && [[ -d "${BACKUP_ROOT}" ]]
+}
+
+create_complete_directory_backup() {
+    log_info "${L_BACKUP_START}"
+    
+    "${MKDIR}" -p "${BACKUP_ROOT}"
+    "${CHMOD}" 700 "${BACKUP_ROOT}"
+    
+    for dir in "${DIRECTORIES_TO_BACKUP[@]}"; do
+        if [[ -d "${dir}" ]]; then
+            local backup_name=$(echo "${dir}" | "${SED}" 's|/|_|g' | "${SED}" 's|^_||')
+            local backup_path="${BACKUP_ROOT}/${backup_name}"
+            
+            log_info "${L_BACKUP_DIR}: ${dir}"
+            
+            if command -v rsync >/dev/null 2>&1; then
+                "${RSYNC}" -a --delete "${dir}/" "${backup_path}/"
+            else
+                "${RM}" -rf "${backup_path}" 2>/dev/null || true
+                "${CP}" -a "${dir}" "${backup_path}"
+            fi
+            
+            log_info "${L_BACKUP_SAVED}: ${backup_path}"
+        else
+            log_warn "${L_BACKUP_NOT_FOUND}: ${dir}"
+        fi
+    done
+    
+    local important_files=(
+        "/etc/motd"
+        "/etc/bash.bashrc"
+    )
+    
+    for file in "${important_files[@]}"; do
+        if [[ -f "${file}" ]] || [[ -L "${file}" ]]; then
+            local backup_name=$(echo "${file}" | "${SED}" 's|/|_|g' | "${SED}" 's|^_||')
+            "${CP}" -a "${file}" "${BACKUP_ROOT}/${backup_name}" 2>/dev/null || true
+            log_info "${L_BACKUP_FILE}: ${file}"
+        fi
+    done
+    
+    "${DATE}" > "${INSTALL_MARKER}"
+    
+    log_info "${L_BACKUP_DONE}: ${BACKUP_ROOT}"
+}
+
+restore_complete_directories() {
+    log_info "${L_RESTORE_START}"
+    
+    if ! check_backup_exists; then
+        log_error "${L_RESTORE_NO_BACKUP}"
+        return 1
+    fi
+    
+    for dir in "${DIRECTORIES_TO_BACKUP[@]}"; do
+        local backup_name=$(echo "${dir}" | "${SED}" 's|/|_|g' | "${SED}" 's|^_||')
+        local backup_path="${BACKUP_ROOT}/${backup_name}"
+        
+        if [[ -d "${backup_path}" ]]; then
+            log_info "${L_RESTORE_DIR}: ${dir}"
+            
+            "${RM}" -rf "${dir}" 2>/dev/null || true
+            "${MKDIR}" -p "$(dirname "${dir}")"
+            
+            if command -v rsync >/dev/null 2>&1; then
+                "${RSYNC}" -a --delete "${backup_path}/" "${dir}/"
+            else
+                "${CP}" -a "${backup_path}" "${dir}"
+            fi
+            
+            log_info "${L_RESTORE_DIR_DONE}: ${dir}"
+        else
+            log_warn "${L_RESTORE_DIR_MISSING}: ${backup_path}"
+        fi
+    done
+    
+    local important_files=(
+        "/etc/motd"
+        "/etc/bash.bashrc"
+    )
+    
+    for file in "${important_files[@]}"; do
+        local backup_name=$(echo "${file}" | "${SED}" 's|/|_|g' | "${SED}" 's|^_||')
+        local backup_file="${BACKUP_ROOT}/${backup_name}"
+        
+        if [[ -f "${backup_file}" ]] || [[ -L "${backup_file}" ]]; then
+            "${RM}" -f "${file}" 2>/dev/null || true
+            "${CP}" -a "${backup_file}" "${file}"
+            log_info "${L_RESTORE_FILE}: ${file}"
+        fi
+    done
+    
+    log_info "${L_RESTORE_DONE}"
+}
+
+complete_cleanup() {
+    log_info "${L_CLEANUP_START}"
+    
+    local custom_files=(
+        "${CONFIG_FILE}"
+        "${MOTD_SCRIPT}"
+        "${CMD_MOTD}"
+        "${CMD_SETTINGS}"
+        "${APT_CONF_FILE}"
+    )
+    
+    for file in "${custom_files[@]}"; do
+        "${RM}" -f "${file}" 2>/dev/null || true
+    done
+    
+    local cache_files=(
+        "/var/run/motd"
+        "/var/run/motd.dynamic"
+        "/run/motd"
+        "/run/motd.dynamic"
+        "/var/lib/update-notifier/updates-available"
+    )
+    
+    for cache_file in "${cache_files[@]}"; do
+        "${RM}" -f "${cache_file}" 2>/dev/null || true
+    done
+    
+    if "${SYSTEMCTL}" is-active ssh >/dev/null 2>&1; then
+        "${SYSTEMCTL}" reload ssh 2>/dev/null || true
+    elif "${SYSTEMCTL}" is-active sshd >/dev/null 2>&1; then
+        "${SYSTEMCTL}" reload sshd 2>/dev/null || true
+    fi
+    
+    log_info "${L_CLEANUP_DONE}"
+}
+
+force_regenerate_standard_motd() {
+    log_info "${L_REGEN_START}"
+    
+    if command -v apt >/dev/null 2>&1; then
+        apt list --upgradable > /dev/null 2>&1 || true
+        
+        if [[ -x "/usr/lib/update-notifier/apt-check" ]]; then
+            /usr/lib/update-notifier/apt-check 2>&1 | head -1 > /var/lib/update-notifier/updates-available || true
+        fi
+    fi
+    
+    if [[ -d "/etc/update-motd.d" ]]; then
+        if command -v run-parts >/dev/null 2>&1; then
+            local temp_motd=$(mktemp)
+            run-parts --lsbsysinit /etc/update-motd.d/ > "${temp_motd}" 2>/dev/null || true
+            
+            if [[ -s "${temp_motd}" ]]; then
+                "${CP}" "${temp_motd}" "/var/run/motd.dynamic"
+                "${CHMOD}" 644 "/var/run/motd.dynamic"
+                "${CP}" "${temp_motd}" "/run/motd.dynamic" 2>/dev/null || true
+            fi
+            
+            "${RM}" -f "${temp_motd}"
+        fi
+    fi
+    
+    if "${SYSTEMCTL}" list-unit-files | grep -q "motd-news"; then
+        "${SYSTEMCTL}" restart motd-news.timer 2>/dev/null || true
+    fi
+    
+    log_info "${L_REGEN_DONE}"
+}
+
+complete_uninstall() {
+    log_info "${L_UNINSTALL_START}"
+    
+    complete_cleanup
+    restore_complete_directories
+    force_regenerate_standard_motd
+    
+    "${RM}" -rf "/opt/motd"
+    
+    log_info "${L_UNINSTALL_DONE}"
+}
+
+cleanup_on_error() {
+    log_error "${L_ERROR_ROLLBACK}"
+    
+    if check_backup_exists; then
+        complete_uninstall
+    else
+        complete_cleanup
+    fi
+    
+    exit 1
+}
+
+trap cleanup_on_error ERR
+
+select_language
+load_language_strings
+select_theme
+
+check_root() {
+    if [[ "${EUID}" -ne 0 ]]; then
+        log_error "${L_ROOT_REQUIRED}"
+        exit 1
+    fi
+}
+
+check_existing_installation() {
+    if check_backup_exists; then
+        log_warn "${L_REINSTALL_DETECTED}"
+        echo "${L_REINSTALL_PROMPT}"
+        
+        local response
+        if [[ -t 0 ]]; then
+            echo -n "${L_REINSTALL_CONFIRM}"
+            read -r response
+        else
+            echo -n "${L_REINSTALL_CONFIRM}" > /dev/tty
+            read -r response < /dev/tty
+        fi
+        
+        case "${response,,}" in
+            y|yes|да|д)
+                log_info "${L_REINSTALL_CONFIRMED}"
+                complete_uninstall
+                log_info "${L_REINSTALL_DONE}"
+                ;;
+            *)
+                log_info "${L_INSTALL_CANCELLED}"
+                exit 0
+                ;;
+        esac
+    fi
+}
+
+validate_system() {
+    if [[ ! -f "/etc/debian_version" ]]; then
+        log_error "${L_DEBIAN_ONLY}"
+        exit 1
+    fi
+    
+    local required_commands=("${APT_GET}" "${SED}" "${GREP}" "${CHMOD}" "${TAR}")
+    for cmd in "${required_commands[@]}"; do
+        if [[ ! -x "${cmd}" ]]; then
+            log_error "${L_CMD_NOT_FOUND}: ${cmd}"
+            exit 1
+        fi
+    done
+}
+
+install_dependencies() {
+    log_info "${L_DEPS_START}"
+    
+    if [[ ! -f "${APT_CONF_FILE}" ]]; then
+        echo 'Acquire::ForceIPv4 "true";' > "${APT_CONF_FILE}"
+        "${CHMOD}" 644 "${APT_CONF_FILE}"
+    fi
+    
+    if ! "${APT_GET}" update -qq; then
+        log_warn "${L_DEPS_UPDATE_FAIL}"
+    fi
+    
+    local packages=("procps" "lsb-release" "whiptail" "rsync" "curl" "util-linux")
+    if ! "${APT_GET}" install -y "${packages[@]}" > /dev/null; then
+        log_error "${L_DEPS_INSTALL_FAIL}"
+        exit 1
+    fi
+}
+
+create_config() {
+    log_info "${L_CONFIG_START}"
+    
+    cat > "${CONFIG_FILE}" << EOF
+MOTDSET_LANG=${INSTALLER_LANG}
+COLOR_THEME=${THEME_CHOICE}
+SHOW_LOGO=true
+SHOW_HOSTING=true
+SHOW_STORAGE_MODEL=true
+SERVER_LABEL=""
+HOSTING_NAME=""
+SHOW_CPU=true
+SHOW_MEM=true
+SHOW_NET=false
+SHOW_DOCKER=true
+SHOW_DOCKER_STATUS=true
+SHOW_DOCKER_RUNNING_LIST=false
+SHOW_FIREWALL=true
+SHOW_FIREWALL_RULES=false
+SHOW_UPDATES=true
+SHOW_SECURITY=false
+SERVICES_STATUS_ENABLED=false
+
+# Add the required services here to display the status, for example SERVICES=(crowdsec ufw netbird)
+SERVICES=()
+
+EOF
+    
+    "${CHMOD}" 644 "${CONFIG_FILE}"
+    
+    if [[ ! -f "${CONFIG_FILE}" ]]; then
+        log_error "${L_CONFIG_FAIL}"
+        exit 1
+    fi
+}
+
+create_motd_script() {
+    log_info "${L_MOTD_SCRIPT_START}"
+    
+    "${MKDIR}" -p /etc/update-motd.d
+    
+    cat > "${MOTD_SCRIPT}" << 'MOTD_EOF'
+#!/bin/bash
+
+if [[ -f "/etc/dist-motd.conf" ]]; then
+    source "/etc/dist-motd.conf"
+else
+    SHOW_LOGO=true
+    SHOW_HOSTING=true
+    SHOW_STORAGE_MODEL=true
+    SERVER_LABEL=""
+    HOSTING_NAME=""
+    SHOW_CPU=true
+    SHOW_MEM=true
+    SHOW_NET=false
+    SHOW_DOCKER=true
+    SHOW_DOCKER_STATUS=true
+    SHOW_DOCKER_RUNNING_LIST=false
+    SHOW_FIREWALL=true
+    SHOW_FIREWALL_RULES=false
+    SHOW_UPDATES=true
+    SHOW_SECURITY=false
+    SERVICES_STATUS_ENABLED=false
 fi
-cat > "$MOTD" <<'RUN'
-#!/usr/bin/env bash
-exec /opt/midas-motd/render.sh
-RUN
-chmod 755 "$MOTD"
-cat > /usr/local/bin/motd <<'RUN'
-#!/usr/bin/env bash
-exec /opt/midas-motd/render.sh
-RUN
-cat > /usr/local/bin/motd-set <<'RUN'
-#!/usr/bin/env bash
-exec /opt/midas-motd/settings.sh
-RUN
-chmod 755 /usr/local/bin/motd /usr/local/bin/motd-set
-# Avoid duplicate standard dynamic MOTD fragments, but keep backups.
-for f in /etc/update-motd.d/00-header /etc/update-motd.d/10-help-text /etc/update-motd.d/50-motd-news /etc/update-motd.d/00-dist-motd; do
- [[ ! -f $f ]] || chmod a-x "$f"
-done
-# Do not edit PAM, SSH or restart sshd: existing pam_motd will execute update-motd.d.
-touch "$BASE/installed"
-if [[ ! -f "$BASE/setup-complete" ]]; then
- touch "$BASE/setup-complete"
- printf '\nУстановка завершена. Для настройки запустите: motd-set\n'
+
+# Detect terminal background and set color theme
+# Override via config: COLOR_THEME=auto|dark|light
+_detect_theme() {
+    local theme="${COLOR_THEME:-auto}"
+    if [[ "${theme}" == "auto" ]]; then
+        # Try COLORFGBG: "fg;bg" — bg < 8 means dark
+        if [[ -n "${COLORFGBG:-}" ]]; then
+            local bg="${COLORFGBG##*;}"
+            if [[ "${bg}" =~ ^[0-9]+$ ]] && [[ "${bg}" -gt 8 ]]; then
+                theme="light"
+            else
+                theme="dark"
+            fi
+        else
+            theme="dark"
+        fi
+    fi
+    echo "${theme}"
+}
+
+_THEME=$(_detect_theme)
+
+if [[ "${_THEME}" == "light" ]]; then
+    COLOR_TITLE="\e[1;34m"
+    COLOR_LABEL="\e[0;36m"
+    COLOR_VALUE="\e[0;30m"
+    COLOR_GREEN="\e[0;32m"
+    COLOR_RED="\e[0;31m"
+    COLOR_YELLOW="\e[0;33m"
+    BOLD="\e[1m"
+    RESET="\e[0m"
+else
+    COLOR_TITLE="\e[1;37m"
+    COLOR_LABEL="\e[0;36m"
+    COLOR_VALUE="\e[0;37m"
+    COLOR_GREEN="\e[0;32m"
+    COLOR_RED="\e[0;31m"
+    COLOR_YELLOW="\e[0;33m"
+    BOLD="\e[1m"
+    RESET="\e[0m"
 fi
-printf '\nCommands: motd, motd-set\n'
+readonly COLOR_TITLE COLOR_LABEL COLOR_VALUE COLOR_GREEN COLOR_RED COLOR_YELLOW BOLD RESET
+
+readonly TOILET="/usr/bin/toilet"
+readonly LAST="/usr/bin/last"
+readonly LASTLOG="/usr/bin/lastlog"
+readonly WHO="/usr/bin/who"
+readonly UPTIME="/usr/bin/uptime"
+readonly HOSTNAME="/bin/hostname"
+readonly LSB_RELEASE="/usr/bin/lsb-release"
+readonly IP="/sbin/ip"
+readonly UNAME="/bin/uname"
+readonly VMSTAT="/usr/bin/vmstat"
+readonly FREE="/usr/bin/free"
+readonly DF="/bin/df"
+readonly CAT="/bin/cat"
+readonly AWK="/usr/bin/awk"
+readonly CUT="/usr/bin/cut"
+readonly HEAD="/usr/bin/head"
+readonly TAIL="/usr/bin/tail"
+readonly GREP="/bin/grep"
+readonly SED="/bin/sed"
+readonly DOCKER="/usr/bin/docker"
+readonly WC="/usr/bin/wc"
+readonly SYSTEMCTL="/bin/systemctl"
+
+bar() {
+    local used=$1
+    local total=$2
+    local label_extra="${3:-}"
+    local width=30
+    
+    if [[ ! "${used}" =~ ^[0-9]+$ ]] || [[ ! "${total}" =~ ^[0-9]+$ ]] || [[ "${total}" -eq 0 ]]; then
+        printf "[%-${width}s] N/A" ""
+        return
+    fi
+    
+    local percent=$((100 * used / total))
+    local filled=$((width * used / total))
+    local empty=$((width - filled))
+    local color
+    
+    if [[ "${percent}" -lt 50 ]]; then 
+        color="${COLOR_GREEN}"
+    elif [[ "${percent}" -lt 80 ]]; then 
+        color="${COLOR_YELLOW}"
+    else 
+        color="${COLOR_RED}"
+    fi
+    
+    printf "["
+    for ((i=0; i<filled; i++)); do printf "${color}━"; done
+    for ((i=0; i<empty; i++)); do printf "${RESET}━"; done
+    printf "${RESET}] %d%%%s" "${percent}" "${label_extra}"
+}
+
+safe_cmd() {
+    local cmd_output
+    if cmd_output=$("$@" 2>/dev/null); then
+        printf '%s' "${cmd_output}"
+    else
+        printf 'N/A'
+    fi
+}
+
+format_uptime() {
+    local seconds
+    seconds=$(cat /proc/uptime 2>/dev/null | awk '{print int($1)}')
+    if [[ -z "${seconds}" ]]; then
+        echo "N/A"
+        return
+    fi
+    local days=$(( seconds / 86400 ))
+    local hours=$(( (seconds % 86400) / 3600 ))
+    local mins=$(( (seconds % 3600) / 60 ))
+    if [[ ${days} -gt 0 ]]; then
+        echo "${days} days ${hours}h ${mins}m"
+    elif [[ ${hours} -gt 0 ]]; then
+        echo "${hours}h ${mins}m"
+    else
+        echo "${mins}m"
+    fi
+}
+
+show_logo() {
+    if [[ "${SHOW_LOGO}" = "true" ]]; then
+        echo -e "${COLOR_TITLE}Message Of The Day by MIDAS MOTD (v1.0)${RESET}"
+        echo -e "${COLOR_TITLE}-----------------------------------------${RESET}"
+    fi
+}
+
+show_session_info() {
+    echo -e "${COLOR_TITLE}• Session Details${RESET}"
+
+    local real_user
+    real_user=$(safe_cmd /usr/bin/logname)
+    if [[ "${real_user}" = "N/A" || -z "${real_user}" ]]; then
+        real_user=$(safe_cmd "${WHO}" | "${AWK}" 'NR==1{print $1}')
+    fi
+    printf "${COLOR_LABEL}%-22s${COLOR_YELLOW}%s${RESET}\n" "User:" "${real_user:-Unknown}"
+
+    local last_login
+    last_login=$(journalctl -u ssh.service -u sshd.service -o short-iso -n 30 \
+        | grep -E "Accepted (password|publickey|keyboard-interactive)" \
+        | grep -w "${real_user}" \
+        | tail -n 2 \
+        | head -n 1 \
+        | sed -n 's/^\([0-9TZ:+-]*\).* from \([0-9.]*\) port.*/\1 \2/p' \
+        | while read dt ip; do
+            date_str=$(date -d "$dt" "+%d %b %H:%M")
+            echo "$date_str from $ip"
+          done)
+
+    if [[ -n "$last_login" ]]; then
+        printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "Last login:" "$last_login"
+    else
+        echo -e "${COLOR_LABEL}Last login:${RESET} not available"
+    fi
+
+    local uptime_fmt
+    uptime_fmt=$(format_uptime)
+    printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "Uptime:" "${uptime_fmt}"
+}
+
+show_system_info() {
+    echo -e "\n${COLOR_TITLE}• System Details${RESET}"
+    
+    local hostname_value
+    hostname_value=$(safe_cmd "${HOSTNAME}")
+    printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "Hostname:" "${hostname_value:-Unknown}"
+    
+    local os_info
+    if [[ -x "${LSB_RELEASE}" ]]; then
+        os_info=$(safe_cmd "${LSB_RELEASE}" -ds)
+    elif [[ -f "/etc/os-release" ]]; then
+        os_info=$(safe_cmd "${GREP}" PRETTY_NAME /etc/os-release | "${CUT}" -d= -f2 | tr -d '"')
+    else
+        os_info="Unknown"
+    fi
+    printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "OS:" "${os_info}"
+    
+    local ipv4 ipv6
+    if [[ -x "${IP}" ]]; then
+        ipv4=$(safe_cmd "${IP}" -4 addr show scope global | "${AWK}" '/inet/ {print $2}' | "${CUT}" -d/ -f1 | "${HEAD}" -n1)
+        ipv6=$(safe_cmd "${IP}" -6 addr show scope global | "${AWK}" '/inet6/ {print $2}' | "${CUT}" -d/ -f1 | "${HEAD}" -n1)
+    fi
+    printf "${COLOR_LABEL}%-22s${COLOR_YELLOW}%s${RESET}\n" "External IP (v4):" "${ipv4:-N/A}"
+    printf "${COLOR_LABEL}%-22s${COLOR_YELLOW}%s${RESET}\n" "External IP (v6):" "${ipv6:-N/A}"
+    
+    local kernel_version
+    kernel_version=$(safe_cmd "${UNAME}" -r)
+    printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "Kernel:" "${kernel_version:-Unknown}"
+}
+
+midas_label() {
+    local ru="$1" en="$2"
+    if [[ "${MOTDSET_LANG:-ru}" == "ru" ]]; then printf '%s' "$ru"; else printf '%s' "$en"; fi
+}
+
+midas_provider() {
+    if [[ -n "${HOSTING_NAME:-}" ]]; then printf '%s' "$HOSTING_NAME"; return; fi
+    local cache="/var/cache/midas-motd-provider"
+    if [[ -s "$cache" ]]; then
+        cat "$cache"
+    else
+        printf '%s' "$(midas_label 'Не определён' 'Unknown')"
+    fi
+}
+
+midas_extra_system() {
+    if [[ -n "${SERVER_LABEL:-}" ]]; then
+        printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" \
+            "$(midas_label 'Название сервера:' 'Server name:')" "$SERVER_LABEL"
+    fi
+    if [[ "${SHOW_HOSTING:-true}" == "true" ]]; then
+        printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" \
+            "$(midas_label 'Хостер:' 'Hosting:')" "$(midas_provider)"
+    fi
+}
+
+midas_storage_model() {
+    [[ "${SHOW_STORAGE_MODEL:-true}" == "true" ]] || return 0
+    local source_disk parent model transport
+    source_disk=$(findmnt -n -o SOURCE / 2>/dev/null || true)
+    parent=$(lsblk -no PKNAME "$source_disk" 2>/dev/null | head -n1 || true)
+    [[ -n "$parent" ]] || parent=$(lsblk -no NAME "$source_disk" 2>/dev/null | head -n1 || true)
+    model=""
+    transport=""
+    if [[ -n "$parent" && -b "/dev/$parent" ]]; then
+        model=$(lsblk -dn -o MODEL "/dev/$parent" 2>/dev/null | xargs || true)
+        transport=$(lsblk -dn -o TRAN "/dev/$parent" 2>/dev/null | xargs || true)
+    fi
+    printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" \
+        "$(midas_label 'Накопитель:' 'Storage:')" "${model:-Virtual / Unknown}${transport:+ ($transport)}"
+}
+
+show_cpu_info() {
+    if [[ "${SHOW_CPU}" = "true" ]]; then
+        echo -e "\n${COLOR_TITLE}• CPU${RESET}"
+        
+        local cpu_model
+        if [[ -f "/proc/cpuinfo" ]]; then
+            cpu_model=$(safe_cmd "${GREP}" -m1 "model name" /proc/cpuinfo | "${CUT}" -d ':' -f2 | "${SED}" 's/^ //')
+        fi
+        printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "Model:" "${cpu_model:-Unknown}"
+        
+        local cpu_idle cpu_usage
+        if [[ -x "${VMSTAT}" ]]; then
+            cpu_idle=$(safe_cmd "${VMSTAT}" 1 2 | "${TAIL}" -1 | "${AWK}" '{print $15}')
+            if [[ "${cpu_idle}" =~ ^[0-9]+$ ]]; then
+                cpu_usage=$((100 - cpu_idle))
+            else
+                cpu_usage="N/A"
+            fi
+        else
+            cpu_usage="N/A"
+        fi
+        
+        printf "${COLOR_LABEL}%-22s" "Usage:"
+        if [[ "${cpu_usage}" != "N/A" ]]; then
+            bar "${cpu_usage}" 100
+        else
+            printf "N/A"
+        fi
+        echo
+        
+        local load_avg
+        if [[ -f "/proc/loadavg" ]]; then
+            load_avg=$(safe_cmd "${AWK}" '{print $1 " / " $2 " / " $3}' /proc/loadavg)
+        fi
+        printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "Load average:" "${load_avg:-Unknown}"
+    fi
+}
+
+show_memory_info() {
+    if [[ "${SHOW_MEM}" = "true" ]]; then
+        echo -e "\n${COLOR_TITLE}• RAM & Disk${RESET}"
+        
+        if [[ -x "${FREE}" ]]; then
+            local mem_total mem_used mem_total_mb mem_used_mb
+            mem_total=$(safe_cmd "${FREE}" -m | "${AWK}" '/Mem:/ {print $2}')
+            mem_used=$(safe_cmd "${FREE}" -m | "${AWK}" '/Mem:/ {print $3}')
+            
+            printf "${COLOR_LABEL}%-22s" "RAM:"
+            if [[ "${mem_total}" =~ ^[0-9]+$ ]] && [[ "${mem_used}" =~ ^[0-9]+$ ]]; then
+                local mem_label
+                if [[ "${mem_total}" -ge 1024 ]]; then
+                    mem_label=$(awk "BEGIN {printf \" (%d MB / %d MB)\", ${mem_used}, ${mem_total}}")
+                else
+                    mem_label=" (${mem_used} MB / ${mem_total} MB)"
+                fi
+                bar "${mem_used}" "${mem_total}" "${mem_label}"
+            else
+                printf "N/A"
+            fi
+            echo
+        fi
+        
+        if [[ -x "${DF}" ]]; then
+            local disk_used disk_total disk_used_gb disk_total_gb
+            disk_used=$(safe_cmd "${DF}" -m / | "${AWK}" 'NR==2{print $3}')
+            disk_total=$(safe_cmd "${DF}" -m / | "${AWK}" 'NR==2{print $2}')
+            
+            printf "${COLOR_LABEL}%-22s" "Disk:"
+            if [[ "${disk_used}" =~ ^[0-9]+$ ]] && [[ "${disk_total}" =~ ^[0-9]+$ ]]; then
+                local disk_label
+                disk_label=$(awk "BEGIN {printf \" (%.1f GB / %.1f GB)\", ${disk_used}/1024, ${disk_total}/1024}")
+                bar "${disk_used}" "${disk_total}" "${disk_label}"
+            else
+                printf "N/A"
+            fi
+            echo
+        fi
+    fi
+}
+
+show_network_info() {
+    if [[ "${SHOW_NET}" = "true" ]] && [[ -x "${IP}" ]]; then
+        echo -e "\n${COLOR_TITLE}• Network${RESET}"
+        
+        local net_iface
+        net_iface=$(safe_cmd "${IP}" route get 8.8.8.8 2>/dev/null | "${AWK}" '{for(i=1;i<=NF;i++) if($i=="dev") print $(i+1)}')
+        
+        if [[ -n "${net_iface}" ]] && [[ -f "/sys/class/net/${net_iface}/statistics/rx_bytes" ]]; then
+            local rx_bytes tx_bytes
+            rx_bytes=$(safe_cmd "${CAT}" "/sys/class/net/${net_iface}/statistics/rx_bytes")
+            tx_bytes=$(safe_cmd "${CAT}" "/sys/class/net/${net_iface}/statistics/tx_bytes")
+            
+            human_readable() {
+                local bytes=$1
+                local units=('B' 'KB' 'MB' 'GB' 'TB') 
+                local unit=0
+                
+                if [[ ! "${bytes}" =~ ^[0-9]+$ ]]; then
+                    echo "N/A"
+                    return
+                fi
+                
+                while (( bytes > 1024 && unit < 4 )); do 
+                    bytes=$((bytes / 1024))
+                    ((unit++))
+                done
+                echo "${bytes} ${units[$unit]}"
+            }
+            
+            local rx_hr tx_hr
+            rx_hr=$(human_readable "${rx_bytes}")
+            tx_hr=$(human_readable "${tx_bytes}")
+            
+            printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "Interface:" "${net_iface}"
+            printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "Received:" "${rx_hr}"
+            printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "Transmitted:" "${tx_hr}"
+        else
+            printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "Network:" "Interface not found"
+        fi
+    fi
+}
+
+show_firewall_info() {
+    if [[ "${SHOW_FIREWALL}" = "true" ]]; then
+        echo -e "\n${COLOR_TITLE}• Firewall${RESET}"
+        
+        local ufw_bin="/usr/sbin/ufw"
+        if [[ -x "${ufw_bin}" ]]; then
+            local status
+            status=$(safe_cmd "${ufw_bin}" status | "${HEAD}" -1 | "${AWK}" '{print $2}')
+            
+            if [[ "${status}" = "active" ]]; then
+                printf "${COLOR_LABEL}%-22s${COLOR_GREEN}%s${RESET}\n" "UFW Status:" "${status}"
+                
+                if [[ "${SHOW_FIREWALL_RULES}" = "true" ]]; then
+                    local rules_output
+                    if rules_output=$(safe_cmd "${ufw_bin}" status 2>/dev/null); then
+                        local rules_array
+                        mapfile -t rules_array < <(echo "${rules_output}" | "${AWK}" '/ALLOW/ {
+                            port=$1
+                            from=""
+                            for (i=3; i<=NF; i++) {
+                                if ($i != "ALLOW") from=from $i " "
+                            }
+                            gsub(/[[:space:]]+$/, "", from)
+                            sub(/#.*/, "", from)
+                            gsub(/[[:space:]]+$/, "", from)
+                            
+                            if (port ~ /\(v6\)/) {
+                                sub(/ \(v6\)/, "", port)
+                                if (from == "Anywhere") from = "Anywhere (v6)"
+                            }
+                            
+                            print port "|" from
+                        }')
+                        
+                        if [[ ${#rules_array[@]} -gt 0 ]]; then
+                            declare -A grouped_rules
+                            for rule in "${rules_array[@]}"; do
+                                local port="${rule%%|*}"
+                                local from="${rule##*|}"
+                                grouped_rules["${from}"]+="${port}, "
+                            done
+                            
+                            echo -e "${COLOR_LABEL}Rules:${RESET}"
+                            for from in "${!grouped_rules[@]}"; do
+                                local ports="${grouped_rules[${from}]}"
+                                ports="${ports%, }"
+                                echo -e "  ${COLOR_VALUE}${ports} ALLOW from ${from}${RESET}"
+                            done
+                        else
+                            echo -e "${COLOR_LABEL}Rules:${RESET} None"
+                        fi
+                    fi
+                fi
+            else
+                printf "${COLOR_LABEL}%-22s${COLOR_RED}%s${RESET}\n" "UFW Status:" "${status:-inactive}"
+            fi
+        else
+            printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "UFW:" "not installed"
+        fi
+    fi
+}
+
+show_docker_info() {
+    if [[ "${SHOW_DOCKER}" == "true" ]] && [[ -x "${DOCKER}" ]]; then
+        echo -e "\n${COLOR_TITLE}• Docker${RESET}"
+
+        if [[ "${SHOW_DOCKER_STATUS}" != "true" ]] && [[ "${SHOW_DOCKER_RUNNING_LIST}" != "true" ]]; then
+            printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "Docker:" "info disabled by configuration"
+            return
+        fi
+
+        local runningnamesoutput totalnamesoutput
+        runningnamesoutput=$(safe_cmd "${DOCKER}" ps --format '{{.Names}}' 2>/dev/null)
+        totalnamesoutput=$(safe_cmd "${DOCKER}" ps -a --format '{{.Names}}' 2>/dev/null)
+        local runningcount=0 totalcount=0
+
+        if [[ "${runningnamesoutput}" != "N/A" ]] && [[ -n "${runningnamesoutput}" ]]; then
+            runningcount=$(echo "${runningnamesoutput}" | "${WC}" -l)
+        fi
+        if [[ "${totalnamesoutput}" != "N/A" ]] && [[ -n "${totalnamesoutput}" ]]; then
+            totalcount=$(echo "${totalnamesoutput}" | "${WC}" -l)
+        fi
+
+        if [[ "${SHOW_DOCKER_STATUS}" == "true" ]]; then
+            printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "Containers:" "${runningcount} / ${totalcount}"
+        fi
+
+        if [[ "${SHOW_DOCKER_RUNNING_LIST}" == "true" ]] && [[ "${runningcount}" -gt 0 ]] && [[ "${runningnamesoutput}" != "N/A" ]]; then
+            echo -e "${COLOR_LABEL}Running Containers:${RESET}"
+            local names_array=()
+            while IFS= read -r line; do
+                [[ -n "$line" ]] && names_array+=("$line")
+            done <<< "${runningnamesoutput}"
+            for ((i = 0; i < ${#names_array[@]}; i+=2)); do
+                if [[ $((i + 1)) -lt ${#names_array[@]} ]]; then
+                    printf " ${COLOR_VALUE}%-30s%-30s${RESET}\n" "${names_array[$i]}" "${names_array[$((i + 1))]}"
+                else
+                    printf " ${COLOR_VALUE}%-30s${RESET}\n" "${names_array[$i]}"
+                fi
+            done
+        fi
+
+    elif [[ "${SHOW_DOCKER}" == "true" ]]; then
+        echo -e "\n${COLOR_TITLE}• Docker${RESET}"
+        printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "Docker:" "not installed"
+    fi
+}
+
+show_updates_info() {
+    if [[ "${SHOW_UPDATES}" = "true" ]]; then
+        echo -e "\n${COLOR_TITLE}• Updates Available${RESET}"
+        
+        local updates_count security_count
+        
+        if command -v apt >/dev/null 2>&1; then
+            updates_count=$(safe_cmd apt list --upgradable 2>/dev/null | "${GREP}" -v "Listing" | "${WC}" -l)
+            
+            if [[ "${updates_count}" =~ ^[0-9]+$ ]] && [[ "${updates_count}" -gt 0 ]]; then
+                printf "${COLOR_LABEL}%-22s${COLOR_YELLOW}%s packages${RESET}\n" "Total updates:" "${updates_count}"
+                
+                if [[ -x "/usr/lib/update-notifier/apt-check" ]]; then
+                    local apt_check_output
+                    apt_check_output=$(safe_cmd /usr/lib/update-notifier/apt-check 2>&1)
+                    security_count=$(echo "${apt_check_output}" | "${CUT}" -d';' -f2)
+                    
+                    if [[ "${security_count}" =~ ^[0-9]+$ ]] && [[ "${security_count}" -gt 0 ]]; then
+                        printf "${COLOR_LABEL}%-22s${COLOR_RED}%s security${RESET}\n" "Security updates:" "${security_count}"
+                    fi
+                fi
+                
+                echo -e "${COLOR_LABEL}Run 'sudo apt upgrade' to install updates${RESET}"
+            else
+                printf "${COLOR_LABEL}%-22s${COLOR_GREEN}%s${RESET}\n" "Status:" "System is up to date"
+            fi
+        else
+            printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "Updates:" "apt not available"
+        fi
+    fi
+}
+
+show_security_info() {
+    if [[ "${SHOW_SECURITY}" != "true" ]]; then
+        return
+    fi
+
+    echo -e "\n${COLOR_TITLE}• Security${RESET}"
+
+    local failed_count failed_last
+    failed_count=$(journalctl -u ssh.service -u sshd.service --since "7 days ago" 2>/dev/null \
+        | grep -c "Failed password\|Invalid user\|authentication failure" 2>/dev/null || echo "0")
+    if [[ ! "${failed_count}" =~ ^[0-9]+$ ]]; then
+        failed_count=0
+    fi
+
+    if [[ "${failed_count}" -gt 0 ]]; then
+        failed_last=$(journalctl -u ssh.service -u sshd.service --since "7 days ago" -o short-iso 2>/dev/null \
+            | grep "Failed password\|Invalid user\|authentication failure" \
+            | tail -1 \
+            | awk '{print $1}' \
+            | xargs -I{} date -d "{}" "+%d %b %H:%M" 2>/dev/null || echo "")
+
+        printf "${COLOR_LABEL}%-22s${COLOR_RED}%s${RESET}" "Failed logins (7d):" "${failed_count} attempts"
+        if [[ -n "${failed_last}" ]]; then
+            printf "${COLOR_VALUE} (last: %s)${RESET}" "${failed_last}"
+        fi
+        echo
+    else
+        printf "${COLOR_LABEL}%-22s${COLOR_GREEN}%s${RESET}\n" "Failed logins:" "none since boot"
+    fi
+
+    local real_user
+    real_user=$(logname 2>/dev/null || echo "")
+    if [[ -n "${real_user}" ]]; then
+        local home_dir key_count
+        home_dir=$(getent passwd "${real_user}" | cut -d: -f6 2>/dev/null || echo "")
+        if [[ -f "${home_dir}/.ssh/authorized_keys" ]]; then
+            key_count=$(grep -c "^ssh-\|^ecdsa-\|^sk-" "${home_dir}/.ssh/authorized_keys" 2>/dev/null || true); key_count=${key_count:-0}
+            printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "Authorized keys:" "${key_count} key(s)"
+        fi
+    fi
+}
+
+show_services_info() {
+  source /etc/dist-motd.conf || true
+
+  if [[ "${SERVICES_STATUS_ENABLED,,}" != "true" ]]; then
+    return
+  fi
+
+  echo -e "\n${COLOR_TITLE}• Services Status${RESET}"
+
+  if [[ ${#SERVICES[@]} -eq 0 ]]; then
+    printf "${COLOR_YELLOW}Настройте список сервисов через motd-set.${RESET}"
+    return
+  fi
+
+  for service in "${SERVICES[@]}"; do
+    if command -v systemctl >/dev/null 2>&1; then
+      if systemctl is-active --quiet "$service"; then
+        printf "${COLOR_LABEL}%-22s${COLOR_GREEN}%s${RESET}\n" "$service:" "active"
+      elif systemctl is-enabled --quiet "$service"; then
+        printf "${COLOR_LABEL}%-22s${COLOR_YELLOW}%s${RESET}\n" "$service:" "inactive"
+      else
+        printf "${COLOR_LABEL}%-22s${COLOR_RED}%s${RESET}\n" "$service:" "disabled/not installed"
+      fi
+    else
+      printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "$service:" "systemctl not available"
+    fi
+  done
+}
+
+main() {
+    show_logo
+    show_session_info
+    show_system_info
+    midas_extra_system
+    show_cpu_info
+    show_memory_info
+    midas_storage_model
+    show_network_info
+    show_firewall_info
+    show_docker_info
+    show_security_info
+    show_services_info
+    show_updates_info 
+    echo
+}
+
+if main; then
+    exit 0
+else
+    echo -e "${COLOR_RED}Ошибка при выполнении MOTD скрипта${RESET}" >&2
+    exit 1
+fi
+MOTD_EOF
+
+    "${CHMOD}" 755 "${MOTD_SCRIPT}"
+    
+    if [[ ! -x "${MOTD_SCRIPT}" ]]; then
+        log_error "${L_MOTD_SCRIPT_FAIL}"
+        exit 1
+    fi
+}
+
+create_settings_command() {
+    log_info "${L_SETTINGS_CMD_START}"
+    
+    cat > "${CMD_SETTINGS}" << SETTINGS_EOF
+#!/bin/bash
+
+readonly CONFIG="/etc/dist-motd.conf"
+readonly WHIPTAIL="/usr/bin/whiptail"
+readonly BACKUP_ROOT="/opt/motd/complete-backup"
+readonly INSTALL_MARKER="/opt/motd/custom_motd_installed"
+
+readonly DIRECTORIES_TO_BACKUP=(
+    "/etc/update-motd.d"
+    "/etc/pam.d"
+    "/etc/ssh"
+    "/usr/local/bin"
+)
+
+load_motdset_lang() {
+    local lang="\${1:-ru}"
+    if [[ "\${lang}" == "en" ]]; then
+        MS_TITLE="MOTD v2.5.0"
+        MS_MENU_PROMPT="Choose action:"
+        MS_MENU_CONFIGURE="Configure MOTD display"
+        MS_MENU_SERVICES="Configure Services Status"
+        MS_MENU_UNINSTALL="Remove custom MOTD (with full restore)"
+        MS_MENU_STATUS="Show installation status"
+        MS_MENU_EXIT="Exit"
+        MS_DISPLAY_TITLE="MOTD Display Settings"
+        MS_DISPLAY_PROMPT="Select what to display in MOTD:"
+        MS_DISPLAY_LOGO="MOTD header"
+        MS_DISPLAY_CPU="CPU load"
+        MS_DISPLAY_MEM="Memory and disk"
+        MS_DISPLAY_NET="Network traffic"
+        MS_DISPLAY_FW="UFW status"
+        MS_DISPLAY_FW_RULES="UFW rules"
+        MS_DISPLAY_DOCKER="Docker containers (master switch)"
+        MS_DISPLAY_DOCKER_STATUS="Running containers count"
+        MS_DISPLAY_DOCKER_LIST="Running containers list"
+        MS_DISPLAY_SECURITY="Security (failed logins, SSH keys)"
+        MS_DISPLAY_UPDATES="Available package updates"
+        MS_SAVED="Settings updated!\n\nCheck result with command: motd"
+        MS_SERVICES_TITLE="Services Status Settings"
+        MS_SERVICES_PROMPT="Choose action:"
+        MS_SERVICES_TOGGLE="Enable/Disable display"
+        MS_SERVICES_EDIT="Edit services list"
+        MS_SERVICES_BACK="Back"
+        MS_SERVICES_UPDATED="Services display option updated! Reconnect to apply changes."
+        MS_UNINSTALL_TITLE="Confirm removal"
+        MS_UNINSTALL_WARN="WARNING!\n\nThis will completely remove the custom MOTD and restore the system from a full directory backup.\n\nAre you sure?"
+        MS_UNINSTALL_STEP1="Cleaning up custom files..."
+        MS_UNINSTALL_STEP2="Restoring directories..."
+        MS_UNINSTALL_STEP3="Regenerating MOTD..."
+        MS_UNINSTALL_STEP4="Restarting services..."
+        MS_UNINSTALL_STEP5="Finishing..."
+        MS_UNINSTALL_GAUGE="Performing full removal..."
+        MS_UNINSTALL_TITLE_GAUGE="Removing MOTD"
+        MS_UNINSTALL_SUCCESS="Custom MOTD fully removed!\n\nSystem restored from full backup."
+        MS_UNINSTALL_ERROR="An error occurred during removal!"
+        MS_UNINSTALL_NO_BACKUP="Backups not found!\nRemoval is not possible."
+        MS_STATUS_TITLE="Installation status"
+        MS_STATUS_INSTALLED="Custom MOTD installed"
+        MS_STATUS_BACKUPS="Full directory backups"
+        MS_STATUS_CONFIG="Configuration file"
+        MS_STATUS_SCRIPT_ACTIVE="MOTD script active"
+        MS_STATUS_SCRIPT_INACTIVE="MOTD script inactive"
+        MS_STATUS_INSTALLED_DATE="Installed"
+        MS_STATUS_NOT_INSTALLED="Custom MOTD not installed"
+        MS_STATUS_NO_BACKUPS="Backups not found"
+        MS_ERROR_NO_CONFIG="Configuration file not found"
+        MS_ERROR_ROOT="Root privileges required.\n\nRun with sudo."
+        MS_ERROR_NO_WHIPTAIL="whiptail is not installed"
+        MS_LANG_TITLE="Language / Язык"
+        MS_LANG_PROMPT="Select interface language:"
+        MS_LANG_RU="Russian / Русский"
+        MS_LANG_EN="English / Английский"
+        MS_LANG_SAVED="Language changed. Restart motd-set to apply."
+        MS_THEME_TITLE="Color Theme"
+        MS_THEME_PROMPT="Select color theme for MOTD:"
+        MS_THEME_AUTO="Auto (detect from terminal)"
+        MS_THEME_DARK="Dark (for dark backgrounds)"
+        MS_THEME_LIGHT="Light (for light backgrounds)"
+        MS_THEME_SAVED="Theme saved. Run 'motd' to check result."
+        MS_MENU_THEME="Color Theme"
+        MS_MENU_IDENTITY="Server & hosting"
+        MS_IDENTITY_TITLE="Server & hosting"
+        MS_HOSTNAME="Change Linux hostname"
+        MS_SERVER_LABEL="Server display name"
+        MS_HOSTING_NAME="Hosting display name"
+        MS_HOSTING_REFRESH="Refresh hosting lookup"
+        MS_IDENTITY_WARNING="This changes the real hostname. Services using the old name may require reconfiguration. Continue?"
+
+    else
+        MS_TITLE="MOTD v2.5.0"
+        MS_MENU_PROMPT="Выберите действие:"
+        MS_MENU_CONFIGURE="Настроить отображение MOTD"
+        MS_MENU_SERVICES="Настроить Services Status"
+        MS_MENU_UNINSTALL="Удалить кастомный MOTD (с полным восстановлением)"
+        MS_MENU_STATUS="Показать статус установки"
+        MS_MENU_EXIT="Выход"
+        MS_DISPLAY_TITLE="MOTD Display Settings"
+        MS_DISPLAY_PROMPT="Выберите, что отображать в MOTD:"
+        MS_DISPLAY_LOGO="Заголовок MOTD"
+        MS_DISPLAY_CPU="Загрузка процессора"
+        MS_DISPLAY_MEM="Память и диск"
+        MS_DISPLAY_NET="Сетевой трафик"
+        MS_DISPLAY_FW="Статус UFW"
+        MS_DISPLAY_FW_RULES="Правила UFW"
+        MS_DISPLAY_DOCKER="Контейнеры Docker (общий выключатель)"
+        MS_DISPLAY_DOCKER_STATUS="Количество запущенных контейнеров"
+        MS_DISPLAY_DOCKER_LIST="Список запущенных контейнеров"
+        MS_DISPLAY_SECURITY="Безопасность (неудачные логины, SSH ключи)"
+        MS_DISPLAY_UPDATES="Доступные обновления пакетов"
+        MS_SAVED="Настройки обновлены!\n\nПроверьте результат командой: motd"
+        MS_SERVICES_TITLE="Настройка Services Status"
+        MS_SERVICES_PROMPT="Выберите действие:"
+        MS_SERVICES_TOGGLE="Включить/Отключить отображение"
+        MS_SERVICES_EDIT="Настроить список сервисов"
+        MS_SERVICES_BACK="Назад"
+        MS_SERVICES_UPDATED="Опция отображения статуса сервисов обновлена! Чтобы изменения вступили в силу, переподключитесь."
+        MS_UNINSTALL_TITLE="Подтверждение удаления"
+        MS_UNINSTALL_WARN="ВНИМАНИЕ!\n\nЭто действие полностью удалит кастомный MOTD и восстановит систему из полного бэкапа директорий.\n\nВы уверены?"
+        MS_UNINSTALL_STEP1="Очистка кастомных файлов..."
+        MS_UNINSTALL_STEP2="Восстановление директорий..."
+        MS_UNINSTALL_STEP3="Регенерация MOTD..."
+        MS_UNINSTALL_STEP4="Перезапуск служб..."
+        MS_UNINSTALL_STEP5="Завершение..."
+        MS_UNINSTALL_GAUGE="Выполняется полное удаление..."
+        MS_UNINSTALL_TITLE_GAUGE="Удаление MOTD"
+        MS_UNINSTALL_SUCCESS="Кастомный MOTD полностью удален!\n\nСистема восстановлена из полного бэкапа."
+        MS_UNINSTALL_ERROR="Произошла ошибка при удалении!"
+        MS_UNINSTALL_NO_BACKUP="Бэкапы не найдены!\nУдаление невозможно."
+        MS_STATUS_TITLE="Статус установки"
+        MS_STATUS_INSTALLED="Установлен кастомный MOTD"
+        MS_STATUS_BACKUPS="Полные бэкапы директорий"
+        MS_STATUS_CONFIG="Конфигурационный файл"
+        MS_STATUS_SCRIPT_ACTIVE="MOTD скрипт активен"
+        MS_STATUS_SCRIPT_INACTIVE="MOTD скрипт неактивен"
+        MS_STATUS_INSTALLED_DATE="Установлен"
+        MS_STATUS_NOT_INSTALLED="Кастомный MOTD не установлен"
+        MS_STATUS_NO_BACKUPS="Бэкапы не найдены"
+        MS_ERROR_NO_CONFIG="Конфигурационный файл не найден"
+        MS_ERROR_ROOT="Требуются права суперпользователя.\n\nЗапустите с sudo."
+        MS_ERROR_NO_WHIPTAIL="whiptail не установлен"
+        MS_LANG_TITLE="Language / Язык"
+        MS_LANG_PROMPT="Выберите язык интерфейса:"
+        MS_LANG_RU="Russian / Русский"
+        MS_LANG_EN="English / Английский"
+        MS_LANG_SAVED="Язык изменён. Перезапустите motd-set для применения."
+        MS_THEME_TITLE="Цветовая тема"
+        MS_THEME_PROMPT="Выберите цветовую тему для MOTD:"
+        MS_THEME_AUTO="Авто (определять по терминалу)"
+        MS_THEME_DARK="Тёмная (для тёмного фона)"
+        MS_THEME_LIGHT="Светлая (для светлого фона)"
+        MS_THEME_SAVED="Тема сохранена. Запустите 'motd' для проверки."
+        MS_MENU_THEME="Цветовая тема"
+        MS_MENU_IDENTITY="Сервер и хостер"
+        MS_IDENTITY_TITLE="Сервер и хостер"
+        MS_HOSTNAME="Изменить hostname Linux"
+        MS_SERVER_LABEL="Отображаемое имя сервера"
+        MS_HOSTING_NAME="Название хостера"
+        MS_HOSTING_REFRESH="Обновить определение хостера"
+        MS_IDENTITY_WARNING="Будет изменено настоящее имя Linux. Сервисы, использующие старое имя, могут потребовать настройки. Продолжить?"
+
+    fi
+}
+
+_MOTDSET_LANG="\$(grep '^MOTDSET_LANG=' "\${CONFIG}" 2>/dev/null | cut -d= -f2 | tr -d '\"' || echo 'ru')"
+[[ -z "\${_MOTDSET_LANG}" ]] && _MOTDSET_LANG="ru"
+load_motdset_lang "\${_MOTDSET_LANG}"
+
+check_backup_exists() {
+    [[ -f "\${INSTALL_MARKER}" ]] && [[ -d "\${BACKUP_ROOT}" ]]
+}
+
+restore_complete_directories() {
+    echo "[+] Restoring directories from backup..."
+    
+    if ! check_backup_exists; then
+        echo "[!] Backups not found."
+        return 1
+    fi
+    
+    for dir in "\${DIRECTORIES_TO_BACKUP[@]}"; do
+        local backup_name=\$(echo "\${dir}" | /bin/sed 's|/|_|g' | /bin/sed 's|^_||')
+        local backup_path="\${BACKUP_ROOT}/\${backup_name}"
+        
+        if [[ -d "\${backup_path}" ]]; then
+            /bin/rm -rf "\${dir}" 2>/dev/null || true
+            /bin/mkdir -p "\$(dirname "\${dir}")"
+            
+            if command -v rsync >/dev/null 2>&1; then
+                /usr/bin/rsync -a --delete "\${backup_path}/" "\${dir}/"
+            else
+                /bin/cp -a "\${backup_path}" "\${dir}"
+            fi
+        fi
+    done
+    
+    local important_files=("/etc/motd" "/etc/bash.bashrc")
+    for file in "\${important_files[@]}"; do
+        local backup_name=\$(echo "\${file}" | /bin/sed 's|/|_|g' | /bin/sed 's|^_||')
+        local backup_file="\${BACKUP_ROOT}/\${backup_name}"
+        
+        if [[ -f "\${backup_file}" ]] || [[ -L "\${backup_file}" ]]; then
+            /bin/rm -f "\${file}" 2>/dev/null || true
+            /bin/cp -a "\${backup_file}" "\${file}"
+        fi
+    done
+}
+
+force_regenerate_standard_motd() {
+    local cache_files=("/var/run/motd" "/var/run/motd.dynamic" "/run/motd" "/run/motd.dynamic")
+    for cache_file in "\${cache_files[@]}"; do
+        /bin/rm -f "\${cache_file}" 2>/dev/null || true
+    done
+    
+    if command -v apt >/dev/null 2>&1; then
+        apt list --upgradable > /dev/null 2>&1 || true
+        if [[ -x "/usr/lib/update-notifier/apt-check" ]]; then
+            /usr/lib/update-notifier/apt-check 2>&1 | head -1 > /var/lib/update-notifier/updates-available || true
+        fi
+    fi
+    
+    if [[ -d "/etc/update-motd.d" ]]; then
+        if command -v run-parts >/dev/null 2>&1; then
+            local temp_motd=\$(mktemp)
+            run-parts --lsbsysinit /etc/update-motd.d/ > "\${temp_motd}" 2>/dev/null || true
+            if [[ -s "\${temp_motd}" ]]; then
+                /bin/cp "\${temp_motd}" "/var/run/motd.dynamic"
+                /bin/chmod 644 "/var/run/motd.dynamic"
+                /bin/cp "\${temp_motd}" "/run/motd.dynamic" 2>/dev/null || true
+            fi
+            /bin/rm -f "\${temp_motd}"
+        fi
+    fi
+}
+
+complete_cleanup() {
+    local custom_files=(
+        "/etc/dist-motd.conf"
+        "/etc/update-motd.d/00-dist-motd"
+        "/usr/local/bin/motd"
+        "/usr/local/bin/motd-set"
+        "/etc/apt/apt.conf.d/99force-ipv4"
+    )
+    for file in "\${custom_files[@]}"; do
+        /bin/rm -f "\${file}" 2>/dev/null || true
+    done
+    local cache_files=("/var/run/motd" "/var/run/motd.dynamic" "/run/motd" "/run/motd.dynamic")
+    for cache_file in "\${cache_files[@]}"; do
+        /bin/rm -f "\${cache_file}" 2>/dev/null || true
+    done
+}
+
+uninstall_custom_motd() {
+    complete_cleanup
+    restore_complete_directories
+    force_regenerate_standard_motd
+    
+    if /bin/systemctl is-active ssh >/dev/null 2>&1; then
+        /bin/systemctl reload ssh 2>/dev/null || true
+    elif /bin/systemctl is-active sshd >/dev/null 2>&1; then
+        /bin/systemctl reload sshd 2>/dev/null || true
+    fi
+    
+    /bin/rm -rf "/opt/motd"
+}
+
+check_setting() {
+    local setting="\$1"
+    if /bin/grep -q "\${setting}=true" "\${CONFIG}" 2>/dev/null; then
+        echo "ON"
+    else
+        echo "OFF"
+    fi
+}
+
+change_theme() {
+    local current_theme="\$(grep '^COLOR_THEME=' "\${CONFIG}" 2>/dev/null | cut -d= -f2 | tr -d '"' || echo 'auto')"
+    [[ -z "\${current_theme}" ]] && current_theme="auto"
+
+    local new_theme
+    new_theme=\$("\${WHIPTAIL}" --title "\${MS_THEME_TITLE}" --menu "\${MS_THEME_PROMPT}" 11 55 3 \
+        "auto"  "\${MS_THEME_AUTO}" \
+        "dark"  "\${MS_THEME_DARK}" \
+        "light" "\${MS_THEME_LIGHT}" \
+        3>&1 1>&2 2>&3) || return
+
+    if /bin/grep -q '^COLOR_THEME=' "\${CONFIG}"; then
+        /bin/sed -i "s|^COLOR_THEME=.*|COLOR_THEME=\${new_theme}|" "\${CONFIG}"
+    else
+        echo "COLOR_THEME=\${new_theme}" >> "\${CONFIG}"
+    fi
+
+    "\${WHIPTAIL}" --title "\${MS_THEME_TITLE}" --msgbox "\${MS_THEME_SAVED}" 8 50
+}
+
+change_language() {
+    local current_lang="\$(grep '^MOTDSET_LANG=' "\${CONFIG}" 2>/dev/null | cut -d= -f2 | tr -d '\"' || echo 'ru')"
+    [[ -z "\${current_lang}" ]] && current_lang="ru"
+
+    local new_lang
+    new_lang=\$("\${WHIPTAIL}" --title "\${MS_LANG_TITLE}" --menu "\${MS_LANG_PROMPT}" 10 50 2 \
+        "ru" "\${MS_LANG_RU}" \
+        "en" "\${MS_LANG_EN}" \
+        3>&1 1>&2 2>&3) || return
+
+    if /bin/grep -q '^MOTDSET_LANG=' "\${CONFIG}"; then
+        /bin/sed -i "s|^MOTDSET_LANG=.*|MOTDSET_LANG=\${new_lang}|" "\${CONFIG}"
+    else
+        echo "MOTDSET_LANG=\${new_lang}" >> "\${CONFIG}"
+    fi
+
+    load_motdset_lang "\${new_lang}"
+    "\${WHIPTAIL}" --title "\${MS_LANG_TITLE}" --msgbox "\${MS_LANG_SAVED}" 8 50
+}
+
+
+midas_set_config() {
+    local key="\$1" value="\$2" encoded
+    encoded=\$(printf '%q' "\$value")
+    if grep -q "^\${key}=" "\$CONFIG"; then
+        sed -i "s|^\${key}=.*|\${key}=\${encoded}|" "\$CONFIG"
+    else
+        printf '%s=%s\n' "\$key" "\$encoded" >> "\$CONFIG"
+    fi
+}
+
+midas_rename_hostname() {
+    local old new old_static tmp cfg
+    old=\$(hostname)
+    new=\$(whiptail --title "\${MS_HOSTNAME}" --inputbox \
+        "Current: \$old\nNew hostname (a-z, 0-9, hyphen):" 11 68 "\$old" 3>&1 1>&2 2>&3) || return
+    [[ "\$new" == "\$old" ]] && return
+    if [[ ! "\$new" =~ ^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$ ]]; then
+        whiptail --msgbox "Invalid hostname" 8 55; return
+    fi
+    whiptail --yesno "\${MS_IDENTITY_WARNING}\n\$old → \$new" 12 72 || return
+    mkdir -p /var/backups/midas-motd
+    local backup="/var/backups/midas-motd/hostname-\$(date +%Y%m%d-%H%M%S)"
+    mkdir -p "\$backup"
+    cp -a /etc/hostname "\$backup/" 2>/dev/null || true
+    cp -a /etc/hosts "\$backup/" 2>/dev/null || true
+    if [[ -e /etc/cloud/cloud.cfg.d/99-zz-midas-hostname.cfg ]]; then
+        cp -a /etc/cloud/cloud.cfg.d/99-zz-midas-hostname.cfg "\$backup/cloud.cfg" || true
+    fi
+    if ! hostnamectl set-hostname "\$new"; then
+        whiptail --msgbox "hostnamectl failed" 8 55; return
+    fi
+    if [[ -f /etc/hosts ]]; then
+        tmp=\$(mktemp)
+        # Replace exact old hostname tokens, retaining all IPs and aliases.
+        awk -v old="\$old" -v new="\$new" '{
+          if (\$1 !~ /^#/) for(i=2;i<=NF;i++) if(\$i==old) \$i=new
+          print
+        }' /etc/hosts > "\$tmp"
+        cat "\$tmp" > /etc/hosts
+        rm -f "\$tmp"
+    fi
+    if [[ -d /etc/cloud/cloud.cfg.d ]]; then
+        printf 'preserve_hostname: true\n' > /etc/cloud/cloud.cfg.d/99-zz-midas-hostname.cfg
+    fi
+    if [[ "\$(hostname)" != "\$new" ]]; then
+        hostnamectl set-hostname "\$old" || true
+        [[ ! -f "\$backup/hosts" ]] || cp -a "\$backup/hosts" /etc/hosts
+        [[ ! -f "\$backup/hostname" ]] || cp -a "\$backup/hostname" /etc/hostname
+        whiptail --msgbox "Hostname verification failed; rollback attempted" 9 65
+        return
+    fi
+    whiptail --msgbox "Hostname: \$new\nReopen your SSH session to update the shell prompt." 9 68
+}
+
+configure_identity() {
+    local choice val
+    while true; do
+        choice=\$(whiptail --title "\${MS_IDENTITY_TITLE}" --menu \
+            "\${MS_MENU_PROMPT}" 18 75 8 \
+            "1" "\${MS_HOSTNAME}" \
+            "2" "\${MS_SERVER_LABEL}" \
+            "3" "\${MS_HOSTING_NAME}" \
+            "4" "\${MS_HOSTING_REFRESH}" \
+            "0" "\${MS_MENU_EXIT}" 3>&1 1>&2 2>&3) || break
+        case "\$choice" in
+            1) midas_rename_hostname ;;
+            2) val=\$(whiptail --inputbox "\${MS_SERVER_LABEL} (empty = hostname)" 10 70 \
+                "" 3>&1 1>&2 2>&3) || continue
+               midas_set_config SERVER_LABEL "\$val" ;;
+            3) val=\$(whiptail --inputbox "\${MS_HOSTING_NAME} (empty = automatic)" 10 70 \
+                "" 3>&1 1>&2 2>&3) || continue
+               midas_set_config HOSTING_NAME "\$val" ;;
+            4) if command -v curl >/dev/null 2>&1; then
+                   val=\$(curl -4 -fsS --connect-timeout 2 --max-time 4 https://ipinfo.io/org 2>/dev/null | head -c 120 || true)
+                   [[ -z "\$val" ]] || printf '%s\n' "\$val" > /var/cache/midas-motd-provider
+               fi
+               whiptail --msgbox "\${val:-Unknown}" 9 65 ;;
+            0) break ;;
+        esac
+    done
+}
+
+show_main_menu() {
+    while true; do
+        CHOICE=\$("\${WHIPTAIL}" --title "\${MS_TITLE}" --menu \
+        "\${MS_MENU_PROMPT}" 19 70 8 \
+        "1" "\${MS_MENU_CONFIGURE}" \
+        "2" "\${MS_MENU_SERVICES}" \
+        "3" "\${MS_MENU_UNINSTALL}" \
+        "4" "\${MS_MENU_STATUS}" \
+        "5" "\${MS_MENU_THEME}" \
+        "6" "Language / Язык" \
+        "7" "\${MS_MENU_IDENTITY}" \
+        "8" "\${MS_MENU_EXIT}" \
+        3>&1 1>&2 2>&3)
+        
+        case \$CHOICE in
+            1) configure_motd_display ;;
+            2) manage_services_status_menu ;;
+            3) confirm_uninstall ;;
+            4) show_installation_status ;;
+            5) change_theme ;;
+            6) change_language ;;
+            7) configure_identity ;;
+            8) exit 0 ;;
+            *) exit 0 ;;
+        esac
+    done
+}
+
+configure_motd_display() {
+    if [[ ! -f "\${CONFIG}" ]]; then
+        "\${WHIPTAIL}" --title "Error" --msgbox "\${MS_ERROR_NO_CONFIG}: \${CONFIG}" 8 60
+        return
+    fi
+    
+    CHOICES=\$("\${WHIPTAIL}" --title "\${MS_DISPLAY_TITLE}" --checklist \
+    "\${MS_DISPLAY_PROMPT}" 24 80 13 \
+    "SHOW_LOGO"               "\${MS_DISPLAY_LOGO}"          "\$(check_setting 'SHOW_LOGO')" \
+    "SHOW_HOSTING"            "Хостер / Hosting"           "\$(check_setting 'SHOW_HOSTING')" \
+    "SHOW_STORAGE_MODEL"      "SSD / Disk model"           "\$(check_setting 'SHOW_STORAGE_MODEL')" \
+    "SHOW_CPU"                "\${MS_DISPLAY_CPU}"           "\$(check_setting 'SHOW_CPU')" \
+    "SHOW_MEM"                "\${MS_DISPLAY_MEM}"           "\$(check_setting 'SHOW_MEM')" \
+    "SHOW_NET"                "\${MS_DISPLAY_NET}"           "\$(check_setting 'SHOW_NET')" \
+    "SHOW_FIREWALL"           "\${MS_DISPLAY_FW}"            "\$(check_setting 'SHOW_FIREWALL')" \
+    "SHOW_FIREWALL_RULES"     "\${MS_DISPLAY_FW_RULES}"      "\$(check_setting 'SHOW_FIREWALL_RULES')" \
+    "SHOW_DOCKER"             "\${MS_DISPLAY_DOCKER}"        "\$(check_setting 'SHOW_DOCKER')" \
+    "SHOW_DOCKER_STATUS"      "\${MS_DISPLAY_DOCKER_STATUS}" "\$(check_setting 'SHOW_DOCKER_STATUS')" \
+    "SHOW_DOCKER_RUNNING_LIST" "\${MS_DISPLAY_DOCKER_LIST}"  "\$(check_setting 'SHOW_DOCKER_RUNNING_LIST')" \
+    "SHOW_SECURITY"           "\${MS_DISPLAY_SECURITY}"      "\$(check_setting 'SHOW_SECURITY')" \
+    "SHOW_UPDATES"            "\${MS_DISPLAY_UPDATES}"       "\$(check_setting 'SHOW_UPDATES')" \
+    3>&1 1>&2 2>&3)
+    
+    if [[ \$? -eq 0 ]]; then
+        local VARIABLES=(
+            "SHOW_LOGO" "SHOW_HOSTING" "SHOW_STORAGE_MODEL" "SHOW_CPU" "SHOW_MEM" "SHOW_NET"
+            "SHOW_FIREWALL" "SHOW_FIREWALL_RULES"
+            "SHOW_DOCKER" "SHOW_DOCKER_STATUS" "SHOW_DOCKER_RUNNING_LIST"
+            "SHOW_SECURITY" "SHOW_UPDATES"
+        )
+        
+        for var in "\${VARIABLES[@]}"; do
+            if echo "\${CHOICES}" | /bin/grep -q "\${var}"; then
+                /bin/sed -i "s/^\${var}=.*/\${var}=true/" "\${CONFIG}"
+            else
+                /bin/sed -i "s/^\${var}=.*/\${var}=false/" "\${CONFIG}"
+            fi
+        done
+
+        if ! /bin/grep -q "^SHOW_SECURITY=" "\${CONFIG}"; then
+            if echo "\${CHOICES}" | /bin/grep -q "SHOW_SECURITY"; then
+                echo "SHOW_SECURITY=true" >> "\${CONFIG}"
+            else
+                echo "SHOW_SECURITY=false" >> "\${CONFIG}"
+            fi
+        fi
+        
+        "\${WHIPTAIL}" --title "OK" --msgbox "\${MS_SAVED}" 10 50
+    fi
+}
+
+manage_services_status_menu() {
+  while true; do
+    CHOICE=\$(whiptail --title "\${MS_SERVICES_TITLE}" --menu "\${MS_SERVICES_PROMPT}" 12 55 3 \
+      "1" "\${MS_SERVICES_TOGGLE}" \
+      "2" "\${MS_SERVICES_EDIT}" \
+      "0" "\${MS_SERVICES_BACK}" 3>&1 1>&2 2>&3)
+
+    exitstatus=\$?
+    if [ \$exitstatus != 0 ]; then
+      break
+    fi
+
+    case "\$CHOICE" in
+      "1") toggle_services_status ;;
+      "2") edit_services_list ;;
+      "0") break ;;
+    esac
+  done
+}
+
+toggle_services_status() {
+  source "\$CONFIG" || true
+
+  if [[ "\$SERVICES_STATUS_ENABLED" == "true" ]]; then
+    sed -i 's/^SERVICES_STATUS_ENABLED=true/SERVICES_STATUS_ENABLED=false/' "\$CONFIG"
+  else
+    if ! grep -q '^SERVICES_STATUS_ENABLED=' "\$CONFIG"; then
+      echo 'SERVICES_STATUS_ENABLED=true' >> "\$CONFIG"
+    else
+      sed -i 's/^SERVICES_STATUS_ENABLED=.*/SERVICES_STATUS_ENABLED=true/' "\$CONFIG"
+    fi
+  fi
+
+  whiptail --msgbox "\${MS_SERVICES_UPDATED}" 8 70
+}
+
+edit_services_list() {
+  local config_file="/etc/dist-motd.conf"
+
+  if [ ! -f "\$config_file" ]; then
+    echo 'SERVICES=()' > "\$config_file"
+  fi
+
+  nano "\$config_file"
+}
+
+confirm_uninstall() {
+    if ! check_backup_exists; then
+        "\${WHIPTAIL}" --title "Error" --msgbox "\${MS_UNINSTALL_NO_BACKUP}" 10 60
+        return
+    fi
+    
+    if "\${WHIPTAIL}" --title "\${MS_UNINSTALL_TITLE}" --yesno "\${MS_UNINSTALL_WARN}" 12 70; then
+        
+        (
+            echo "10"; echo "\${MS_UNINSTALL_STEP1}"
+            sleep 1
+            echo "40"; echo "\${MS_UNINSTALL_STEP2}"
+            sleep 1
+            echo "70"; echo "\${MS_UNINSTALL_STEP3}"
+            sleep 1
+            echo "90"; echo "\${MS_UNINSTALL_STEP4}"
+            sleep 1
+            echo "100"; echo "\${MS_UNINSTALL_STEP5}"
+            sleep 1
+        ) | "\${WHIPTAIL}" --title "\${MS_UNINSTALL_TITLE_GAUGE}" --gauge "\${MS_UNINSTALL_GAUGE}" 8 60 0
+        
+        if uninstall_custom_motd >/dev/null 2>&1; then
+            "\${WHIPTAIL}" --title "OK" --msgbox "\${MS_UNINSTALL_SUCCESS}" 10 50
+            exit 0
+        else
+            "\${WHIPTAIL}" --title "Error" --msgbox "\${MS_UNINSTALL_ERROR}" 8 50
+        fi
+    fi
+}
+
+show_installation_status() {
+    local status_info=""
+    
+    if check_backup_exists; then
+        status_info+="✓ \${MS_STATUS_INSTALLED}\n"
+        status_info+="✓ \${MS_STATUS_BACKUPS}: \${BACKUP_ROOT}\n"
+        
+        if [[ -f "\${CONFIG}" ]]; then
+            status_info+="✓ \${MS_STATUS_CONFIG}: \${CONFIG}\n"
+        else
+            status_info+="✗ \${MS_STATUS_CONFIG} not found\n"
+        fi
+        
+        if [[ -x "/etc/update-motd.d/00-dist-motd" ]]; then
+            status_info+="✓ \${MS_STATUS_SCRIPT_ACTIVE}\n"
+        else
+            status_info+="✗ \${MS_STATUS_SCRIPT_INACTIVE}\n"
+        fi
+        
+        if [[ -f "\${INSTALL_MARKER}" ]]; then
+            local install_date
+            install_date=\$(cat "\${INSTALL_MARKER}")
+            status_info+="📅 \${MS_STATUS_INSTALLED_DATE}: \${install_date}\n"
+        fi
+        
+    else
+        status_info+="✗ \${MS_STATUS_NOT_INSTALLED}\n"
+        status_info+="✗ \${MS_STATUS_NO_BACKUPS}\n"
+    fi
+    
+    "\${WHIPTAIL}" --title "\${MS_STATUS_TITLE}" --msgbox "\${status_info}" 15 70
+}
+
+if [[ "\${EUID}" -ne 0 ]]; then
+    "\${WHIPTAIL}" --title "Error" --msgbox "\${MS_ERROR_ROOT}" 8 50
+    exit 1
+fi
+
+if [[ ! -x "\${WHIPTAIL}" ]]; then
+    echo "\${MS_ERROR_NO_WHIPTAIL}" >&2
+    exit 1
+fi
+
+show_main_menu
+SETTINGS_EOF
+
+    "${CHMOD}" 755 "${CMD_SETTINGS}"
+    
+    if [[ ! -x "${CMD_SETTINGS}" ]]; then
+        log_error "${L_SETTINGS_CMD_FAIL}"
+        exit 1
+    fi
+}
+
+create_motd_command() {
+    log_info "${L_MOTD_CMD_START}"
+    
+    cat > "${CMD_MOTD}" << 'CMD_EOF'
+#!/bin/bash
+
+readonly MOTD_SCRIPT="/etc/update-motd.d/00-dist-motd"
+
+if [[ -x "${MOTD_SCRIPT}" ]]; then
+    "${MOTD_SCRIPT}"
+else
+    echo "MOTD скрипт не найден или недоступен" >&2
+    exit 1
+fi
+CMD_EOF
+
+    "${CHMOD}" 755 "${CMD_MOTD}"
+    
+    if [[ ! -x "${CMD_MOTD}" ]]; then
+        log_error "${L_MOTD_CMD_FAIL}"
+        exit 1
+    fi
+}
+
+configure_pam_ssh() {
+    log_info "${L_PAM_START}"
+    
+    local pam_files=("/etc/pam.d/sshd" "/etc/pam.d/login")
+    for pam_file in "${pam_files[@]}"; do
+        if [[ -f "${pam_file}" ]]; then
+            if ! "${GREP}" -q "session optional pam_motd.so noupdate" "${pam_file}"; then
+                echo "session optional pam_motd.so noupdate" >> "${pam_file}"
+            fi
+        fi
+    done
+    
+    local sshd_config="/etc/ssh/sshd_config"
+    if [[ -f "${sshd_config}" ]]; then
+        if "${GREP}" -q "^PrintMotd" "${sshd_config}"; then
+            "${SED}" -i 's/^PrintMotd.*/PrintMotd no/' "${sshd_config}"
+        else
+            echo "PrintMotd no" >> "${sshd_config}"
+        fi
+        
+        if "${GREP}" -q "^PrintLastLog" "${sshd_config}"; then
+            "${SED}" -i 's/^PrintLastLog.*/PrintLastLog no/' "${sshd_config}"
+        else
+            echo "PrintLastLog no" >> "${sshd_config}"
+        fi
+    fi
+    
+    for pam_file in "${pam_files[@]}"; do
+        if [[ -f "${pam_file}" ]]; then
+            "${SED}" -i 's/^\(session.*pam_lastlog.so.*\)/#\1/' "${pam_file}"
+        fi
+    done
+}
+
+restart_ssh_service() {
+    local ssh_restarted=false
+    
+    if "${SYSTEMCTL}" is-active ssh >/dev/null 2>&1; then
+        if "${SYSTEMCTL}" reload ssh; then
+            ssh_restarted=true
+        fi
+    elif "${SYSTEMCTL}" is-active sshd >/dev/null 2>&1; then
+        if "${SYSTEMCTL}" reload sshd; then
+            ssh_restarted=true
+        fi
+    fi
+    
+    if [[ "${ssh_restarted}" = false ]]; then
+        log_warn "${L_SSH_RESTART_FAIL}"
+    fi
+}
+
+finalize_setup() {
+    log_info "${L_FINALIZE_START}"
+    
+    "${SED}" -i 's|^#\s*\(session\s\+optional\s\+pam_motd\.so\s\+motd=/run/motd\.dynamic\)|\1|' /etc/pam.d/sshd 2>/dev/null || true
+    "${SED}" -i 's|^#\s*\(session\s\+optional\s\+pam_motd\.so\s\+noupdate\)|\1|' /etc/pam.d/sshd 2>/dev/null || true
+    
+    "${CHMOD}" -x /etc/update-motd.d/* 2>/dev/null || true
+    "${CHMOD}" +x "${MOTD_SCRIPT}"
+    
+    "${RM}" -f /etc/motd 2>/dev/null || true
+    "${LN}" -sf /var/run/motd /etc/motd 2>/dev/null || true
+}
+
+main() {
+    log_info "${L_INSTALL_START}"
+    
+    check_root
+    check_existing_installation
+    validate_system
+    
+    create_complete_directory_backup
+    
+    install_dependencies
+    create_config
+    create_motd_script
+    create_settings_command
+    create_motd_command
+    configure_pam_ssh
+    restart_ssh_service
+    finalize_setup
+    if [[ -r /dev/tty ]]; then
+        if whiptail --title "MIDAS MOTD" --yesno             "Настроить имя сервера и название хостера сейчас? / Configure hostname and hosting now?" 10 70 </dev/tty; then
+            /usr/local/bin/motd-set </dev/tty || true
+        fi
+    fi
+
+    log_info "${L_INSTALL_DONE}"
+    echo ""
+    echo "========================================================="
+    echo "             🎉 ${L_BANNER_TITLE}"
+    echo "========================================================="
+    echo ""
+    echo "📋 ${L_BANNER_COMMANDS}"
+    echo "${L_BANNER_MOTD}"
+    echo "${L_BANNER_SET}"
+    echo ""
+    echo "💾 ${L_BANNER_BACKUPS}: ${BACKUP_ROOT}"
+    echo "🔄 ${L_BANNER_REMOVE}"
+    echo ""
+    echo "🕑 ${L_BANNER_TZ}"
+    echo "  ${L_BANNER_TZ_CMD} $(tput bold)$(tput setaf 2)timedatectl set-timezone Europe/Moscow$(tput sgr0)"
+    echo "  ${L_BANNER_TZ_NOTE}"
+    echo ""
+}
+
+main "$@"
+
