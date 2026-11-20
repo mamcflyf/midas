@@ -492,7 +492,7 @@ MOTDSET_LANG=${INSTALLER_LANG}
 COLOR_THEME=${THEME_CHOICE}
 SHOW_LOGO=true
 SHOW_HOSTING=true
-SHOW_STORAGE_MODEL=true
+SHOW_STORAGE_MODEL=false
 SERVER_LABEL=""
 HOSTING_NAME=""
 SHOW_CPU=true
@@ -533,7 +533,7 @@ if [[ -f "/etc/dist-motd.conf" ]]; then
 else
     SHOW_LOGO=true
     SHOW_HOSTING=true
-    SHOW_STORAGE_MODEL=true
+    SHOW_STORAGE_MODEL=false
     SERVER_LABEL=""
     HOSTING_NAME=""
     SHOW_CPU=true
@@ -754,18 +754,18 @@ midas_provider() {
     if [[ -s "$cache" ]]; then
         cat "$cache"
     else
-        printf '%s' "$(midas_label 'Не определён' 'Unknown')"
+        printf '%s' "Unknown"
     fi
 }
 
 midas_extra_system() {
     if [[ -n "${SERVER_LABEL:-}" ]]; then
         printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" \
-            "$(midas_label 'Название сервера:' 'Server name:')" "$SERVER_LABEL"
+            "Server name:" "$SERVER_LABEL"
     fi
     if [[ "${SHOW_HOSTING:-true}" == "true" ]]; then
         printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" \
-            "$(midas_label 'Хостер:' 'Hosting:')" "$(midas_provider)"
+            "Hosting:" "$(midas_provider)"
     fi
 }
 
@@ -1125,7 +1125,6 @@ main() {
     midas_extra_system
     show_cpu_info
     show_memory_info
-    midas_storage_model
     show_network_info
     show_firewall_info
     show_docker_info
