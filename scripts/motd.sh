@@ -5,7 +5,7 @@ set -Eeuo pipefail
 [[ -f /etc/debian_version ]] || { echo 'Debian/Ubuntu only' >&2; exit 1; }
 if ! command -v whiptail >/dev/null 2>&1 && ! command -v dialog >/dev/null 2>&1; then
   echo 'Installing whiptail for interactive menu (maximum 60 seconds)...'
-  timeout 60 apt-get install -y -qq whiptail >/dev/null 2>&1 || echo 'whiptail unavailable: text menu fallback'
+  DEBIAN_FRONTEND=noninteractive timeout 30 apt-get install -y -qq whiptail >/dev/null 2>&1 || echo 'whiptail unavailable: text menu fallback'
 fi
 BASE=/opt/midas-motd
 CFG=/etc/midas-motd.conf
@@ -46,7 +46,9 @@ else
  PINK=$'\033[1;35m'; ORANGE=$'\033[1;33m'; RESET=$'\033[0m'
 fi
 # Distillium-style fixed columns and progress bars
-field() { printf '%b%-22s%b %b%s%b\n' "$BLUE" "$1" "$RESET" "$2" "$3" "$RESET"; }
+# Width-aware labels: UTF-8 Cyrillic is multi-byte, but each letter is one terminal cell.
+label() { local text=$1; printf '%b%s%b' "$BLUE" "$text" "$RESET"; local pad=$((22-${#text})); ((pad<1)) && pad=1; printf '%*s' "$pad" ''; }
+field() { label "$1"; printf '%b%s%b\n' "$2" "$3" "$RESET"; }
 section() { printf '\n%b• %s%b\n' "$WHITE" "$1" "$RESET"; }
 bar() {
  local used=${1:-0} total=${2:-0} width=30 filled=0 pct=0 i
@@ -54,7 +56,7 @@ bar() {
  ((pct>100)) && pct=100
  printf '%b[' "$BLUE"
  for ((i=0;i<width;i++)); do
-  if ((i<filled)); then printf '%b━' "$GREEN"; else printf '%b━' "$BLUE"; fi
+  if ((i<filled)); then printf '%b=' "$GREEN"; else printf '%b-' "$BLUE"; fi
  done
  printf '%b] %b%s%%%b' "$BLUE" "$GREEN" "$pct" "$RESET"
 }
@@ -64,7 +66,7 @@ printf '%b====================================%b\n' "$WHITE" "$RESET"
 section "$(trn 'Сведения о сеансе' 'Session Details')"
 field "$(trn 'Пользователь:' 'User:')" "$ORANGE" "$(id -un)"
 field "$(trn 'Имя сервера:' 'Server:')" "$GREEN" "${SERVER_LABEL:-$(hostname)}"
-field "$(trn 'Время работы:' 'Uptime:')" "$GREEN" "$(uptime -p 2>/dev/null | sed 's/^up //')"
+if flag SHOW_UPTIME; then field "$(trn 'Время работы:' 'Uptime:')" "$GREEN" "$(uptime -p 2>/dev/null | sed 's/^up //')"; fi
 section "$(trn 'Сведения о системе' 'System Details')"
 field "$(trn 'Имя машины:' 'Hostname:')" "$GREEN" "$(hostname)"
 if flag SHOW_OS; then . /etc/os-release 2>/dev/null || true; field "$(trn 'ОС:' 'OS:')" "$GREEN" "${PRETTY_NAME:-Linux}"; fi
@@ -75,28 +77,34 @@ for fam in 4 6; do
  field "External IP (v$fam):" "$PINK" "${addr:-N/A}"
 done
 if flag SHOW_KERNEL; then field "$(trn 'Ядро:' 'Kernel:')" "$GREEN" "$(uname -r)"; fi
-if flag SHOW_HOSTING; then field "$(trn 'Хостер:' 'Hosting:')" "$GREEN" "$(provider)"; fi
+if flag SHOW_HOSTING; then field "$(trn 'Хостер:' 'Hosting:')" "$GREEN" "$(provider || true)"; fi
 if flag SHOW_CPU; then
  section 'CPU'
  cpu=$(lscpu 2>/dev/null | sed -n 's/^Model name:[[:space:]]*//p' | head -n1)
  [[ -n $cpu ]] || cpu=$(awk -F: '/model name/ {gsub(/^[ \t]+/,"",$2);print $2;exit}' /proc/cpuinfo)
  field "$(trn 'Модель:' 'Model:')" "$ORANGE" "${cpu:-Unknown} ($(nproc 2>/dev/null || echo '?') vCPU)"
- cpu_load=$(awk '{print $1}' /proc/loadavg)
- cpu_pct=$(awk -v l="$cpu_load" -v n="$(nproc 2>/dev/null || echo 1)" 'BEGIN{p=int(100*l/n);if(p>100)p=100;print p}')
- printf '%b%-22s%b ' "$BLUE" "$(trn 'Нагрузка:' 'Usage:')" "$RESET"
- bar "$cpu_pct" 100; printf '  %s\n' "$(trn 'оценка по loadavg' 'loadavg estimate')"
- field 'Load average:' "$GREEN" "$(cut -d' ' -f1-3 /proc/loadavg)"
+ # Actual short CPU utilization sample from /proc/stat (not load average).
+ read -r _ u n sy idle io irq soft steal _ < /proc/stat
+ t1=$((u+n+sy+idle+io+irq+soft+steal)); idle1=$((idle+io))
+ sleep 0.15
+ read -r _ u n sy idle io irq soft steal _ < /proc/stat
+ t2=$((u+n+sy+idle+io+irq+soft+steal)); idle2=$((idle+io))
+ delta=$((t2-t1)); cpu_pct=0
+ if ((delta>0)); then cpu_pct=$((100*(delta-idle2+idle1)/delta)); fi
+ label "$(trn 'Нагрузка:' 'Usage:')"
+ bar "$cpu_pct" 100; printf '\n'
+ if flag SHOW_LOAD; then field 'Load average:' "$GREEN" "$(cut -d' ' -f1-3 /proc/loadavg)"; fi
 fi
 if flag SHOW_RAM || flag SHOW_DISK; then section "$(trn 'ОЗУ и диск' 'RAM & Disk')"; fi
 if flag SHOW_RAM; then
  read -r mem_total mem_avail < <(awk '/^MemTotal:/ {t=$2} /^MemAvailable:/ {a=$2} END {print t,a}' /proc/meminfo)
  mem_used=$((mem_total-mem_avail))
- printf '%b%-22s%b ' "$BLUE" 'RAM:' "$RESET"; bar "$mem_used" "$mem_total"
+ label 'RAM:'; bar "$mem_used" "$mem_total"
  printf ' %b(%s / %s)%b\n' "$GREEN" "$(human_bytes $((mem_used*1024)))" "$(human_bytes $((mem_total*1024)))" "$RESET"
 fi
 if flag SHOW_DISK; then
  read -r disk_total disk_used < <(df -B1 -P / | awk 'NR==2{print $2,$3}')
- printf '%b%-22s%b ' "$BLUE" "$(trn 'Диск:' 'Disk:')" "$RESET"; bar "$disk_used" "$disk_total"
+ label "$(trn 'Диск:' 'Disk:')"; bar "$disk_used" "$disk_total"
  printf ' %b(%s / %s)%b\n' "$GREEN" "$(human_bytes "$disk_used")" "$(human_bytes "$disk_total")" "$RESET"
  dev=$(findmnt -n -o SOURCE / 2>/dev/null || true)
  parent=$(lsblk -no PKNAME "$dev" 2>/dev/null | head -n1 || true)
@@ -386,9 +394,8 @@ for f in /etc/update-motd.d/00-header /etc/update-motd.d/10-help-text /etc/updat
 done
 # Do not edit PAM, SSH or restart sshd: existing pam_motd will execute update-motd.d.
 touch "$BASE/installed"
-if [[ ! -f "$BASE/setup-complete" && -r /dev/tty ]]; then
- printf '\nMIDAS MOTD: first-time setup / Первоначальная настройка\n'
- /opt/midas-motd/settings.sh </dev/tty || true
+if [[ ! -f "$BASE/setup-complete" ]]; then
  touch "$BASE/setup-complete"
+ printf '\nУстановка завершена. Для настройки запустите: motd-set\n'
 fi
 printf '\nCommands: motd, motd-set\n'
