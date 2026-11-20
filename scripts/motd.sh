@@ -1,453 +1,265 @@
 #!/usr/bin/env bash
-# One-command installer: Distillium MOTD + MIDAS extension
+# MIDAS MOTD - self-contained Debian/Ubuntu installer (MIT)
 set -Eeuo pipefail
-BASE_URL='https://raw.githubusercontent.com/distillium/motd/main/install-motd.sh'
-EXTRA_CONF=/etc/motd-midas.conf
-EXTRA_SCRIPT=/etc/update-motd.d/01-midas-extra
-SETTINGS=/usr/local/bin/motd-set
-ORIGINAL=/usr/local/bin/motd-set-distillium
-SELF=/usr/local/sbin/motd-midas-installer
-
-[[ $EUID -eq 0 ]] || { echo 'Run as root' >&2; exit 1; }
+[[ $EUID == 0 ]] || { echo 'Run as root / Запустите от root' >&2; exit 1; }
 [[ -f /etc/debian_version ]] || { echo 'Debian/Ubuntu only' >&2; exit 1; }
-
-if [[ ${1:-} == --uninstall-extension ]]; then
-  if [[ -e "$ORIGINAL" ]]; then mv -f "$ORIGINAL" "$SETTINGS"; fi
-  if [[ -f /opt/motd/midas-distillium-original.sh ]]; then cp -a /opt/motd/midas-distillium-original.sh /etc/update-motd.d/00-dist-motd; rm -f /opt/motd/midas-distillium-original.sh; fi
-  rm -f "$EXTRA_SCRIPT" "$EXTRA_CONF" "$SELF" /usr/local/sbin/motd-safe-hostname /usr/local/sbin/motd-midas-translate
-  echo 'Extension removed; original Distillium retained.'
-  exit 0
+BASE=/opt/midas-motd
+CFG=/etc/midas-motd.conf
+MOTD=/etc/update-motd.d/00-midas
+BACK=$BASE/backup
+mkdir -p "$BASE" "$BACK"
+if [[ ! -f $BASE/installed ]]; then
+  for f in /etc/update-motd.d/00-header /etc/update-motd.d/10-help-text /etc/update-motd.d/50-motd-news /etc/update-motd.d/00-dist-motd /usr/local/bin/motd /usr/local/bin/motd-set; do
+    [[ ! -e $f ]] || { mkdir -p "$BACK$(dirname "$f")"; cp -a "$f" "$BACK$f"; }
+  done
 fi
-
-# Keep stdin available for interactive upstream installer even when invoked via curl | bash.
-if [[ -r /dev/tty ]]; then
-  exec 3</dev/tty
-else
-  exec 3</dev/null
+cat > "$BASE/lib.sh" <<'LIB'
+#!/usr/bin/env bash
+CFG=/etc/midas-motd.conf
+# Only root-controlled configuration is sourced.
+LANGUAGE=ru; THEME=cyan; SERVER_LABEL=''; HOSTING_NAME=''
+SHOW_IP4=1; SHOW_IP6=1; SHOW_HOSTING=1; SHOW_KERNEL=1; SHOW_UPDATES=1
+SHOW_UFW=1; SHOW_CPU=1; SHOW_RAM=1; SHOW_DISK=1; SHOW_DOCKER=1
+SHOW_UPTIME=1; SHOW_LOAD=1; SHOW_OS=1; SHOW_LASTLOGIN=0
+[[ ! -r $CFG ]] || source "$CFG"
+trn() { if [[ $LANGUAGE == ru ]]; then printf '%s' "$1"; else printf '%s' "$2"; fi; }
+color() { case $THEME in green) printf '\033[1;32m';; purple) printf '\033[1;35m';; blue) printf '\033[1;34m';; none) printf '';; *) printf '\033[1;36m';; esac; }
+reset() { printf '\033[0m'; }
+line() { printf '  %-17s %s\n' "$1" "$2"; }
+heading() { printf '\n'; color; printf '  ── %s ──────────────────────────────\n' "$1"; reset; }
+flag() { [[ ${!1:-0} == 1 ]]; }
+# The external lookup is done by a cache refresh command, never on SSH login.
+provider() { [[ -n $HOSTING_NAME ]] && printf '%s' "$HOSTING_NAME" || { [[ ! -s /var/cache/midas-motd-provider ]] || head -n1 /var/cache/midas-motd-provider; }; }
+LIB
+cat > "$BASE/render.sh" <<'RENDER'
+#!/usr/bin/env bash
+set -u
+source /opt/midas-motd/lib.sh
+export LC_ALL=C
+printf '\n'; color; printf '  ◆ MIDAS MOTD'; reset; printf '  |  %s\n' "${SERVER_LABEL:-$(hostname)}"
+heading "$(trn 'СИСТЕМА' 'SYSTEM')"
+if flag SHOW_OS; then . /etc/os-release 2>/dev/null || true; line "$(trn 'ОС' 'OS')" "${PRETTY_NAME:-Linux}"; fi
+if flag SHOW_KERNEL; then line "$(trn 'Ядро' 'Kernel')" "$(uname -r)"; fi
+if flag SHOW_UPTIME; then line "$(trn 'Время работы' 'Uptime')" "$(uptime -p 2>/dev/null || echo '?')"; fi
+if flag SHOW_LOAD; then line "$(trn 'Нагрузка' 'Load')" "$(cut -d' ' -f1-3 /proc/loadavg 2>/dev/null)"; fi
+if flag SHOW_CPU; then
+ cpu=$(lscpu 2>/dev/null | sed -n 's/^Model name:[[:space:]]*//p' | head -n1)
+ [[ -n $cpu ]] || cpu=$(awk -F: '/model name/ {gsub(/^[ \t]+/,"",$2);print $2;exit}' /proc/cpuinfo)
+ line 'CPU' "${cpu:-Unknown} ($(nproc 2>/dev/null || echo '?') vCPU)"
 fi
-
-# Install upstream only if not already installed. No piping remote code directly to bash.
-if [[ ! -x /etc/update-motd.d/00-dist-motd || ! -x "$SETTINGS" ]]; then
-  command -v curl >/dev/null || { echo 'curl is required' >&2; exit 1; }
-  tmp=$(mktemp)
-  trap 'rm -f "${tmp:-}"' EXIT
-  curl -fLSs --retry 2 --connect-timeout 10 --max-time 60 "$BASE_URL" -o "$tmp"
-  bash -n "$tmp"
-  echo 'Установка оригинального Distillium MOTD...'
-  bash "$tmp" <&3
+if flag SHOW_RAM; then line 'RAM' "$(free -h 2>/dev/null | awk '/^Mem:/ {print $3 " / " $2 " (available " $7 ")"}')"; fi
+if flag SHOW_DISK; then
+ dev=$(findmnt -n -o SOURCE / 2>/dev/null || true)
+ parent=$(lsblk -no PKNAME "$dev" 2>/dev/null | head -n1 || true)
+ [[ -n $parent ]] || parent=$(lsblk -no NAME "$dev" 2>/dev/null | head -n1 || true)
+ model='Virtual / Unknown'; transport=''
+ if [[ -n $parent && -b /dev/$parent ]]; then
+   value=$(lsblk -dn -o MODEL "/dev/$parent" 2>/dev/null | xargs || true)
+   [[ -z $value ]] || model=$value
+   transport=$(lsblk -dn -o TRAN "/dev/$parent" 2>/dev/null | xargs || true)
+ fi
+ line "$(trn 'Накопитель' 'Storage')" "$model${transport:+ ($transport)}"
+ line "$(trn 'Диск /' 'Disk /')" "$(df -hP / | awk 'NR==2 {print $3 " / " $2 " (" $5 ")"}')"
 fi
-
-[[ -x "$SETTINGS" || -e "$ORIGINAL" ]] || { echo 'Distillium motd-set not found' >&2; exit 1; }
-
-if [[ ! -e "$EXTRA_CONF" ]]; then
-cat > "$EXTRA_CONF" <<'CONFIG'
-# MIDAS MOTD extension configuration
-SERVER_LABEL=""
-LANGUAGE="ru"
-HOSTING_NAME=""
-SHOW_IP=1
+heading "$(trn 'СЕТЬ' 'NETWORK')"
+for fam in 4 6; do
+ flag "SHOW_IP$fam" || continue
+ if [[ $fam == 4 ]]; then dest=1.1.1.1; else dest=2606:4700:4700::1111; fi
+ addr=$(ip -"$fam" route get "$dest" 2>/dev/null | sed -n 's/.* src \([^ ]*\).*/\1/p' | head -n1)
+ line "IPv$fam" "${addr:-$(trn 'Недоступен' 'Unavailable')}"
+done
+if flag SHOW_HOSTING; then line "$(trn 'Хостер' 'Hosting')" "$(provider)"; fi
+heading "$(trn 'БЕЗОПАСНОСТЬ' 'SECURITY')"
+if flag SHOW_UFW; then
+ if ! command -v ufw >/dev/null 2>&1; then st=$(trn 'Не установлен' 'Not installed')
+ elif ufw status 2>/dev/null | grep -q '^Status: active'; then st=$(trn 'ВКЛЮЧЁН' 'ACTIVE')
+ else st=$(trn 'ВЫКЛЮЧЕН' 'INACTIVE'); fi
+ line UFW "$st"
+fi
+if flag SHOW_UPDATES; then
+ count=$(apt list --upgradable 2>/dev/null | awk 'NR>1 && /\[upgradable from:/ {n++} END {print n+0}')
+ line "$(trn 'Обновления' 'Updates')" "$count $(trn 'пакетов (кэш APT)' 'packages (APT cache)')"
+fi
+if flag SHOW_DOCKER && command -v docker >/dev/null 2>&1; then
+ running=$(timeout 2 docker ps -q 2>/dev/null | wc -l)
+ line Docker "$running $(trn 'запущено' 'running')"
+fi
+printf '\n'
+RENDER
+cat > "$BASE/settings.sh" <<'SETTINGS'
+#!/usr/bin/env bash
+set -Eeuo pipefail
+[[ $EUID == 0 ]] || { echo 'Root required'; exit 1; }
+source /opt/midas-motd/lib.sh
+TTY=/dev/tty
+[[ -r $TTY ]] || { echo 'Interactive terminal required'; exit 1; }
+ask() { read -r -p "$1" REPLY < "$TTY"; }
+write_setting() {
+ local key=$1 value=$2 temp
+ [[ $key =~ ^[A-Z][A-Z0-9_]*$ ]] || return 1
+ temp=$(mktemp)
+ if [[ -f $CFG ]]; then grep -v -E "^${key}=" "$CFG" > "$temp" || true; fi
+ printf '%s=%q\n' "$key" "$value" >> "$temp"
+ chmod 600 "$temp"; mv "$temp" "$CFG"
+ printf -v "$key" '%s' "$value"
+}
+rename_host() {
+ local new old backup cloud_file=/etc/cloud/cloud.cfg.d/99-zz-midas-hostname.cfg
+ old=$(hostname)
+ printf '%s: %s\n' "$(trn 'Текущее имя' 'Current hostname')" "$old"
+ ask "$(trn 'Новое имя (пусто = отмена)' 'New hostname (empty = cancel)'): "
+ new=${REPLY,,}; [[ -n $new ]] || return 0
+ [[ $new =~ ^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$ ]] || { echo 'Invalid hostname'; return 1; }
+ [[ $new != "$old" ]] || return 0
+ printf '%s\n' "$(trn 'Внимание: проверьте зависимости сервисов от старого hostname.' 'Warning: check services that depend on the old hostname.')"
+ ask "$(trn 'Введите YES для подтверждения' 'Type YES to confirm'): "
+ [[ $REPLY == YES ]] || return 0
+ backup=$(mktemp -d /root/midas-hostname-backup.XXXXXXXX)
+ cp -a /etc/hostname "$backup/hostname" 2>/dev/null || true
+ cp -a /etc/hosts "$backup/hosts"
+ if [[ -f /etc/cloud/cloud.cfg ]]; then
+   mkdir -p /etc/cloud/cloud.cfg.d
+   if [[ -e $cloud_file ]]; then cp -a "$cloud_file" "$backup/cloud"; else touch "$backup/cloud-absent"; fi
+ fi
+ if ! hostnamectl set-hostname "$new"; then echo 'hostnamectl failed'; return 1; fi
+ if ! NEW_NAME="$new" OLD_NAME="$old" python3 - <<'PY'
+import os
+from pathlib import Path
+p=Path('/etc/hosts')
+old=os.environ['OLD_NAME']; new=os.environ['NEW_NAME']
+lines=[]; found=False
+for line in p.read_text().splitlines(keepends=True):
+    parts=line.partition('#')
+    fields=parts[0].split()
+    if fields and fields[0]=='127.0.1.1':
+        aliases=[new]+[x for x in fields[1:] if x not in (old,new)]
+        line='\t'.join(['127.0.1.1']+aliases)+(' #'+parts[2].rstrip('\n') if parts[1] else '')+'\n'
+        found=True
+    lines.append(line)
+if not found: lines.append('127.0.1.1\t'+new+'\n')
+p.write_text(''.join(lines))
+PY
+ then
+   cp -a "$backup/hosts" /etc/hosts; hostnamectl set-hostname "$old" || true; return 1
+ fi
+ if [[ -f /etc/cloud/cloud.cfg ]]; then
+   printf '# MIDAS MOTD: preserve manually configured hostname\npreserve_hostname: true\n' > "$cloud_file"
+ fi
+ if [[ $(hostname) != "$new" ]]; then
+   cp -a "$backup/hosts" /etc/hosts
+   [[ ! -f $backup/hostname ]] || cp -a "$backup/hostname" /etc/hostname
+   if [[ -f $backup/cloud ]]; then cp -a "$backup/cloud" "$cloud_file"; elif [[ -f $backup/cloud-absent ]]; then rm -f "$cloud_file"; fi
+   hostnamectl set-hostname "$old" || true
+   echo 'Verification failed; rolled back'; return 1
+ fi
+ echo "Hostname: $old -> $new"
+ echo "Backup: $backup"
+}
+menu() {
+ while true; do
+  source /opt/midas-motd/lib.sh
+  printf '\n=== MIDAS MOTD ===\n'
+  printf ' 1) %s: %s\n' "$(trn 'Язык' 'Language')" "$LANGUAGE"
+  printf ' 2) %s: %s\n' "$(trn 'Тема' 'Theme')" "$THEME"
+  printf ' 3) %s\n' "$(trn 'Изменить hostname Linux' 'Change Linux hostname')"
+  printf ' 4) %s: %s\n' "$(trn 'Название сервера' 'Server label')" "${SERVER_LABEL:-auto}"
+  printf ' 5) %s: %s\n' "$(trn 'Название хостера' 'Hosting name')" "${HOSTING_NAME:-auto}"
+  local i=6 k
+  for k in SHOW_IP4 SHOW_IP6 SHOW_HOSTING SHOW_KERNEL SHOW_UPDATES SHOW_UFW SHOW_CPU SHOW_RAM SHOW_DISK SHOW_DOCKER SHOW_UPTIME SHOW_LOAD SHOW_OS; do
+    printf '%2d) %-17s [%s]\n' "$i" "${k#SHOW_}" "${!k}"
+    ((i+=1))
+  done
+  printf '19) %s\n20) %s\n21) %s\n 0) %s\n' "$(trn 'Показать MOTD' 'Preview MOTD')" "$(trn 'Обновить данные хостера' 'Refresh hosting info')" "$(trn 'Удалить MIDAS MOTD' 'Uninstall MIDAS MOTD')" "$(trn 'Выход' 'Exit')"
+  ask '> '
+  case $REPLY in
+   0) break;;
+   1) if [[ $LANGUAGE == ru ]]; then write_setting LANGUAGE en; else write_setting LANGUAGE ru; fi;;
+   2) ask 'cyan / green / purple / blue / none: '; case $REPLY in cyan|green|purple|blue|none) write_setting THEME "$REPLY";; esac;;
+   3) rename_host || true;;
+   4) ask "$(trn 'Название сервера (пусто = hostname)' 'Server label (empty = hostname)'): "; write_setting SERVER_LABEL "$REPLY";;
+   5) ask "$(trn 'Хостер (пусто = авто)' 'Hosting (empty = auto)'): "; write_setting HOSTING_NAME "$REPLY";;
+   19) /opt/midas-motd/render.sh;;
+   20) /opt/midas-motd/refresh-provider.sh;;
+   21) ask 'Type REMOVE to uninstall / Введите REMOVE для удаления: '; if [[ $REPLY == REMOVE ]]; then /opt/midas-motd/uninstall.sh; exit 0; fi;;
+   *) if [[ $REPLY =~ ^([0-9]+)$ ]] && (( REPLY >= 6 && REPLY <= 18 )); then
+      local keys=(SHOW_IP4 SHOW_IP6 SHOW_HOSTING SHOW_KERNEL SHOW_UPDATES SHOW_UFW SHOW_CPU SHOW_RAM SHOW_DISK SHOW_DOCKER SHOW_UPTIME SHOW_LOAD SHOW_OS)
+      k=${keys[REPLY-6]}; if [[ ${!k} == 1 ]]; then write_setting "$k" 0; else write_setting "$k" 1; fi
+      fi;;
+  esac
+ done
+}
+menu
+SETTINGS
+cat > "$BASE/refresh-provider.sh" <<'PROVIDER'
+#!/usr/bin/env bash
+set -Eeuo pipefail
+command -v curl >/dev/null || { echo 'curl not installed'; exit 1; }
+mkdir -p /var/cache
+value=$(curl -4fsSL --connect-timeout 3 --max-time 8 https://ipinfo.io/org | head -c 120)
+[[ -n $value ]] || exit 1
+printf '%s\n' "$value" > /var/cache/midas-motd-provider
+printf 'Hosting ASN: %s\n' "$value"
+PROVIDER
+cat > "$BASE/uninstall.sh" <<'UNINSTALL'
+#!/usr/bin/env bash
+set -Eeuo pipefail
+[[ $EUID == 0 ]] || exit 1
+BASE=/opt/midas-motd
+BACK=$BASE/backup
+rm -f /etc/update-motd.d/00-midas /usr/local/bin/motd /usr/local/bin/motd-set
+for f in /etc/update-motd.d/00-header /etc/update-motd.d/10-help-text /etc/update-motd.d/50-motd-news /etc/update-motd.d/00-dist-motd /usr/local/bin/motd /usr/local/bin/motd-set; do
+ [[ ! -e $BACK$f ]] || { mkdir -p "$(dirname "$f")"; cp -a "$BACK$f" "$f"; }
+done
+rm -f /etc/midas-motd.conf
+# Intentionally preserve the system hostname and cloud-init hostname policy.
+# A renamed machine must not be silently renamed back on uninstall.
+echo 'MIDAS MOTD removed. Hostname and cloud-init hostname policy preserved.'
+UNINSTALL
+for f in "$BASE"/*.sh; do chmod 755 "$f"; done
+if [[ ! -f $CFG ]]; then
+ cat > "$CFG" <<'CONFIG'
+LANGUAGE=ru
+THEME=cyan
+SERVER_LABEL=''
+HOSTING_NAME=''
+SHOW_IP4=1
+SHOW_IP6=1
 SHOW_HOSTING=1
 SHOW_KERNEL=1
 SHOW_UPDATES=1
 SHOW_UFW=1
-SHOW_EXTRA_CPU=1
-SHOW_EXTRA_RAM=1
+SHOW_CPU=1
+SHOW_RAM=1
 SHOW_DISK=1
+SHOW_DOCKER=1
+SHOW_UPTIME=1
+SHOW_LOAD=1
+SHOW_OS=1
 CONFIG
-chmod 600 "$EXTRA_CONF"
+ chmod 600 "$CFG"
 fi
-
-cat > "$EXTRA_SCRIPT" <<'EXTRA'
+cat > "$MOTD" <<'RUN'
 #!/usr/bin/env bash
-[[ -r /etc/motd-midas.conf ]] || exit 0
-# Config is root-writable only. Shell-quote values when editing manually.
-source /etc/motd-midas.conf
-export LC_ALL=C
-if [[ ${LANGUAGE:-ru} == ru ]]; then
-  title="СВЕДЕНИЯ О СЕРВЕРЕ"; server_label="Сервер"; hosting_label="Хостер"; kernel_label="Ядро"; updates_label="Обновления"; disk_label="Диск"
-else
-  title="SERVER DETAILS"; server_label="Server"; hosting_label="Hosting"; kernel_label="Kernel"; updates_label="Updates"; disk_label="Disk"
-fi
-printf '\n\033[1;36m  ── %s ──\033[0m\n' "$title"
-show() { printf '  %-12s %s\n' "$1" "$2"; }
-show "$server_label" "${SERVER_LABEL:-$(hostname)}"
-if [[ ${SHOW_IP:-1} == 1 ]]; then
-  for fam in 4 6; do
-    target=1.1.1.1; [[ $fam == 6 ]] && target=2606:4700:4700::1111
-    addr=$(ip -"$fam" route get "$target" 2>/dev/null | sed -n 's/.* src \([^ ]*\).*/\1/p' | head -n1)
-    show "IPv$fam" "${addr:-Unavailable}"
-  done
-fi
-if [[ ${SHOW_HOSTING:-1} == 1 ]]; then
-  hosting=${HOSTING_NAME:-}
-  if [[ -z $hosting ]]; then
-    cache=/var/cache/motd-midas-hosting
-    if [[ ! -s $cache || -n $(find "$cache" -mmin +1440 -print 2>/dev/null) ]]; then
-      result=$(curl -4fsS --connect-timeout 1 --max-time 2 https://ipinfo.io/org 2>/dev/null | head -c 120 || true)
-      [[ -n $result ]] && printf '%s\n' "$result" > "$cache"
-    fi
-    hosting=$(cat "$cache" 2>/dev/null || true)
-  fi
-  show "$hosting_label" "${hosting:-Unknown}"
-fi
-[[ ${SHOW_KERNEL:-1} == 1 ]] && show "$kernel_label" "$(uname -r)"
-if [[ ${SHOW_UPDATES_EXTRA:-0} == 1 ]]; then
-  count=$(apt list --upgradable 2>/dev/null | awk 'NR>1 && /\[upgradable from:/ {n++} END {print n+0}')
-  show "$updates_label" "$count (cached APT lists)"
-fi
-if [[ ${SHOW_UFW_EXTRA:-0} == 1 ]]; then
-  if ! command -v ufw >/dev/null; then status='Not installed'
-  elif ufw status 2>/dev/null | grep -q '^Status: active'; then status='ACTIVE'
-  else status='INACTIVE'; fi
-  if [[ ${LANGUAGE:-ru} == ru ]]; then case $status in ACTIVE) status='ВКЛЮЧЁН';; INACTIVE) status='ВЫКЛЮЧЕН';; 'Not installed') status='Не установлен';; esac; fi
-  show 'UFW' "$status"
-fi
-if [[ ${SHOW_EXTRA_CPU:-1} == 1 ]]; then
-  model=$(lscpu 2>/dev/null | sed -n 's/^Model name:[[:space:]]*//p' | head -n1)
-  show 'CPU' "${model:-Unknown} ($(nproc 2>/dev/null || echo '?') vCPU)"
-fi
-if [[ ${SHOW_EXTRA_RAM:-1} == 1 ]]; then
-  ram=$(free -h | awk '/^Mem:/ {print $3 " / " $2 " used; " $7 " available"}')
-  show 'RAM' "${ram:-Unknown}"
-fi
-if [[ ${SHOW_DISK:-1} == 1 ]]; then
-  disk=$(df -hP / | awk 'NR==2 {print $3 " / " $2 " (" $5 ")"}')
-  source_dev=$(findmnt -n -o SOURCE / 2>/dev/null || true)
-  parent=$(lsblk -no PKNAME "$source_dev" 2>/dev/null | head -n1 || true)
-  [[ -n $parent ]] || parent=$(lsblk -no NAME "$source_dev" 2>/dev/null | head -n1 || true)
-  model='Virtual / Unknown'; transport=''
-  if [[ -n $parent && -b /dev/$parent ]]; then
-    m=$(lsblk -dn -o MODEL "/dev/$parent" 2>/dev/null | xargs || true)
-    [[ -n $m ]] && model=$m
-    transport=$(lsblk -dn -o TRAN "/dev/$parent" 2>/dev/null | xargs || true)
-  fi
-  if [[ ${LANGUAGE:-ru} == ru ]]; then show 'Накопитель' "$model${transport:+ ($transport)}"; show 'Диск /' "${disk:-Неизвестно}"; else show 'Storage' "$model${transport:+ ($transport)}"; show 'Disk /' "${disk:-Unknown}"; fi
-fi
-EXTRA
-chmod 755 "$EXTRA_SCRIPT"
-
-# Safe hostname change helper, including persistent cloud-init policy.
-cat > /usr/local/sbin/motd-safe-hostname <<'HOSTHELPER'
+exec /opt/midas-motd/render.sh
+RUN
+chmod 755 "$MOTD"
+cat > /usr/local/bin/motd <<'RUN'
 #!/usr/bin/env bash
-set -Eeuo pipefail
-[[ $EUID -eq 0 ]] || { echo 'Root required' >&2; exit 1; }
-new=${1:-}
-[[ $new =~ ^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$ ]] || { echo 'Invalid hostname' >&2; exit 1; }
-command -v hostnamectl >/dev/null || { echo 'hostnamectl is unavailable' >&2; exit 1; }
-old=$(hostname)
-[[ $old != "$new" ]] || exit 0
-# Keep cloud-init from restoring the provider-assigned hostname on reboot.
-cloud_config=/etc/cloud/cloud.cfg.d/99-zz-midas-hostname.cfg
-cloud_enabled=0
-if [[ -f /etc/cloud/cloud.cfg ]]; then
-  cloud_enabled=1
-fi
-backup_dir=$(mktemp -d /root/motd-hostname-backup.XXXXXXXX)
-cp -a /etc/hostname "$backup_dir/hostname" 2>/dev/null || true
-cp -a /etc/hosts "$backup_dir/hosts"
-if (( cloud_enabled )); then
-  if [[ -e $cloud_config ]]; then
-    cp -a "$cloud_config" "$backup_dir/cloud-config"
-  else
-    touch "$backup_dir/cloud-config-absent"
-  fi
-fi
-rollback() {
-  echo 'Hostname update failed; attempting rollback...' >&2
-  cp -a "$backup_dir/hosts" /etc/hosts || true
-  if [[ -f $backup_dir/hostname ]]; then cp -a "$backup_dir/hostname" /etc/hostname || true; fi
-  if [[ -f $backup_dir/cloud-config ]]; then
-    cp -a "$backup_dir/cloud-config" "$cloud_config" || true
-  elif [[ -f $backup_dir/cloud-config-absent ]]; then
-    rm -f "$cloud_config" || true
-  fi
-  hostnamectl set-hostname "$old" || true
-}
-trap rollback ERR
-# Update only an existing Debian 127.0.1.1 record. Preserve aliases and comments.
-if grep -Eq '^127\.0\.1\.1[[:space:]]' /etc/hosts; then
-  NEW_HOSTNAME="$new" OLD_HOSTNAME="$old" python3 - <<'PYHOST'
-from pathlib import Path
-import os
-p=Path('/etc/hosts')
-old=os.environ['OLD_HOSTNAME']; new=os.environ['NEW_HOSTNAME']
-lines=[]
-for line in p.read_text().splitlines(keepends=True):
-    if line.split('#',1)[0].split()[:1] == ['127.0.1.1']:
-        body, sep, comment = line.partition('#')
-        fields=body.split()
-        fields=[new if x==old else x for x in fields]
-        if old not in body.split():
-            fields.insert(1,new)
-        # Remove duplicate host aliases while retaining other aliases.
-        fields=list(dict.fromkeys(fields))
-        line='\t'.join(fields)+((' #'+comment.rstrip('\n')) if sep else '')+'\n'
-    lines.append(line)
-p.write_text(''.join(lines))
-PYHOST
-fi
-if (( cloud_enabled )); then
-  mkdir -p /etc/cloud/cloud.cfg.d
-  printf '# Managed by MIDAS MOTD hostname setup\npreserve_hostname: true\n' > "$cloud_config"
-fi
-hostnamectl set-hostname "$new"
-[[ $(hostname) == "$new" ]] || { echo 'Hostname verification failed' >&2; false; }
-trap - ERR
-echo "Hostname changed: $old -> $new"
-echo "Backup: $backup_dir"
-if (( cloud_enabled )); then
-  echo "cloud-init hostname preservation: $cloud_config"
-fi
-echo 'Reconnect SSH to update the shell prompt.'
-HOSTHELPER
-chmod 700 /usr/local/sbin/motd-safe-hostname
-
-# Preserve upstream settings menu and add a wrapper. Idempotent on reruns.
-if [[ ! -e "$ORIGINAL" ]]; then mv "$SETTINGS" "$ORIGINAL"; fi
-cat > "$SETTINGS" <<'MENU'
+exec /opt/midas-motd/render.sh
+RUN
+cat > /usr/local/bin/motd-set <<'RUN'
 #!/usr/bin/env bash
-set -u
-CONF=/etc/motd-midas.conf
-BASE=/etc/dist-motd.conf
-[[ $EUID -eq 0 ]] || { echo 'Запустите от root / Run as root'; exit 1; }
-[[ -r /dev/tty ]] || { echo 'Требуется интерактивный терминал / TTY required'; exit 1; }
-read_setting() { source "$CONF"; [[ -f "$BASE" ]] && source "$BASE"; }
-write_setting() {
-  local file=$1 key=$2 value=$3 tmp
-  tmp=$(mktemp "${file}.XXXXXX") || return 1
-  awk -v k="$key" -v v="$value" 'BEGIN {done=0} index($0,k"=")==1 {print k"="v;done=1;next} {print} END {if (!done) print k"="v}' "$file" > "$tmp" && cat "$tmp" > "$file"
-  rm -f "$tmp"
-}
-set_string() {
-  local key=$1 label=$2 val quoted
-  printf '%s: ' "$label" > /dev/tty
-  IFS= read -r val </dev/tty || return
-  printf -v quoted '%q' "$val"
-  write_setting "$CONF" "$key" "$quoted"
-}
-toggle() {
-  local file=$1 key=$2 current=$3
-  if [[ $current == true ]]; then write_setting "$file" "$key" false
-  elif [[ $current == false ]]; then write_setting "$file" "$key" true
-  elif [[ $current == 1 ]]; then write_setting "$file" "$key" 0
-  else write_setting "$file" "$key" 1; fi
-}
-rename_host() {
-  local name old answer
-  old=$(hostname)
-  printf 'Текущее имя / Current hostname: %s\nНовое имя / New hostname: ' "$old" > /dev/tty
-  IFS= read -r name </dev/tty || return
-  [[ -n $name && $name != "$old" ]] || return 0
-  echo 'Внимание: проверьте зависимости сертификатов, мониторинга и приложений от старого hostname.' > /dev/tty
-  printf 'Подтвердите изменение / Type YES: ' > /dev/tty
-  IFS= read -r answer </dev/tty || return
-  [[ $answer == YES ]] && /usr/local/sbin/motd-safe-hostname "$name"
-}
-while :; do
-  read_setting
-  if [[ ${LANGUAGE:-ru} == ru ]]; then
-    cat > /dev/tty <<EOF
-
-════════════ НАСТРОЙКИ MOTD ════════════
- 1) Язык: Русский
- 2) Цветовая тема: ${COLOR_THEME:-dark}
- 3) Логотип: ${SHOW_LOGO:-true}
- 4) CPU: ${SHOW_CPU:-true}
- 5) RAM: ${SHOW_MEM:-true}
- 6) Сеть: ${SHOW_NET:-false}
- 7) Docker: ${SHOW_DOCKER:-true}
- 8) Статус Docker: ${SHOW_DOCKER_STATUS:-true}
- 9) Список контейнеров: ${SHOW_DOCKER_RUNNING_LIST:-false}
-10) Брандмауэр: ${SHOW_FIREWALL:-true}
-11) Правила брандмауэра: ${SHOW_FIREWALL_RULES:-false}
-12) Обновления: ${SHOW_UPDATES:-true}
-13) Безопасность: ${SHOW_SECURITY:-false}
-14) Состояние служб: ${SERVICES_STATUS_ENABLED:-false}
-
-──────────── СЕРВЕР И ЖЕЛЕЗО ────────────
-15) Изменить настоящее имя машины: $(hostname)
-16) Название сервера: ${SERVER_LABEL:-авто}
-17) Название хостера: ${HOSTING_NAME:-авто}
-18) IPv4 и IPv6: ${SHOW_IP:-1}
-19) Хостер: ${SHOW_HOSTING:-1}
-20) Ядро: ${SHOW_KERNEL:-1}
-21) Подробная информация CPU: ${SHOW_EXTRA_CPU:-1}
-22) Подробная информация RAM: ${SHOW_EXTRA_RAM:-1}
-23) Модель и заполнение диска: ${SHOW_DISK:-1}
-24) Просмотр MOTD
- 0) Выход
-EOF
-  else
-    cat > /dev/tty <<EOF
-
-════════════ MOTD SETTINGS ════════════
- 1) Language: English
- 2) Color theme: ${COLOR_THEME:-dark}
- 3) Logo: ${SHOW_LOGO:-true}
- 4) CPU: ${SHOW_CPU:-true}
- 5) RAM: ${SHOW_MEM:-true}
- 6) Network: ${SHOW_NET:-false}
- 7) Docker: ${SHOW_DOCKER:-true}
- 8) Docker status: ${SHOW_DOCKER_STATUS:-true}
- 9) Running containers: ${SHOW_DOCKER_RUNNING_LIST:-false}
-10) Firewall: ${SHOW_FIREWALL:-true}
-11) Firewall rules: ${SHOW_FIREWALL_RULES:-false}
-12) Updates: ${SHOW_UPDATES:-true}
-13) Security: ${SHOW_SECURITY:-false}
-14) Services: ${SERVICES_STATUS_ENABLED:-false}
-
-──────────── SERVER & HARDWARE ────────────
-15) Change Linux hostname: $(hostname)
-16) Server display name: ${SERVER_LABEL:-auto}
-17) Hosting name: ${HOSTING_NAME:-auto}
-18) IPv4 and IPv6: ${SHOW_IP:-1}
-19) Hosting: ${SHOW_HOSTING:-1}
-20) Kernel: ${SHOW_KERNEL:-1}
-21) Detailed CPU: ${SHOW_EXTRA_CPU:-1}
-22) Detailed RAM: ${SHOW_EXTRA_RAM:-1}
-23) Disk model and usage: ${SHOW_DISK:-1}
-24) Preview MOTD
- 0) Exit
-EOF
-  fi
-  printf '> ' > /dev/tty
-  IFS= read -r choice </dev/tty || exit 0
-  case "$choice" in
-    0) exit 0 ;;
-    1) if [[ ${LANGUAGE:-ru} == ru ]]; then lang=en; else lang=ru; fi
-       write_setting "$CONF" LANGUAGE "$lang"; write_setting "$BASE" MOTDSET_LANG "$lang"
-       /usr/local/sbin/motd-midas-translate "$lang" ;;
-    2) printf '1) Dark / Тёмная  2) Light / Светлая  3) Auto / Авто: ' > /dev/tty
-       read -r c </dev/tty; case "$c" in 1) theme=dark;;2) theme=light;;3) theme=auto;;*) continue;;esac
-       write_setting "$BASE" COLOR_THEME "$theme" ;;
-    3|4|5|6|7|8|9|10|11|12|13|14)
-       case "$choice" in
-       3) key=SHOW_LOGO;;4) key=SHOW_CPU;;5) key=SHOW_MEM;;6) key=SHOW_NET;;
-       7) key=SHOW_DOCKER;;8) key=SHOW_DOCKER_STATUS;;9) key=SHOW_DOCKER_RUNNING_LIST;;
-       10) key=SHOW_FIREWALL;;11) key=SHOW_FIREWALL_RULES;;12) key=SHOW_UPDATES;;
-       13) key=SHOW_SECURITY;;14) key=SERVICES_STATUS_ENABLED;; esac
-       eval 'current=${'"$key"':-false}'; toggle "$BASE" "$key" "$current" ;;
-    15) rename_host ;;
-    16) set_string SERVER_LABEL 'Имя сервера / Server label (Enter = hostname)' ;;
-    17) set_string HOSTING_NAME 'Хостер / Hosting name (Enter = auto)' ;;
-    18|19|20|21|22|23)
-       case "$choice" in 18) key=SHOW_IP;;19) key=SHOW_HOSTING;;20) key=SHOW_KERNEL;;
-       21) key=SHOW_EXTRA_CPU;;22) key=SHOW_EXTRA_RAM;;23) key=SHOW_DISK;;esac
-       eval 'current=${'"$key"':-1}'; toggle "$CONF" "$key" "$current" ;;
-    24) /usr/local/bin/motd; [[ -x /etc/update-motd.d/01-midas-extra ]] && /etc/update-motd.d/01-midas-extra ;;
-    *) echo 'Неверный выбор / Invalid choice' > /dev/tty ;;
-  esac
+exec /opt/midas-motd/settings.sh
+RUN
+chmod 755 /usr/local/bin/motd /usr/local/bin/motd-set
+# Avoid duplicate standard dynamic MOTD fragments, but keep backups.
+for f in /etc/update-motd.d/00-header /etc/update-motd.d/10-help-text /etc/update-motd.d/50-motd-news /etc/update-motd.d/00-dist-motd; do
+ [[ ! -f $f ]] || chmod a-x "$f"
 done
-MENU
-chmod 755 "$SETTINGS"
-
-# Translate original Distillium MOTD output without changing its functionality.
-cat > /usr/local/sbin/motd-midas-translate <<'TRANSLATE'
-#!/usr/bin/env python3
-import pathlib, sys, shutil
-lang = sys.argv[1] if len(sys.argv)>1 else 'ru'
-if lang not in ('ru','en'): sys.exit('Unknown language')
-p = pathlib.Path('/etc/update-motd.d/00-dist-motd')
-backup = pathlib.Path('/opt/motd/midas-distillium-original.sh')
-if not p.exists(): sys.exit(0)
-backup.parent.mkdir(parents=True, exist_ok=True)
-if not backup.exists(): shutil.copy2(p, backup)
-s = backup.read_text()
-# Only replace visible, quoted English labels, not keywords used by shell logic.
-replacements = {
-'• Session Details':'• Сведения о сеансе',
-'• System Details':'• Сведения о системе',
-'• RAM & Disk':'• Память и диск',
-'• Network':'• Сеть',
-'• Firewall':'• Брандмауэр',
-'• Updates Available':'• Доступные обновления',
-'• Security':'• Безопасность',
-'"User:"':'"Пользователь:"',
-'"Last login:"':'"Последний вход:"',
-'"Uptime:"':'"Время работы:"',
-'"Hostname:"':'"Имя машины:"',
-'"External IP (v4):"':'"Внешний IPv4:"',
-'"External IP (v6):"':'"Внешний IPv6:"',
-'"Kernel:"':'"Ядро:"',
-'"Model:"':'"Модель:"',
-'"Usage:"':'"Загрузка:"',
-'"Load average:"':'"Средняя нагрузка:"',
-'"Disk:"':'"Диск:"',
-'"Interface:"':'"Интерфейс:"',
-'"Received:"':'"Получено:"',
-'"Transmitted:"':'"Отправлено:"',
-'"Network:"':'"Сеть:"',
-'"UFW Status:"':'"Статус UFW:"',
-'"Rules:"':'"Правила:"',
-'"Containers:"':'"Контейнеры:"',
-'"Running Containers:"':'"Запущенные контейнеры:"',
-'"Total updates:"':'"Всего обновлений:"',
-'"Security updates:"':'"Обновления безопасности:"',
-'"Status:"':'"Состояние:"',
-'"Updates:"':'"Обновления:"',
-'"System is up to date"':'"Система обновлена"',
-'"apt not available"':'"APT недоступен"',
-'"not installed"':'"не установлен"',
-'"info disabled by configuration"':'"информация отключена в настройках"',
-'"Interface not found"':'"Интерфейс не найден"',
-'"Run \'sudo apt upgrade\' to install updates"':'"Для установки обновлений: sudo apt upgrade"',
-}
-if lang == 'ru':
-    for a,b in replacements.items(): s=s.replace(a,b)
-p.write_text(s)
-p.chmod(0o755)
-TRANSLATE
-chmod 755 /usr/local/sbin/motd-midas-translate
-# Respect existing language choice on reruns.
-source "$EXTRA_CONF"
-if [[ -f /etc/dist-motd.conf ]]; then
-  if grep -q '^MOTDSET_LANG=' /etc/dist-motd.conf; then
-    sed -i "s/^MOTDSET_LANG=.*/MOTDSET_LANG=${LANGUAGE:-ru}/" /etc/dist-motd.conf
-  else
-    printf 'MOTDSET_LANG=%s\\n' "${LANGUAGE:-ru}" >> /etc/dist-motd.conf
-  fi
+# Do not edit PAM, SSH or restart sshd: existing pam_motd will execute update-motd.d.
+touch "$BASE/installed"
+if [[ -r /dev/tty ]]; then
+ printf '\nMIDAS MOTD installed. Initial setup / Первоначальная настройка:\n'
+ /opt/midas-motd/settings.sh </dev/tty
 fi
-/usr/local/sbin/motd-midas-translate "${LANGUAGE:-ru}"
-
-# Interactive first-run setup, including real Linux hostname and provider name.
-# Read from the terminal: curl | bash consumes stdin otherwise.
-if [[ -t 3 ]]; then
-  printf '\n\033[1;36m=== MIDAS MOTD: ПЕРВОНАЧАЛЬНАЯ НАСТРОЙКА ===\033[0m\n'
-  printf 'Текущее имя машины: %s\n' "$(hostname)"
-  printf 'Новое имя машины (Enter = оставить): '
-  IFS= read -r new_hostname <&3 || new_hostname=''
-  if [[ -n $new_hostname ]]; then
-    echo 'ВНИМАНИЕ: смена имени может повлиять на мониторинг, TLS и сервисы, зависящие от hostname.'
-    printf 'Введите YES для подтверждения: '
-    IFS= read -r confirmation <&3 || confirmation=''
-    if [[ $confirmation == YES ]]; then
-      /usr/local/sbin/motd-safe-hostname "$new_hostname" || echo 'Hostname change failed; inspect the messages above.' >&2
-    else
-      echo 'Имя машины не изменено.'
-    fi
-  fi
-  printf 'Название хостера (Enter = определить автоматически): '
-  IFS= read -r provider_name <&3 || provider_name=''
-  if [[ -n $provider_name ]]; then
-    printf -v quoted_provider '%q' "$provider_name"
-    tmpconf=$(mktemp)
-    awk -v v="$quoted_provider" '/^HOSTING_NAME=/{print "HOSTING_NAME=" v;next}{print}' "$EXTRA_CONF" > "$tmpconf"
-    cat "$tmpconf" > "$EXTRA_CONF"
-    rm -f "$tmpconf"
-    chmod 600 "$EXTRA_CONF"
-  fi
-  printf 'Название сервера в MOTD (Enter = использовать hostname): '
-  IFS= read -r server_label <&3 || server_label=''
-  if [[ -n $server_label ]]; then
-    printf -v quoted_label '%q' "$server_label"
-    tmpconf=$(mktemp)
-    awk -v v="$quoted_label" '/^SERVER_LABEL=/{print "SERVER_LABEL=" v;next}{print}' "$EXTRA_CONF" > "$tmpconf"
-    cat "$tmpconf" > "$EXTRA_CONF"
-    rm -f "$tmpconf"
-    chmod 600 "$EXTRA_CONF"
-  fi
-else
-  echo 'Терминал недоступен: первичная настройка пропущена. Запустите motd-set.'
-fi
-printf '\nDistillium + MIDAS установлен. Команды: motd-set, motd\n' 
-printf 'Удаление расширения: bash install-motd.sh --uninstall-extension\n'
+printf '\nCommands: motd, motd-set\n'
