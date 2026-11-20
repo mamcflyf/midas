@@ -20,7 +20,7 @@ CFG=/etc/midas-motd.conf
 LANGUAGE=ru; THEME=cyan; SERVER_LABEL=''; HOSTING_NAME=''
 SHOW_IP4=1; SHOW_IP6=1; SHOW_HOSTING=1; SHOW_KERNEL=1; SHOW_UPDATES=1
 SHOW_UFW=1; SHOW_CPU=1; SHOW_RAM=1; SHOW_DISK=1; SHOW_DOCKER=1
-SHOW_UPTIME=1; SHOW_LOAD=1; SHOW_OS=1; SHOW_LASTLOGIN=0
+SHOW_UPTIME=1; SHOW_LOAD=1; SHOW_OS=1; SHOW_NET=1; SHOW_UFW_RULES=1; SHOW_LASTLOGIN=0
 [[ ! -r $CFG ]] || source "$CFG"
 trn() { if [[ $LANGUAGE == ru ]]; then printf '%s' "$1"; else printf '%s' "$2"; fi; }
 color() { case $THEME in green) printf '\033[1;32m';; purple) printf '\033[1;35m';; blue) printf '\033[1;34m';; none) printf '';; *) printf '\033[1;36m';; esac; }
@@ -36,53 +36,111 @@ cat > "$BASE/render.sh" <<'RENDER'
 set -u
 source /opt/midas-motd/lib.sh
 export LC_ALL=C
-printf '\n'; color; printf '  ◆ MIDAS MOTD'; reset; printf '  |  %s\n' "${SERVER_LABEL:-$(hostname)}"
-heading "$(trn 'СИСТЕМА' 'SYSTEM')"
-if flag SHOW_OS; then . /etc/os-release 2>/dev/null || true; line "$(trn 'ОС' 'OS')" "${PRETTY_NAME:-Linux}"; fi
-if flag SHOW_KERNEL; then line "$(trn 'Ядро' 'Kernel')" "$(uname -r)"; fi
-if flag SHOW_UPTIME; then line "$(trn 'Время работы' 'Uptime')" "$(uptime -p 2>/dev/null || echo '?')"; fi
-if flag SHOW_LOAD; then line "$(trn 'Нагрузка' 'Load')" "$(cut -d' ' -f1-3 /proc/loadavg 2>/dev/null)"; fi
+if [[ $THEME == none ]]; then BLUE=''; WHITE=''; GREEN=''; PINK=''; ORANGE=''; RESET=''
+else
+ BLUE=$'\033[1;34m'; WHITE=$'\033[1;37m'; GREEN=$'\033[0;32m'
+ PINK=$'\033[1;35m'; ORANGE=$'\033[1;33m'; RESET=$'\033[0m'
+fi
+# Distillium-style fixed columns and progress bars
+field() { printf '%b%-22s%b %b%s%b\n' "$BLUE" "$1" "$RESET" "$2" "$3" "$RESET"; }
+section() { printf '\n%b• %s%b\n' "$WHITE" "$1" "$RESET"; }
+bar() {
+ local used=${1:-0} total=${2:-0} width=30 filled=0 pct=0 i
+ if ((total>0)); then pct=$((used*100/total)); filled=$((pct*width/100)); fi
+ ((pct>100)) && pct=100
+ printf '%b[' "$BLUE"
+ for ((i=0;i<width;i++)); do
+  if ((i<filled)); then printf '%b━' "$GREEN"; else printf '%b━' "$BLUE"; fi
+ done
+ printf '%b] %b%s%%%b' "$BLUE" "$GREEN" "$pct" "$RESET"
+}
+human_bytes() { numfmt --to=iec --suffix=B "${1:-0}" 2>/dev/null || printf '%s B' "${1:-0}"; }
+printf '%bMessage Of The Day by MIDAS MOTD%b\n' "$WHITE" "$RESET"
+printf '%b====================================%b\n' "$WHITE" "$RESET"
+section "$(trn 'Сведения о сеансе' 'Session Details')"
+field "$(trn 'Пользователь:' 'User:')" "$ORANGE" "$(id -un)"
+field "$(trn 'Имя сервера:' 'Server:')" "$GREEN" "${SERVER_LABEL:-$(hostname)}"
+field "$(trn 'Время работы:' 'Uptime:')" "$GREEN" "$(uptime -p 2>/dev/null | sed 's/^up //')"
+section "$(trn 'Сведения о системе' 'System Details')"
+field "$(trn 'Имя машины:' 'Hostname:')" "$GREEN" "$(hostname)"
+if flag SHOW_OS; then . /etc/os-release 2>/dev/null || true; field "$(trn 'ОС:' 'OS:')" "$GREEN" "${PRETTY_NAME:-Linux}"; fi
+for fam in 4 6; do
+ flag "SHOW_IP$fam" || continue
+ dest=1.1.1.1; [[ $fam == 6 ]] && dest=2606:4700:4700::1111
+ addr=$(ip -"$fam" route get "$dest" 2>/dev/null | sed -n 's/.* src \([^ ]*\).*/\1/p' | head -n1)
+ field "External IP (v$fam):" "$PINK" "${addr:-N/A}"
+done
+if flag SHOW_KERNEL; then field "$(trn 'Ядро:' 'Kernel:')" "$GREEN" "$(uname -r)"; fi
+if flag SHOW_HOSTING; then field "$(trn 'Хостер:' 'Hosting:')" "$GREEN" "$(provider)"; fi
 if flag SHOW_CPU; then
+ section 'CPU'
  cpu=$(lscpu 2>/dev/null | sed -n 's/^Model name:[[:space:]]*//p' | head -n1)
  [[ -n $cpu ]] || cpu=$(awk -F: '/model name/ {gsub(/^[ \t]+/,"",$2);print $2;exit}' /proc/cpuinfo)
- line 'CPU' "${cpu:-Unknown} ($(nproc 2>/dev/null || echo '?') vCPU)"
+ field "$(trn 'Модель:' 'Model:')" "$ORANGE" "${cpu:-Unknown} ($(nproc 2>/dev/null || echo '?') vCPU)"
+ cpu_load=$(awk '{print $1}' /proc/loadavg)
+ cpu_pct=$(awk -v l="$cpu_load" -v n="$(nproc 2>/dev/null || echo 1)" 'BEGIN{p=int(100*l/n);if(p>100)p=100;print p}')
+ printf '%b%-22s%b ' "$BLUE" "$(trn 'Нагрузка:' 'Usage:')" "$RESET"
+ bar "$cpu_pct" 100; printf '  %s\n' "$(trn 'оценка по loadavg' 'loadavg estimate')"
+ field 'Load average:' "$GREEN" "$(cut -d' ' -f1-3 /proc/loadavg)"
 fi
-if flag SHOW_RAM; then line 'RAM' "$(free -h 2>/dev/null | awk '/^Mem:/ {print $3 " / " $2 " (available " $7 ")"}')"; fi
+if flag SHOW_RAM || flag SHOW_DISK; then section "$(trn 'ОЗУ и диск' 'RAM & Disk')"; fi
+if flag SHOW_RAM; then
+ read -r mem_total mem_avail < <(awk '/^MemTotal:/ {t=$2} /^MemAvailable:/ {a=$2} END {print t,a}' /proc/meminfo)
+ mem_used=$((mem_total-mem_avail))
+ printf '%b%-22s%b ' "$BLUE" 'RAM:' "$RESET"; bar "$mem_used" "$mem_total"
+ printf ' %b(%s / %s)%b\n' "$GREEN" "$(human_bytes $((mem_used*1024)))" "$(human_bytes $((mem_total*1024)))" "$RESET"
+fi
 if flag SHOW_DISK; then
+ read -r disk_total disk_used < <(df -B1 -P / | awk 'NR==2{print $2,$3}')
+ printf '%b%-22s%b ' "$BLUE" "$(trn 'Диск:' 'Disk:')" "$RESET"; bar "$disk_used" "$disk_total"
+ printf ' %b(%s / %s)%b\n' "$GREEN" "$(human_bytes "$disk_used")" "$(human_bytes "$disk_total")" "$RESET"
  dev=$(findmnt -n -o SOURCE / 2>/dev/null || true)
  parent=$(lsblk -no PKNAME "$dev" 2>/dev/null | head -n1 || true)
  [[ -n $parent ]] || parent=$(lsblk -no NAME "$dev" 2>/dev/null | head -n1 || true)
- model='Virtual / Unknown'; transport=''
  if [[ -n $parent && -b /dev/$parent ]]; then
-   value=$(lsblk -dn -o MODEL "/dev/$parent" 2>/dev/null | xargs || true)
-   [[ -z $value ]] || model=$value
-   transport=$(lsblk -dn -o TRAN "/dev/$parent" 2>/dev/null | xargs || true)
+  model=$(lsblk -dn -o MODEL "/dev/$parent" 2>/dev/null | xargs || true)
+  [[ -z $model ]] || field "$(trn 'Накопитель:' 'Storage:')" "$GREEN" "$model"
  fi
- line "$(trn 'Накопитель' 'Storage')" "$model${transport:+ ($transport)}"
- line "$(trn 'Диск /' 'Disk /')" "$(df -hP / | awk 'NR==2 {print $3 " / " $2 " (" $5 ")"}')"
 fi
-heading "$(trn 'СЕТЬ' 'NETWORK')"
-for fam in 4 6; do
- flag "SHOW_IP$fam" || continue
- if [[ $fam == 4 ]]; then dest=1.1.1.1; else dest=2606:4700:4700::1111; fi
- addr=$(ip -"$fam" route get "$dest" 2>/dev/null | sed -n 's/.* src \([^ ]*\).*/\1/p' | head -n1)
- line "IPv$fam" "${addr:-$(trn 'Недоступен' 'Unavailable')}"
-done
-if flag SHOW_HOSTING; then line "$(trn 'Хостер' 'Hosting')" "$(provider)"; fi
-heading "$(trn 'БЕЗОПАСНОСТЬ' 'SECURITY')"
+if [[ ${SHOW_NET:-1} == 1 ]]; then
+ section "$(trn 'Сеть' 'Network')"
+ iface=$(ip -4 route show default 2>/dev/null | awk '/default/{for(i=1;i<=NF;i++)if($i=="dev"){print $(i+1);exit}}')
+ if [[ -n $iface && -r /sys/class/net/$iface/statistics/rx_bytes ]]; then
+  field "$(trn 'Интерфейс:' 'Interface:')" "$GREEN" "$iface"
+  field "$(trn 'Получено:' 'Received:')" "$GREEN" "$(human_bytes "$(cat /sys/class/net/"$iface"/statistics/rx_bytes)")"
+  field "$(trn 'Отправлено:' 'Transmitted:')" "$GREEN" "$(human_bytes "$(cat /sys/class/net/"$iface"/statistics/tx_bytes)")"
+ fi
+fi
 if flag SHOW_UFW; then
- if ! command -v ufw >/dev/null 2>&1; then st=$(trn 'Не установлен' 'Not installed')
- elif ufw status 2>/dev/null | grep -q '^Status: active'; then st=$(trn 'ВКЛЮЧЁН' 'ACTIVE')
- else st=$(trn 'ВЫКЛЮЧЕН' 'INACTIVE'); fi
- line UFW "$st"
-fi
-if flag SHOW_UPDATES; then
- count=$(apt list --upgradable 2>/dev/null | awk 'NR>1 && /\[upgradable from:/ {n++} END {print n+0}')
- line "$(trn 'Обновления' 'Updates')" "$count $(trn 'пакетов (кэш APT)' 'packages (APT cache)')"
+ section "$(trn 'Брандмауэр' 'Firewall')"
+ if ! command -v ufw >/dev/null 2>&1; then st=$(trn 'не установлен' 'not installed')
+ elif ufw status 2>/dev/null | grep -q '^Status: active'; then st='active'
+ else st='inactive'; fi
+ field "$(trn 'Статус UFW:' 'UFW Status:')" "$GREEN" "$st"
+ if [[ ${SHOW_UFW_RULES:-1} == 1 && $st == active ]]; then
+  rules=$(ufw status 2>/dev/null | sed -n '/^--/,$p' | tail -n +2 | head -n 8)
+  if [[ -n $rules ]]; then
+   printf '%b%s%b\n' "$BLUE" "$(trn 'Правила:' 'Rules:')" "$RESET"
+   while IFS= read -r rule; do printf '  %s\n' "$rule"; done <<< "$rules"
+  fi
+ fi
 fi
 if flag SHOW_DOCKER && command -v docker >/dev/null 2>&1; then
+ section 'Docker'
+ total=$(timeout 2 docker ps -aq 2>/dev/null | wc -l)
  running=$(timeout 2 docker ps -q 2>/dev/null | wc -l)
- line Docker "$running $(trn 'запущено' 'running')"
+ field "$(trn 'Контейнеры:' 'Containers:')" "$GREEN" "$running / $total"
+ names=$(timeout 2 docker ps --format '{{.Names}}' 2>/dev/null | head -n 10)
+ if [[ -n $names ]]; then
+  printf '%b%s%b\n' "$BLUE" "$(trn 'Запущенные контейнеры:' 'Running Containers:')" "$RESET"
+  printf '  %s\n' "$names"
+ fi
+fi
+if flag SHOW_UPDATES; then
+ section "$(trn 'Доступные обновления' 'Updates Available')"
+ count=$(apt list --upgradable 2>/dev/null | awk 'NR>1 && /\[upgradable from:/ {n++} END {print n+0}')
+ field "$(trn 'Всего обновлений:' 'Total updates:')" "$ORANGE" "$count $(trn 'пакетов' 'packages')"
+ if ((count>0)); then printf '%b%s%b\n' "$BLUE" "$(trn 'Для установки: apt upgrade' 'Run apt upgrade to install updates')" "$RESET"; fi
 fi
 printf '\n'
 RENDER
@@ -235,6 +293,8 @@ SHOW_DOCKER=1
 SHOW_UPTIME=1
 SHOW_LOAD=1
 SHOW_OS=1
+SHOW_NET=1
+SHOW_UFW_RULES=1
 CONFIG
  chmod 600 "$CFG"
 fi
