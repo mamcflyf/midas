@@ -740,13 +740,31 @@ show_system_info() {
     kernel_version=$(safe_cmd "${UNAME}" -r)
     printf "${COLOR_LABEL}%-22s${COLOR_VALUE}%s${RESET}\n" "Kernel:" "${kernel_version:-Unknown}"
 
-    local ipv4 ipv6
-    if [[ -x "${IP}" ]]; then
-        ipv4=$(safe_cmd "${IP}" -4 addr show scope global | "${AWK}" '/inet/ {print $2}' | "${CUT}" -d/ -f1 | "${HEAD}" -n1)
-        ipv6=$(safe_cmd "${IP}" -6 addr show scope global | "${AWK}" '/inet6/ {print $2}' | "${CUT}" -d/ -f1 | "${HEAD}" -n1)
-    fi
-    printf "${COLOR_LABEL}%-22s${COLOR_YELLOW}%s${RESET}\n" "External IP (v4):" "${ipv4:-N/A}"
-    printf "${COLOR_LABEL}%-22s${COLOR_YELLOW}%s${RESET}\n" "External IP (v6):" "${ipv6:-N/A}"
+    # Show each distinct global address, including secondary addresses.
+    # Never display loopback, link-local or private IPv4 as external.
+    local family address count label
+    for family in 4 6; do
+        count=0
+        if command -v ip >/dev/null 2>&1; then
+            while IFS= read -r address; do
+                [[ -n "$address" ]] || continue
+                if [[ "$family" == 4 ]]; then
+                    case "$address" in
+                        10.*|127.*|192.168.*|169.254.*|0.*) continue ;;
+                        172.*) if [[ "$address" =~ ^172\.(1[6-9]|2[0-9]|3[01])\. ]]; then continue; fi ;;
+                        100.*) if [[ "$address" =~ ^100\.(6[4-9]|[7-9][0-9]|1[01][0-9]|12[0-7])\. ]]; then continue; fi ;;
+                    esac
+                fi
+                count=$((count + 1))
+                label="External IP (v${family}):"
+                if (( count > 1 )); then label="External IP (v${family}) #${count}:"; fi
+                printf "${COLOR_LABEL}%-22s${COLOR_YELLOW}%s${RESET}\n" "$label" "$address"
+            done < <(ip -o -"$family" addr show scope global 2>/dev/null | awk '{split($4,a,"/"); print a[1]}' | awk '!seen[$0]++')
+        fi
+        if (( count == 0 )); then
+            printf "${COLOR_LABEL}%-22s${COLOR_YELLOW}%s${RESET}\n" "External IP (v${family}):" "N/A"
+        fi
+    done
     
 }
 
